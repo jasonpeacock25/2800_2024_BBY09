@@ -44,7 +44,7 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 });
 
-app.get('/contact/email', (req, res) => {
+app.get('/contact/message', (req, res) => {
     res.render('message');
 });
 
