@@ -40,6 +40,14 @@ app.get('/about', (req, res) => {
     res.render('about');
 });
 
+app.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
+app.get('/contact/email', (req, res) => {
+    res.render('email');
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
