@@ -45,7 +45,7 @@ app.get('/contact', (req, res) => {
 });
 
 app.get('/contact/email', (req, res) => {
-    res.render('email');
+    res.render('message');
 });
 
 // Start the server
