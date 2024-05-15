@@ -1,0 +1,47 @@
+<%- include("templates/header") %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h1 class="card-title">Galaxy Getaways</h1>
+        </div>
+        <div class="card-body">
+          <form action="/search" method="POST">
+            <div class="mb-3">
+              <label for="region" class="form-label">Region</label>
+              <select class="form-select" id="region" name="region">
+                <option value="Moon">Moon</option>
+                <option value="Mars">Mars</option>
+                <option value="Jupiter">Jupiter</option>
+                <option value="Venus">Venus</option>
+                <option value="Saturn">Saturn</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="checkIn" class="form-label">Check In</label>
+              <input type="date" class="form-control" id="checkIn" name="checkIn" value="2024-06-09">
+            </div>
+            <div class="mb-3">
+              <label for="checkOut" class="form-label">Check Out</label>
+              <input type="date" class="form-control" id="checkOut" name="checkOut" value="2024-06-22">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+        </div>
+        <div class="card-footer">
+          <span>Region Summary</span>
+          <div class="summary">
+            <p id="region-summary-text">Summary of the region goes here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/hotels.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<%- include("templates/footer") %>
