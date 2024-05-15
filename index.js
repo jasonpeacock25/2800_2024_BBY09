@@ -174,9 +174,88 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 });
 
-app.get('/contact/message', (req, res) => {
-    res.render('message');
+app.get('/contact/inquiry', (req, res) => {
+    res.render('inquiry');
 });
+
+// Define a schema for the inquiry collection
+const inquirySchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    subject: { type: String },
+    description: { type: String, required: true }
+});
+
+// Create a model for the inquiry collection
+const Inquiry = mongoose.model('Inquiry', inquirySchema);
+
+// Handle form submission to save inquiry to MongoDB
+app.post('/contact/inquiry', async (req, res) => {
+    const { name, email, subject, description } = req.body;
+
+    // Validate user input
+    const schema = Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        subject: Joi.string().allow('', null), // Allow empty or null subject
+        description: Joi.string().required()
+    });
+
+    const { error } = schema.validate({ name, email, subject, description });
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    try {
+        // Create a new inquiry and save it to MongoDB
+        const newInquiry = new Inquiry({ name, email, subject, description });
+        await newInquiry.save();
+
+        // Redirect or respond as needed
+        res.redirect('/contact/inquiry-confirmation');
+    } catch (error) {
+        console.error('Error saving inquiry:', error);
+        res.status(500).send('Error saving inquiry.');
+    }
+});
+
+// Route handler for inquiry confirmation page
+app.get('/contact/inquiry-confirmation', (req, res) => {
+    res.render('inquiry-confirmation');
+});
+
+
+
+
+// Route to render admin page
+app.get('/admin', async (req, res) => {
+    if (!req.session.authenticated) {
+        return res.redirect('/signin'); // Redirect to login if user is not logged in
+    }
+
+    try {
+        const loggedInUser = await User.findOne({ username: req.session.username });
+
+        if (!loggedInUser || loggedInUser.user_type !== 'admin') { // Check if user_type is not admin
+            return res.status(403).render('404'); // Set status code to 403 and render error page
+        } else {
+            // Fetch all inquiries
+            const inquiries = await Inquiry.find();
+            
+            // Fetch all users
+            const allUsers = await User.find({}, 'username user_type');
+            
+            // Render admin page with user and inquiries data
+            res.render('admin', { inquiries: inquiries, users: allUsers, user: 'templates/user' });
+        }
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Error fetching users.'); // Send internal server error if there's an error
+    }
+});
+
+
+
 
 // 404 page for any routes that are not defined
 app.get("*", (req, res) => {
