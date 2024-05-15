@@ -170,13 +170,6 @@ app.get('/about', (req, res) => {
     res.render('about');
 });
 
-<<<<<<< HEAD
-// 404 page for any routes that are not defined
-app.get("*", (req, res) => {
-    res.status(404);
-    res.render('404');
-})
-=======
 app.get('/contact', (req, res) => {
     res.render('contact');
 });
@@ -184,7 +177,12 @@ app.get('/contact', (req, res) => {
 app.get('/contact/message', (req, res) => {
     res.render('message');
 });
->>>>>>> contact_page
+
+// 404 page for any routes that are not defined
+app.get("*", (req, res) => {
+    res.status(404);
+    res.render('404');
+})
 
 // Start the server
 app.listen(port, () => {
