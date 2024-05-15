@@ -71,7 +71,9 @@ const User = mongoose.model('User', userSchema);
 app.set('view engine', 'ejs');
 
 // Middleware
+app.use('/favicon_io', express.static('favicon_io'));
 app.use(express.static('.'));
+
 app.use(express.urlencoded({ extended: true }));
 
 // Simple route
