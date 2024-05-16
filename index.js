@@ -91,7 +91,7 @@ app.get('/', (req, res) => {
 
 
 // Gurvir's Routes
-app.get('/hotels', (req, res) => {
+app.get('/hotels', sessionValidation, (req, res) => {
     res.render('hotels');
 });
 
