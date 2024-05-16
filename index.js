@@ -12,6 +12,8 @@ const { departingFlights, returnFlights, hotels } = require('./myBookings');
 
 const port = 8000;
 
+// Import the Hotel model
+const Hotel = require('./models/Hotel');
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
 // Supporting function that checks if session is authenticated
@@ -62,7 +64,12 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, maxlength: 20, trim: true, unique: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    user_type: { type: String, required: true, default: 'user' }
+    user_type: { type: String, required: true, default: 'user' },
+    searchHistory: [{
+        region: String,
+        checkInDate: Date,
+        checkOutDate: Date
+    }]
 });
 
 // Creating a user model
@@ -72,6 +79,7 @@ const User = mongoose.model('User', userSchema);
 app.set('view engine', 'ejs');
 
 // Middleware
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/favicon_io', express.static('favicon_io'));
 app.use(express.static('.'));
 
@@ -81,6 +89,54 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.render('index');
 });
+
+
+// Gurvir's Routes
+app.get('/hotels', sessionValidation, (req, res) => {
+    res.render('hotels');
+});
+
+app.post('/search', async (req, res) => {
+    const region = req.body.region;
+    const checkInDate = req.body.checkIn;
+    const checkOutDate = req.body.checkOut;
+
+    req.session.hotelCheckInDate = checkInDate;
+    req.session.hotelCheckOutDate = checkOutDate;
+
+    await User.findByIdAndUpdate(req.session.userId, {
+        $push: {
+            searchHistory: {
+                region,
+                checkInDate: new Date(checkInDate),
+                checkOutDate: new Date(checkOutDate)
+            }
+        }
+    })
+
+    res.redirect('availableHotels');
+});
+
+app.get('/availableHotels', sessionValidation,  async (req, res) => {
+    try {
+        const hotels = await Hotel.find();
+        res.render('availableHotels', { hotels });
+    } catch (err) {
+        console.error('Error fetching hotels:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/hotelSelection', async (req, res) => {
+    const hotelID = req.body.hotelId;
+    res.redirect(`hotelSummary/${hotelID}`);
+});
+
+app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
+    const hotel = await Hotel.findById(req.params.id);
+    res.render('hotelSummary', { hotel });
+});
+// End of Gurvir's Routes
 
 // Sign up page route
 app.get('/signup', (req, res) => {
@@ -129,6 +185,7 @@ app.post('/submit-signup', async (req, res) => {
     req.session.email = email;
     req.session.user_type = newUser.user_type;
     req.session.cookie.maxAge = expireTime;
+    req.session.userId = newUser._id;
 
     res.redirect('/main');
 });
@@ -180,9 +237,88 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 });
 
-app.get('/contact/message', (req, res) => {
-    res.render('message');
+app.get('/contact/inquiry', (req, res) => {
+    res.render('inquiry');
 });
+
+// Define a schema for the inquiry collection
+const inquirySchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    subject: { type: String },
+    description: { type: String, required: true }
+});
+
+// Create a model for the inquiry collection
+const Inquiry = mongoose.model('Inquiry', inquirySchema);
+
+// Handle form submission to save inquiry to MongoDB
+app.post('/contact/inquiry', async (req, res) => {
+    const { name, email, subject, description } = req.body;
+
+    // Validate user input
+    const schema = Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        subject: Joi.string().allow('', null), // Allow empty or null subject
+        description: Joi.string().required()
+    });
+
+    const { error } = schema.validate({ name, email, subject, description });
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    try {
+        // Create a new inquiry and save it to MongoDB
+        const newInquiry = new Inquiry({ name, email, subject, description });
+        await newInquiry.save();
+
+        // Redirect or respond as needed
+        res.redirect('/contact/inquiry-confirmation');
+    } catch (error) {
+        console.error('Error saving inquiry:', error);
+        res.status(500).send('Error saving inquiry.');
+    }
+});
+
+// Route handler for inquiry confirmation page
+app.get('/contact/inquiry-confirmation', (req, res) => {
+    res.render('inquiry-confirmation');
+});
+
+
+
+
+// Route to render admin page
+app.get('/admin', async (req, res) => {
+    if (!req.session.authenticated) {
+        return res.redirect('/signin'); // Redirect to login if user is not logged in
+    }
+
+    try {
+        const loggedInUser = await User.findOne({ username: req.session.username });
+
+        if (!loggedInUser || loggedInUser.user_type !== 'admin') { // Check if user_type is not admin
+            return res.status(403).render('404'); // Set status code to 403 and render error page
+        } else {
+            // Fetch all inquiries
+            const inquiries = await Inquiry.find();
+            
+            // Fetch all users
+            const allUsers = await User.find({}, 'username user_type');
+            
+            // Render admin page with user and inquiries data
+            res.render('admin', { inquiries: inquiries, users: allUsers, user: 'templates/user' });
+        }
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Error fetching users.'); // Send internal server error if there's an error
+    }
+});
+
+
+
 
 // 404 page for any routes that are not defined
 app.get("*", (req, res) => {
