@@ -1,0 +1,84 @@
+<%- include('templates/header-hamburger'); %>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">Flights</h1>
+                    </div>
+                    <div class="card-body">
+                        <form action="/flights/search" method="POST">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="flightType" class="form-label">Flight Type</label>
+                                    <select id="flightType" name="flightType" class="form-select">
+                                        <option selected>Round Trip</option>
+                                        <option>One Way</option>
+                                        <option>Sub-Orbital</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="travellers" class="form-label">Travellers</label>
+                                    <input id="travellers" name="travellers" type="number" class="form-control w-25"
+                                        value="1" min="1" max="10">
+                                    <div>
+                                        <button class="btn" type="button" onclick="incrementTravellers()">
+                                            <i class="bi bi-caret-up-square"></i>
+                                        </button>
+                                        <button class="btn" type="button" onclick="decrementTravellers()">
+                                            <i class="bi bi-caret-down-square"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <datalist id="locations">
+                                <option value="Moon">
+                                <option value="Mars">
+                                <option value="Houston Space Center">
+                            </datalist>
+                            <div class="mb-3">
+                                <label for="fromInput" class="form-label">From</label>
+                                <input id="fromInput" name="fromInput" type="text" class="form-control"
+                                    placeholder="Where From?" list="locations">
+                            </div>
+                            <div class="mb-3">
+                                <label for="toInput" class="form-label">To</label>
+                                <input type="text" class="form-control" id="toInput" name="toInput"
+                                    placeholder="Where To?" list="locations">
+                            </div>
+                            <div class="mb-3">
+                                <label for="departDate" class="form-label">Depart</label>
+                                <input type="date" class="form-control" id="departDate" name="departDate"
+                                    value="2024-06-09">
+                            </div>
+                            <div class="mb-3">
+                                <label for="returnDate" class="form-label">Return</label>
+                                <input type="date" class="form-control" id="returnDate" name="returnDate"
+                                    value="2024-06-22">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function incrementTravellers() {
+            console.log("Increment");
+            let input = document.getElementById("travellers");
+            if (input.value < 10) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function decrementTravellers() {
+            console.log("Decrement");
+            let input = document.getElementById("travellers");
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+    </script>
+    <%- include('templates/footer'); %>

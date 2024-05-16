@@ -8,6 +8,7 @@ const Joi = require('joi');
 const saltRounds = 12;
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
+const SMTPPool = require('nodemailer/lib/smtp-pool');
 
 const port = 8000;
 
@@ -168,6 +169,24 @@ app.get('/logout', (req, res) => {
 // About us page route
 app.get('/about', (req, res) => {
     res.render('about');
+});
+
+// Flights page route
+app.get('/flights', (req, res) => {
+    res.render('flights');
+});
+
+// Search flights (temporary format to display post is functioning)
+app.post('/flights/search', (req,res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
+    let html = `<div>Flight Type: ` + flightType + 
+    `<br>Travellers: ` + travellers +
+    `<br>From: ` + fromInput +
+    `<br>To: ` + toInput +
+    `<br>Depart: ` + departDate +
+    `<br>Arrive: ` + returnDate +
+    `</div>`;
+    res.send(html);
 });
 
 app.get('/contact', (req, res) => {
