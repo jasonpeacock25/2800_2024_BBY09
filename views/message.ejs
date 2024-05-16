@@ -1,0 +1,30 @@
+<div style="background-color: #062c43; height: 100vh;">
+
+    <%- include('templates/header-back-arrow') %>
+
+    <h1 class="text-center underline-text" style="color:#9ccddc"><u>Contact Us</u></h1>
+
+    <div class="container" style="background-color: #054569; height: 500px;">
+        <form action="/contact" method="get" style="max-width: 400px; margin: 0 auto;">
+            <div class="mb-3">
+                <label for="inputName" class="form-label" style="color:#ced7e0;">Name</label>
+                <input type="text" class="form-control" id="inputName" aria-describedby="nameHelp">
+            </div>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label" style="color:#ced7e0;">Email</label>
+                <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="inputSubject" class="form-label" style="color:#ced7e0;">Subject</label>
+                <input type="text" class="form-control" id="inputSubject">
+            </div>
+            <div class="mb-3">
+                <label for="inputDescription" class="form-label" style="color:#ced7e0;">Description</label>
+                <textarea class="form-control" id="inputDescription" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="color:#ced7e0;">Submit</button>
+        </form>
+    </div>
+
+    <%- include('templates/footer') %>
+</div>
