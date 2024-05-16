@@ -63,7 +63,12 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, maxlength: 20, trim: true, unique: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    user_type: { type: String, required: true, default: 'user' }
+    user_type: { type: String, required: true, default: 'user' },
+    searchHistory: [{
+        region: String,
+        checkInDate: Date,
+        checkOutDate: Date
+    }]
 });
 
 // Creating a user model
@@ -98,9 +103,17 @@ app.post('/search', async (req, res) => {
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    // const hotels = await Hotel.find();
-    // res.render('availableHotels', { hotels }, region);
+    await User.findByIdAndUpdate(req.session.userId, {
+        $push: {
+            searchHistory: {
+                region,
+                checkInDate: new Date(checkInDate),
+                checkOutDate: new Date(checkOutDate)
+            }
+        }
+    })
 
+    res.redirect('availableHotels');
 });
 
 app.get('/availableHotels', async (req, res) => {
@@ -122,6 +135,7 @@ app.get('/hotelSummary/:id', async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel });
 });
+// End of Gurvir's Routes
 
 // Sign up page route
 app.get('/signup', (req, res) => {
@@ -169,6 +183,7 @@ app.post('/submit-signup', async (req, res) => {
     req.session.email = email;
     req.session.user_type = newUser.user_type;
     req.session.cookie.maxAge = expireTime;
+    req.session.userId = newUser._id;
 
     res.redirect('/main');
 });
