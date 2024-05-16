@@ -1,0 +1,43 @@
+<%- include('templates/header-hamburger') %>
+    <h1 class="display-6 text-center">My Bookings</h1>
+    <br>
+    
+    
+        <h2 class="text-center">Departing Flights</h2>
+        <% departingFlights.forEach(function(flight, index) {%>
+        <div class="booking" id="departing-flights-<% index %>">
+            <p>Flight Number: <%= flight.flightNumber %>
+            </p>
+            <p>Destination: <%= flight.destination %>
+            </p>
+            <p>Departure Time: <%= flight.departureTime %>
+            </p>
+        </div>
+        <% }); %>
+    
+    
+        <h2 class="text-center">Return Flights</h2>
+        <% returnFlights.forEach(function(flight, index) {%>
+        <div class="booking" id="return-flight-<%= index %>">
+            <p>Flight Number: <%= flight.flightNumber %></p>
+            <p>Destination: <%= flight.destination %></p>
+            <p>Departure Time: <%= flight.departureTime %></p>
+        </div>
+        <% }); %>
+    
+    
+   
+        <h2 class="text-center">Hotels</h2>
+    
+        <div class="booking">
+            <p>Name: Crater Cove Hotel</p>
+            <p>Rating: 9.6</p>
+            <p>Price: $5009</p>
+            <p>Location: Moon</p>
+            <p>Check-in Date: </p>
+            <p>Check-out Date: </p>
+    
+        </div>
+    
+    </div>
+    <%- include('templates/footer') %>
