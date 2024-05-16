@@ -227,6 +227,10 @@ app.get('/about', (req, res) => {
     res.render('about');
 });
 
+app.get('/faq', (req, res) => {
+    res.render('faq');
+});
+
 app.get('/contact', (req, res) => {
     res.render('contact');
 });
