@@ -8,7 +8,7 @@ const Joi = require('joi');
 const saltRounds = 12;
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
-const { departingFlights, returnFlights } = require('./myBookings');
+const { departingFlights, returnFlights, hotels } = require('./myBookings');
 
 const port = 8000;
 
@@ -173,7 +173,7 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/myBookings', (req,res) => {
-    res.render('myBookings', {departingFlights, returnFlights});
+    res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
 
 app.get('/contact', (req, res) => {

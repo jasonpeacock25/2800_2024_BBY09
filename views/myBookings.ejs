@@ -4,40 +4,73 @@
     
     
         <h2 class="text-center">Departing Flights</h2>
-        <% departingFlights.forEach(function(flight, index) {%>
-        <div class="booking" id="departing-flights-<% index %>">
-            <p>Flight Number: <%= flight.flightNumber %>
-            </p>
-            <p>Destination: <%= flight.destination %>
-            </p>
-            <p>Departure Time: <%= flight.departureTime %>
-            </p>
+        <div class="container">
+            <div class="row justify-content-center ">
+                <% departingFlights.forEach(function(flight, index) {%>
+                    <div class="col-md-4 mb-4" id="departing-flights-<% index %>">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Flight Number: <%= flight.flightNumber %>
+                                </h5>
+                                <p class="card-text">Destination: <%= flight.destination %>
+                                </p>
+                                <p class="card-text">Departure Time: <%= flight.departureTime %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
         </div>
-        <% }); %>
     
     
         <h2 class="text-center">Return Flights</h2>
-        <% returnFlights.forEach(function(flight, index) {%>
-        <div class="booking" id="return-flight-<%= index %>">
-            <p>Flight Number: <%= flight.flightNumber %></p>
-            <p>Destination: <%= flight.destination %></p>
-            <p>Departure Time: <%= flight.departureTime %></p>
+        <div class="container">
+            <div class="row justify-content-center ">
+                <% returnFlights.forEach(function(flight, index) {%>
+                    <div class="col-md-4 mb-4" id="return-flight-<%= index %>">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Flight Number: <%= flight.flightNumber %>
+                                </h5>
+                                <p class="card-text">Destination: <%= flight.destination %>
+                                </p>
+                                <p class="card-text">Departure Time: <%= flight.departureTime %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
         </div>
-        <% }); %>
-    
     
    
         <h2 class="text-center">Hotels</h2>
-    
-        <div class="booking">
-            <p>Name: Crater Cove Hotel</p>
-            <p>Rating: 9.6</p>
-            <p>Price: $5009</p>
-            <p>Location: Moon</p>
-            <p>Check-in Date: </p>
-            <p>Check-out Date: </p>
-    
+        <div class="container">
+            <div class="row justify-content-center ">
+                <% hotels.forEach(function(hotel, index) {%>
+                    <div class="col-md-4 mb-4" id="hotels-<%= index %>">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Name: <%= hotel.name %>
+                                </h5>
+                                <p class="card-text">Rating: <%= hotel.rating %>
+                                </p>
+                                <p class="card-text">Price: <%= hotel.price %>
+                                </p>
+                                <p class="card-text">Location: <%= hotel.location %>
+                                </p>
+                                <p class="card-text">Check-in Date: <%= hotel.startDate %>
+                                </p>
+                                <p class="card-text">Check-out Date: <%= hotel.endDate %>
+                                </p>
+                                <p>Details: <%= hotel.details %>
+                                </p>
+        
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
         </div>
-    
-    </div>
-    <%- include('templates/footer') %>
+        <%- include('templates/footer') %>
