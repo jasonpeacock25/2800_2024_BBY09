@@ -116,7 +116,7 @@ app.post('/search', async (req, res) => {
     res.redirect('availableHotels');
 });
 
-app.get('/availableHotels', async (req, res) => {
+app.get('/availableHotels', sessionValidation,  async (req, res) => {
     try {
         const hotels = await Hotel.find();
         res.render('availableHotels', { hotels });
@@ -131,7 +131,7 @@ app.post('/hotelSelection', async (req, res) => {
     res.redirect(`hotelSummary/${hotelID}`);
 });
 
-app.get('/hotelSummary/:id', async (req, res) => {
+app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel });
 });
