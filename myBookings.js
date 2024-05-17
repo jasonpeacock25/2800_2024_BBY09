@@ -16,26 +16,19 @@ const hotels = [
     {
         name: "Crater Cove Hotel",
         location: "Moon",
-        startDate: "2024-06-01",
-        endDate: "2024-06-10",
+        startDate: "2024-06-20",
+        endDate: "2024-08-10",
         rating: 9.6,
         price: 5009,
         details: "A luxurious stay on the Moon with all modern amenities."
     },
     {
-        name: "Lunar Lodge",
-        startDate: "2024-06-15",
-        endDate: "2024-06-20",
-        rating: 8.9,
-        price: 4500,
-        details: "Experience the tranquility of the lunar surface at Lunar Lodge."
-    },
-    {
-        name: "Moonlight Inn",
-        startDate: "2024-07-01",
+        name: "Olympus Mons Spa & Resort",
+        location: "Mars",
+        startDate: "2024-06-14",
         endDate: "2024-07-05",
-        rating: 9.2,
-        price: 4800,
+        rating: 7.9,
+        price: 2306,
         details: "A cozy inn with stunning views of the Earthrise."
     }
 ];
