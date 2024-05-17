@@ -20,40 +20,38 @@
 <body>
     <%- include('svgs') %>
 
-        <!-- header container -->
-        <div class="container-fluid header-container">
-            <header
-                class="primary-background d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <!-- Header Start -->
+        <header
+            class="primary-background d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
 
-                <!-- back arrow -->
-                <div class="col-md-3 mb-2 mb-md-0 order-md-1">
-                    <a href="javascript:history.back()" class="btn">
-                        <svg class="bi bi-svg-color d-block mx-auto mb-1" width="30" height="30">
-                            <use xlink:href="#arrow-left"></use>
-                        </svg>
-                    </a>
-                </div>
+            <!-- back arrow -->
+            <div class="col-md-3 mb-2 mb-md-0 order-md-1">
+                <a href="javascript:history.back()" class="btn">
+                    <svg class="bi bi-svg-color d-block mx-auto mb-1" width="30" height="30">
+                        <use xlink:href="#arrow-left"></use>
+                    </svg>
+                </a>
+            </div>
 
-                <!-- Title text -->
-                <div class="col-md-6 order-md-2 text-center">
-                    <a href="/main" class="galaxy-link"><span class="galaxy-title">Galaxy Getaways</span></a>
-                </div>
+            <!-- Title text -->
+            <div class="col-md-6 order-md-2 text-center">
+                <a href="/main" class="galaxy-link"><span class="galaxy-title">Galaxy Getaways</span></a>
+            </div>
 
-                <!-- profile icon dropdown menu -->
-                <div class="dropdown col-md-3 text-end order-md-3">
-                    <a href="#" class="btn dropdwon-toggle" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <svg class="bi bi-svg-color d-block mx-auto mb-1" width="30" height="30">
-                            <use xlink:href="#people-circle"></use>
-                        </svg>
-                    </a>
+            <!-- profile icon dropdown menu -->
+            <div class="dropdown col-md-3 text-end order-md-3">
+                <a href="#" class="btn dropdwon-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg class="bi bi-svg-color d-block mx-auto mb-1" width="30" height="30">
+                        <use xlink:href="#people-circle"></use>
+                    </svg>
+                </a>
 
-                    <!--profile dropdown items -->
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Account</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Log out</a></li>
-                    </ul>
-                </div>
-            </header>
-        </div>
+                <!--profile dropdown items -->
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Account</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Log out</a></li>
+                </ul>
+            </div>
+        </header>
+        
