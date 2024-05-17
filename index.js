@@ -8,6 +8,7 @@ const Joi = require('joi');
 const saltRounds = 12;
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
+const { departingFlights, returnFlights, hotels } = require('./myBookings');
 
 const port = 8000;
 
@@ -150,8 +151,9 @@ app.get('/signin', (req, res) => {
 app.get('/main', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/signin');
+        return;
     }
-    res.render('main');
+    res.render('main', { username: req.session.username});
 });
 
 // Submitting a user to the db creating a session
@@ -225,6 +227,10 @@ app.get('/logout', (req, res) => {
 // About us page route
 app.get('/about', (req, res) => {
     res.render('about');
+});
+
+app.get('/myBookings', (req,res) => {
+    res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
 
 app.get('/contact', (req, res) => {
