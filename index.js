@@ -150,8 +150,9 @@ app.get('/signin', (req, res) => {
 app.get('/main', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/signin');
+        return;
     }
-    res.render('main');
+    res.render('main', {username: req.session.username});
 });
 
 // Submitting a user to the db creating a session
