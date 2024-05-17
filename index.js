@@ -231,6 +231,8 @@ app.get('/about', (req, res) => {
 
 app.get('/myBookings', (req,res) => {
     res.render('myBookings', {departingFlights, returnFlights, hotels });
+});
+
 app.get('/faq', (req, res) => {
     res.render('faq');
 });
