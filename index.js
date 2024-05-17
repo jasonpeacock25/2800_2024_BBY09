@@ -226,20 +226,20 @@ app.get('/logout', (req, res) => {
 });
 
 // About us page route
-app.get('/about', (req, res) => {
+app.get('/about', sessionValidation, (req, res) => {
     res.render('about');
 });
 
-app.get('/myBookings', (req,res) => {
+app.get('/myBookings', sessionValidation, (req,res) => {
     res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
 
-app.get('/faq', (req, res) => {
+app.get('/faq', sessionValidation, (req, res) => {
     res.render('faq');
 });
 
 // Flights page route
-app.get('/flights', (req, res) => {
+app.get('/flights', sessionValidation, (req, res) => {
     res.render('flights');
 });
 
@@ -256,11 +256,11 @@ app.post('/flights/search', (req,res) => {
     res.send(html);
 });
 
-app.get('/contact', (req, res) => {
+app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
 });
 
-app.get('/contact/inquiry', (req, res) => {
+app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
 
@@ -306,7 +306,7 @@ app.post('/contact/inquiry', async (req, res) => {
 });
 
 // Route handler for inquiry confirmation page
-app.get('/contact/inquiry-confirmation', (req, res) => {
+app.get('/contact/inquiry-confirmation', sessionValidation, (req, res) => {
     res.render('inquiry-confirmation');
 });
 
