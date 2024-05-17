@@ -153,7 +153,7 @@ app.get('/main', (req, res) => {
         res.redirect('/signin');
         return;
     }
-    res.render('main', {username: req.session.username});
+    res.render('main', { username: req.session.username});
 });
 
 // Submitting a user to the db creating a session
