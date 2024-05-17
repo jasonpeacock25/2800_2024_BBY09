@@ -201,7 +201,7 @@ app.get('/contact/message', (req, res) => {
 app.get("*", (req, res) => {
     res.status(404);
     res.render('404');
-})
+});
 
 // Start the server
 app.listen(port, () => {
