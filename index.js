@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
 });
 
 
-// Gurvir's Routes
+// Gurvir's Routes //////////////////
 app.get('/hotels', sessionValidation, (req, res) => {
     res.render('hotels');
 });
@@ -116,7 +116,7 @@ app.post('/search', async (req, res) => {
     res.redirect('availableHotels');
 });
 
-app.get('/availableHotels', sessionValidation,  async (req, res) => {
+app.get('/availableHotels', sessionValidation, async (req, res) => {
     try {
         const hotels = await Hotel.find();
         res.render('availableHotels', { hotels });
@@ -135,7 +135,7 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel });
 });
-// End of Gurvir's Routes
+// End of Gurvir's Routes //////////////////////////////
 
 // Sign up page route
 app.get('/signup', (req, res) => {
@@ -144,7 +144,7 @@ app.get('/signup', (req, res) => {
 
 // Sign in page route
 app.get('/signin', (req, res) => {
-    res.render('signin');
+    res.render('signin', { message: null });
 });
 
 app.get('/main', (req, res) => {
@@ -205,10 +205,10 @@ app.post('/loggingin', async (req, res) => {
                 req.session.cookie.maxAge = expireTime;
                 res.redirect('/main');
             } else {
-                res.send("Invalid username or Password. Try Again");
+                res.render("signin", { message: "Invalid Password" })
             }
         } else {
-            res.redirect("/signin");
+            res.render("signin", { message: "Invalid Email" })
         }
     } catch (error) {
         console.log(error);
@@ -298,10 +298,10 @@ app.get('/admin', async (req, res) => {
         } else {
             // Fetch all inquiries
             const inquiries = await Inquiry.find();
-            
+
             // Fetch all users
             const allUsers = await User.find({}, 'username user_type');
-            
+
             // Render admin page with user and inquiries data
             res.render('admin', { inquiries: inquiries, users: allUsers, user: 'templates/user' });
         }
@@ -311,6 +311,67 @@ app.get('/admin', async (req, res) => {
     }
 });
 
+// Route for account information table
+app.get("/account", sessionValidation, (req, res) => {
+    res.render('account', {
+        username: req.session.username,
+        email: req.session.email
+    });
+});
+
+app.post('/update-profile', async (req, res) => {
+    const { name, email } = req.body;
+
+    // Validate user input
+    const schema = Joi.object({
+        name: Joi.string().max(20).required(),
+        email: Joi.string().email().required(),
+    });
+
+    const { error } = schema.validate({ name, email });
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+    // Find the user and update their information
+    const updatedUser = await User.findOneAndUpdate({ email: req.session.email }, {
+        username: name,
+        email: email,
+    }, { new: true });
+
+    req.session.username = updatedUser.username;
+    req.session.email = updatedUser.email;
+
+    res.redirect('account');
+});
+
+// route for the change password page
+app.get('/change-password', sessionValidation, (req, res) => {
+    res.render('password', { message: null });
+});
+
+// This route handles the password reset
+app.post('/reset-password', async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({ email: req.session.email });
+        if (user) {
+            const match = await bcrypt.compare(currentPassword, user.password);
+            if (match) {
+                user.password = await bcrypt.hash(newPassword, saltRounds);
+                await user.save();
+                res.render('password', { message: "Password Successfully Changed" });
+            } else {
+                res.render('password', { message: "Invalid Current Password. Try Again" });
+            }
+        } else {
+            res.render('password', { message: "User Not Found!" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.render('password', { message: "An error occurred. Please try again." });
+    }
+});
 
 
 
