@@ -1,0 +1,55 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-y: hidden; /* disables vertical scrolling*/
+}
+.background-container{
+    background-image: url('/public/images/Moon_main_mobile.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height:100vh;
+    padding-top: 20%; 
+}
+.custom-color {
+    color: white;
+    font-size: 1.5em;
+}
+.button-container {
+    margin-top: 20px;
+    
+}
+.button-container a {
+    margin:0 10px; /* Space between buttons */
+}
+@media (min-width: 768px) {
+    .no-scroll-wrapper {
+        overflow: hidden;
+    }
+
+    .background-container {
+        background-image: url('/public/images/Moon_main.jpg');
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+        padding-right: 30%;
+        padding-bottom: 10%;
+    }
+
+    .custom-color {
+        color: white;
+        font-size: 2em;
+    }
+
+    .button-container {
+        margin-top: 20px;
+    }
+
+    .button-container a {
+        margin: 0 10px;
+        /* Space between buttons */
+    }
+}
+
+
