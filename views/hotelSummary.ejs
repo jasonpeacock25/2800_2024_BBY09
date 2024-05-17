@@ -1,0 +1,26 @@
+<%- include('templates/header-back-arrow') %>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="my-4">
+                    <%= hotel.name %>
+                </h1>
+                <img src="/<%= hotel.imageURL %>" class="img-fluid mb-4" alt="<%= hotel.name %>">
+                <p><strong>Hotel details:</strong>
+                    <%= hotel.details %>
+                </p>
+                <p><strong>Rating:</strong>
+                    <%= hotel.rating %>
+                </p>
+                <p><strong>Price:</strong> $<%= hotel.price %>
+                </p>
+                <p><strong>Available from:</strong>
+                    <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
+                </p>
+                <!-- <a href="/availableHotels" class="btn btn-primary">Back to Hotels</a> -->
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <%- include('templates/footer') %>

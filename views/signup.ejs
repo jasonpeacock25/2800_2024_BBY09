@@ -1,0 +1,22 @@
+<%- include('templates/header-basic') %>
+    <h1 class="display-6 text-center">Sign up with your information</h1><br>
+    <div class="container text-center">
+        <form action="/submit-signup" method="POST">
+            <input class="form-control" type="text" name="name" required="true" placeholder="name">
+            <br><br>
+            <input class="form-control" type="email" name="email" required="true" placeholder="email">
+            <br><br>
+            <input class="form-control" type="password" name="password" required="true" placeholder="password">
+            <br><br>
+            <input class="btn btn-secondary btn-block w-50 mx-auto" type="submit" value="Submit">
+        </form>
+    </div>
+
+    <br><br>
+
+    <div class="container">
+        <a href="/" style="text-decoration: none;">
+            <button class="btn btn-secondary">Back</button>
+        </a>
+    </div>
+    <%- include('templates/footer') %>

@@ -1,0 +1,22 @@
+<%- include('templates/header-hamburger') %>
+
+    <div class="text-center">
+        <h1>Admin ONLY PAGE</h1>
+
+        <div id="inquiriesContainer">
+            <% if (inquiries && inquiries.length> 0) { %>
+                <h2>Inquiries:</h2>
+                <ul style=" list-style-type: none;">
+                    <% inquiries.forEach((inquiry)=> { %>
+                        <li>Name: <%= inquiry.name %>, Email: <%= inquiry.email %>, Subject: <%= inquiry.subject %>,
+                                        Description: <%= inquiry.description %>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } else { %>
+                    <p>No inquiries found.</p>
+                    <% } %>
+        </div>
+    </div>
+
+    <%- include('templates/footer') %>

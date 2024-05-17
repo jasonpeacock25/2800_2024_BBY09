@@ -1,0 +1,27 @@
+<%- include('templates/header-basic') %>
+    <h1 class="display-6 text-center">Sign In Here</h1><br>
+    <div class="container text-center">
+        <form action="/loggingin" method="post">
+            <input class="form-control" type="email" name="email" required="true" placeholder="email">
+            <br><br>
+            <input class="form-control" type="password" name="password" required="true" placeholder="password">
+            <br><br>
+            <div class="text-center">
+                <% if (message) { %>
+                    <div id="message">
+                        <%= message %>
+                    </div>
+                    <% } %>
+                        <br>
+                        <input class="btn btn-secondary btn-block w-50 mx-auto" type="submit" value="Login">
+
+            </div>
+        </form>
+    </div>
+    <br><br>
+    <div class="container">
+        <a href="/" style="text-decoration: none;">
+            <button class="btn btn-secondary">Back</button>
+        </a>
+    </div>
+    <%- include('templates/footer') %>
