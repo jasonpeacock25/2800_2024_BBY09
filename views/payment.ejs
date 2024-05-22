@@ -153,5 +153,30 @@
       </form>
     </div>
   </div>
-  
+  <script>
+
+    // parses string and returns a number
+    function parseAmount(amount) {
+        return parseFloat(amount.replace('$', '').replace(',', ''));
+    }
+
+    // formats number as a currency
+    function formatAmount(amount) {
+        return '$' + amount.toFixed(2).toLocaleString();
+    }
+
+    // flight, hotel and total amount constants
+    const flightAmountElement = document.getElementById('flight-amount');
+    const hotelAmountElement = document.getElementById('hotel-amount');
+    const totalAmountElement = document.getElementById('total-amount');
+
+    const flightAmount = parseAmount(flightAmountElement.textContent);
+    const hotelAmount = parseAmount(hotelAmountElement.textContent);
+
+    // Calculates total amount
+    const totalAmount = flightAmount + hotelAmount;
+
+    // Updates total amount
+    totalAmountElement.textContent = formatAmount(totalAmount);
+  </script>
 <%- include('templates/footer') %>
