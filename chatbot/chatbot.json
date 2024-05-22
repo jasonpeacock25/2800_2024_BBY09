@@ -1,0 +1,44 @@
+{
+  "messages": [
+    {
+      "text": "To book a flight with Galaxy Getaways, you can follow these steps:",
+      "type": "text"
+    },
+    {
+      "text": "1. Navigate to the [Explore Flights Page](/flights):",
+      "type": "text"
+    },
+    {
+      "text": "If you need more detailed information or assistance with the booking process, feel free to ask!",
+      "type": "text"
+    },
+    {
+      "text": "To explore available hotels, click [here](/hotels).",
+      "type": "text"
+    },
+    {
+      "text": "To view your bookings, click [here](/myBookings).",
+      "type": "text"
+    },
+    {
+      "text": "To reset your password, click [here](/change-password).",
+      "type": "text"
+    },
+    {
+      "text": "To sign in to your account, click [here](/signin).",
+      "type": "text"
+    },
+    {
+      "text": "To view frequently asked questions, click [here](/faq).",
+      "type": "text"
+    },
+    {
+      "text": "To contact customer support, click [here](/contact).",
+      "type": "text"
+    },
+    {
+      "text": "To sign up with your information, click [here](/signup).",
+      "type": "text"
+    }
+  ]
+}
