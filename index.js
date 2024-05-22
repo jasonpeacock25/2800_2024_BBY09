@@ -268,7 +268,7 @@ app.post('/flights/search', (req,res) => {
     res.redirect('departing');
 });
 
-app.get('/payment', (req, res) => {
+app.get('/payment', sessionValidation, (req, res) => {
     res.render('payment');
 })
 
