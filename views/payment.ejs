@@ -3,7 +3,7 @@
     <div class="col-md-5 col-lg-4 order-md-last">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span style="color: black;">Your cart</span>
-        <span class="badge bg-dark rounded-pill">3</span>
+        <!-- <span class="badge bg-dark rounded-pill">3</span> -->
       </h4>
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -149,11 +149,13 @@
 
         <hr class="my-4">
 
-        <button class="w-100 btn btn-dark btn-lg" type="submit" style="background-color: #062c43;">Confirm checkout</button>
+        <button class="w-100 btn btn-dark btn-lg" type="submit" style="background-color: #062c43;">Confirm payment</button>
       </form>
     </div>
   </div>
   <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
 
     // parses string and returns a number
     function parseAmount(amount) {
@@ -178,5 +180,6 @@
 
     // Updates total amount
     totalAmountElement.textContent = formatAmount(totalAmount);
+});
   </script>
 <%- include('templates/footer') %>
