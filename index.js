@@ -264,6 +264,10 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
 
+app.get('/orderConfirmation', (req, res) => {
+    res.render('orderConfirmation');
+});
+
 // Define a schema for the inquiry collection
 const inquirySchema = new mongoose.Schema({
     name: { type: String, required: true },
