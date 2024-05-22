@@ -15,6 +15,8 @@ const port = 8000;
 
 // Import the Hotel model
 const Hotel = require('./models/Hotel');
+// Import the Booking Info model
+const BookingInfo = require('./models/BookingInfo');
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
 // Supporting function that checks if session is authenticated
@@ -66,11 +68,6 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     user_type: { type: String, required: true, default: 'user' },
-    searchHistory: [{
-        region: String,
-        checkInDate: Date,
-        checkOutDate: Date
-    }]
 });
 
 // Creating a user model
@@ -105,15 +102,15 @@ app.post('/search', async (req, res) => {
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    await User.findByIdAndUpdate(req.session.userId, {
-        $push: {
-            searchHistory: {
-                region,
-                checkInDate: new Date(checkInDate),
-                checkOutDate: new Date(checkOutDate)
-            }
-        }
-    })
+    await BookingInfo.findOneAndUpdate(
+        { userId: req.session.userId }, // Find the document with the matching userId
+        {
+            region,
+            checkInDate: new Date(checkInDate),
+            checkOutDate: new Date(checkOutDate)
+        },
+        { upsert: true, new: true } // If the document doesn't exist, create a new one
+    );
 
     res.redirect('availableHotels');
 });
@@ -206,6 +203,8 @@ app.post('/loggingin', async (req, res) => {
                 req.session.email = email;
                 req.session.user_type = user.user_type;
                 req.session.cookie.maxAge = expireTime;
+                req.session.userId = user._id;
+                console.log(req.session);
                 res.redirect('/main');
             } else {
                 res.render("signin", { message: "Invalid Password" })

@@ -1,5 +1,7 @@
 <%- include('templates/header-back-arrow') %>
 
+<link rel="stylesheet" href="/css/hotelSummary.css">
+
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -7,18 +9,18 @@
                     <%= hotel.name %>
                 </h1>
                 <img src="/<%= hotel.imageURL %>" class="img-fluid mb-4" alt="<%= hotel.name %>">
-                <p><strong>Hotel details:</strong>
-                    <%= hotel.details %>
-                </p>
-                <p><strong>Rating:</strong>
+                <p><strong>Rating: </strong>
                     <%= hotel.rating %>
+                </p>
+                <p><strong></strong>
+                    <%= hotel.details %>
                 </p>
                 <p><strong>Price:</strong> $<%= hotel.price %>
                 </p>
                 <p><strong>Available from:</strong>
                     <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
                 </p>
-                <!-- <a href="/availableHotels" class="btn btn-primary">Back to Hotels</a> -->
+                <a href="" class="btn btn-primary">Book</a>
             </div>
         </div>
     </div>

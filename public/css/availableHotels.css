@@ -1,0 +1,59 @@
+    body {
+        background-color: #f0f2f5;
+        font-family: 'Arial', sans-serif;
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .hotel-card {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        height: 100%;
+    }
+    .hotel-card img {
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+    }
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    .card-text {
+        margin-bottom: 10px;
+        flex-grow: 1;
+    }
+    .btn-primary {
+        background-color: #062c43;
+        border-color: #062c43;
+        border-radius: 5px;
+        padding: 10px 20px;
+        align-self: flex-end; 
+    }
+    .btn-primary:hover {
+        background-color: #357ab8;
+        border-color: #357ab8;
+    }
+    
+    .hotel-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .hotel-col {
+        flex: 0 0 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+        display: flex;
+        margin-bottom: 20px;
+    }
