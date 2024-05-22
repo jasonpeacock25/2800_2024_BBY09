@@ -1,4 +1,5 @@
 <%- include('templates/header-back-arrow') %>
+<link rel="stylesheet" href="/css/availableHotels.css">
 
 <body>
     <div class="container">
@@ -14,12 +15,14 @@
                             <h5 class="card-title">
                                 <%= hotel.name %>
                             </h5>
-                            <p class="card-text">Hotel details: <%= hotel.details %>
+                            <p class="card-text"><%= hotel.details %>
                             </p>
                             <p class="card-text"><strong>Rating:</strong>
                                 <%= hotel.rating %>
                             </p>
                             <p class="card-text"><strong>Price:</strong> $<%= hotel.price %>
+                            </p>
+                            <p class="card-text"><strong>Region:</strong> <%= hotel.region %>
                             </p>
                             <p class="card-text"><strong>Available from:</strong>
                                 <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
