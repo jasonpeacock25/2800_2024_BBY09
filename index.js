@@ -230,6 +230,7 @@ app.get('/about', sessionValidation, (req, res) => {
     res.render('about');
 });
 
+// My bookings page route
 app.get('/myBookings', sessionValidation, (req,res) => {
     res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
@@ -255,6 +256,10 @@ app.post('/flights/search', (req,res) => {
     `</div>`;
     res.send(html);
 });
+
+app.get('/payment', (req, res) => {
+    res.render('payment');
+})
 
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
