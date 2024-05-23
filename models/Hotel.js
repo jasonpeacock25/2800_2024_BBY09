@@ -1,5 +1,28 @@
 const mongoose = require('mongoose');
 
+// Define the review schema
+const reviewSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  details: {
+    type: String,
+    required: true
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 10
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Define the hotel schema
 const hotelSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -33,7 +56,8 @@ const hotelSchema = new mongoose.Schema({
   imageURL: {
     type: String,
     required: true
-  }
+  },
+  reviews: [reviewSchema]
 }, { collection: 'hotels' });
 
 const Hotel = mongoose.model('Hotel', hotelSchema);

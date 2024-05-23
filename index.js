@@ -17,6 +17,7 @@ const port = 8000;
 const Hotel = require('./models/Hotel');
 // Import the Booking Info model
 const BookingInfo = require('./models/BookingInfo');
+
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
 // Supporting function that checks if session is authenticated
@@ -135,7 +136,7 @@ app.post('/hotelSelection', async (req, res) => {
 
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
-    res.render('hotelSummary', { hotel });
+    res.render('hotelSummary', { hotel, reviews: hotel.reviews });
 });
 
 app.post('/bookHotel', async (req, res) => {
@@ -159,7 +160,7 @@ app.get('/main', (req, res) => {
         res.redirect('/signin');
         return;
     }
-    res.render('main', { username: req.session.username});
+    res.render('main', { username: req.session.username });
 });
 
 // Submitting a user to the db creating a session
@@ -237,8 +238,9 @@ app.get('/about', sessionValidation, (req, res) => {
     res.render('about');
 });
 
-app.get('/myBookings', sessionValidation, (req,res) => {
-    res.render('myBookings', {departingFlights, returnFlights, hotels });
+// My bookings page route
+app.get('/myBookings', sessionValidation, (req, res) => {
+    res.render('myBookings', { departingFlights, returnFlights, hotels });
 });
 
 app.get('/faq', sessionValidation, (req, res) => {
@@ -251,7 +253,7 @@ app.get('/flights', sessionValidation, (req, res) => {
 });
 
 // Search flights (temporary format to display post is functioning)
-app.post('/flights/search', (req,res) => {
+app.post('/flights/search', (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
     let html = `<div>Flight Type: ` + flightType + 
     `<br>Travellers: ` + travellers +
@@ -409,9 +411,43 @@ app.post('/reset-password', async (req, res) => {
     }
 });
 
+// Submit review to database
+app.post('/submit-review', async (req, res) => {
+    const { title, details, rating, hotelId } = req.body;
 
+    try {
+        const hotel = await Hotel.findById(hotelId);
+
+        const newReview = {
+            title,
+            details,
+            rating: parseInt(rating, 10),
+            date: new Date()
+        };
+
+        hotel.reviews.push(newReview);
+
+        // Save the hotel with the new review
+        await hotel.save();
+
+        // Calculate the new average rating
+        const ratings = hotel.reviews.map(review => review.rating);
+        const totalRating = ratings.reduce((sum, rating) => sum + rating, 0);
+        const averageRating = ratings.length > 0 ? totalRating / ratings.length : 0;
+
+        // Update the hotel rating
+        hotel.rating = averageRating;
+        await hotel.save();
+
+        res.redirect(`hotelSummary/${hotelId}`);
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // 404 page for any routes that are not defined
+// make sure this is the last route before app.listen
 app.get("*", (req, res) => {
     res.status(404);
     res.render('404');
