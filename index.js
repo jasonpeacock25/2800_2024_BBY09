@@ -268,8 +268,9 @@ app.post('/flights/search', (req,res) => {
     res.redirect('departing');
 });
 
-app.get('/payment', sessionValidation, (req, res) => {
-    res.render('payment');
+app.get('/payment', sessionValidation, async (req, res) => {
+    const hotel = await Hotel.find();
+    res.render('payment', { hotel });
 })
 
 app.get('/contact', sessionValidation, (req, res) => {
