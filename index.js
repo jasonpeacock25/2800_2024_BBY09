@@ -237,6 +237,7 @@ app.get('/about', sessionValidation, (req, res) => {
     res.render('about');
 });
 
+// My bookings page route
 app.get('/myBookings', sessionValidation, (req,res) => {
     res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
@@ -250,18 +251,33 @@ app.get('/flights', sessionValidation, (req, res) => {
     res.render('flights');
 });
 
+// Departing flights page
+app.get('/flights/departing', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    res.render('departingFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
+// Returning flights page
+app.get('/flights/returning', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    res.render('returningFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
 // Search flights (temporary format to display post is functioning)
 app.post('/flights/search', (req,res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
-    let html = `<div>Flight Type: ` + flightType + 
-    `<br>Travellers: ` + travellers +
-    `<br>From: ` + fromInput +
-    `<br>To: ` + toInput +
-    `<br>Depart: ` + departDate +
-    `<br>Arrive: ` + returnDate +
-    `</div>`;
-    res.send(html);
+    req.session.flightType = flightType;
+    req.session.travellers = travellers;
+    req.session.fromInput = fromInput;
+    req.session.toInput = toInput;
+    req.session.departDate = departDate;
+    req.session.returnDate = returnDate;
+    res.redirect('departing');
 });
+
+app.get('/payment', sessionValidation, (req, res) => {
+    res.render('payment');
+})
 
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
