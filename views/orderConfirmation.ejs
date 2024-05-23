@@ -4,6 +4,7 @@
         <div class="card-header text-center">
             <h1>Order Confirmed</h1>
         </div>
+        <!-- Start of card body -->
         <div class="card-body">
             <p><%= username %>,</p>
             <p>Your order has been confirmed! A receipt has been sent to your email.</p>
@@ -12,15 +13,11 @@
                 <tbody>
                     <tr>
                         <th scope="row">Order Number:</th>
-                        <td id="orderNumber">[Order Number]</td>
+                        <td id="orderNumber"></td>
                     </tr>
                     <tr>
                         <th scope="row">Order Date:</th>
-                        <td>[Order Date]</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Shipping Address:</th>
-                        <td>[Shipping Address]</td>
+                        <td id="orderDate"></td>
                     </tr>
                 </tbody>
             </table>
@@ -29,60 +26,75 @@
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th>Quantity</th>
+                        <th>Item ID</th>
                         <th>Price</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>[Item Name 1]</td>
-                        <td>[Quantity 1]</td>
-                        <td>[Price 1]</td>
-                    </tr>
-                    <tr>
-                        <td>[Item Name 2]</td>
-                        <td>[Quantity 2]</td>
-                        <td>[Price 2]</td>
-                    </tr>
-                    <!-- Add more items as needed -->
+                <tbody id="orderItems">
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Total</th>
+                        <th id="totalAmount">$0.00</th>
+                    </tr>
+                </tfoot>
             </table>
             <p>If you have any questions, feel free to contact our customer service team.</p>
             <p>Best regards,</p>
-            <p>[Your Company]</p>
+            <p>Galaxy Getaways</p>
         </div>
-<!-- <div class="conatiner">
-    <div class="p-5 mb-4 bg-body-tertiary rounded-3">
-        <div class="container-fluid ">
-            <h1 class="fw-bold">Order Confirmed</h1>
-            <p class="col-md-8 fs-4"><%= username %>, your order has been confirmed! A receipt has been sent to your email.</p>
-            <button class="btn btn-primary btn-lg" type="button">Example button</button>
-        </div>
-    </div>
-    <div class="row align-items-md-stretch">
-        <div class="col-md-6">
-            <div class="h-100 p-5 text-bg-dark rounded-3">
-                <h2>Change the background</h2>
-                <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look.
-                    Then, mix and match with additional component themes and more.</p>
-                <button class="btn btn-outline-light" type="button">Example button</button>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                <h2>Add borders</h2>
-                <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be
-                    sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of
-                    both column's content for equal-height.</p>
-                <button class="btn btn-outline-secondary" type="button">Example button</button>
-            </div>
-        </div>
-    </div>
-</div> -->
+        <!-- End of card body -->
 <script>
+    var items = [
+        { name: 'Departing Flight', item_ID: 'VAN-MOON 001', price: '2000.00' },
+        { name: 'Returning Flight', item_ID: 'MOON-VAN 001', price: '3000.00' },
+        { name: 'Hotel', item_ID: 'Crater Cove Hotel', price: '5009.00' }
+    ];
+
+document.addEventListener('DOMContentLoaded', function() {
     function generateOrderNumber() {
-            var orderNumber = 'ORD-' + Math.floor(Math.random() * 900000 + 100000);
+            let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000 );
             document.getElementById('orderNumber').textContent = orderNumber;
         }
+    function formatDate(date) {
+        let day = String(date.getDate()).padStart(2, '0');
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let year = date.getFullYear();
+        return month + '/' + day + '/' + year;
+    }
+    function populateOrderItems(items) {
+            var orderItemsContainer = document.getElementById('orderItems');
+            orderItemsContainer.innerHTML = ''; // Clear existing items if any
+
+            var totalAmount = 0;
+
+            items.forEach(function(item) {
+                var row = document.createElement('tr');
+
+                var itemName = document.createElement('td');
+                itemName.textContent = item.name;
+                row.appendChild(itemName);
+
+                var itemQuantity = document.createElement('td');
+                itemQuantity.textContent = item.item_ID;
+                row.appendChild(itemQuantity);
+
+                var itemPrice = document.createElement('td');
+                itemPrice.textContent = '$' + item.price;
+                row.appendChild(itemPrice);
+
+                orderItemsContainer.appendChild(row);
+
+                totalAmount += parseFloat(item.price);
+            });
+            document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+        }
+        generateOrderNumber();
+        var currentDate = new Date();
+        var formattedDate = formatDate(currentDate);
+        document.getElementById('orderDate').textContent = formattedDate;
+        
+        populateOrderItems(items);
+    });
 </script>
 <%- include('templates/footer') %>
