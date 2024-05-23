@@ -280,7 +280,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
 
-app.get('/orderConfirmation', (req, res) => {
+app.get('/orderConfirmation', sessionValidation, (req, res) => {
     res.render('orderConfirmation', { username: req.session.username});
 });
 
