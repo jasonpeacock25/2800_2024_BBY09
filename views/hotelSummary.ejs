@@ -20,7 +20,10 @@
                 <p><strong>Available from:</strong>
                     <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
                 </p>
-                <a href="" class="btn btn-primary">Book</a>
+                <form action="/bookHotel" method="POST">
+                    <input type="hidden" name="hotelId" value="<%= hotel._id %>">
+                    <button type="submit" class="btn btn-primary">Book</button>
+                </form>
             </div>
         </div>
     </div>

@@ -98,31 +98,34 @@ app.post('/search', async (req, res) => {
     const region = req.body.region;
     const checkInDate = req.body.checkIn;
     const checkOutDate = req.body.checkOut;
-
+    
+    req.session.region = region;
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    await BookingInfo.findOneAndUpdate(
-        { userId: req.session.userId }, // Find the document with the matching userId
-        {
-            region,
-            checkInDate: new Date(checkInDate),
-            checkOutDate: new Date(checkOutDate)
-        },
-        { upsert: true, new: true } // If the document doesn't exist, create a new one
-    );
+    // await BookingInfo.findOneAndUpdate(
+    //     { userId: req.session.userId }, // Find the document with the matching userId
+    //     {
+    //         region,
+    //         checkInDate: new Date(checkInDate),
+    //         checkOutDate: new Date(checkOutDate)
+    //     },
+    //     { upsert: true, new: true } // If the document doesn't exist, create a new one
+    // );
 
     res.redirect('availableHotels');
 });
 
 app.get('/availableHotels', sessionValidation, async (req, res) => {
-    try {
-        const hotels = await Hotel.find();
+        const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
+
+        const hotels = await Hotel.find({
+            region,
+            startDate: { $lte: new Date(hotelCheckInDate) }, 
+            endDate: { $gte: new Date(hotelCheckOutDate) }    
+        });
+
         res.render('availableHotels', { hotels });
-    } catch (err) {
-        console.error('Error fetching hotels:', err);
-        res.status(500).send('Internal Server Error');
-    }
 });
 
 app.post('/hotelSelection', async (req, res) => {
@@ -133,6 +136,11 @@ app.post('/hotelSelection', async (req, res) => {
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel });
+});
+
+app.post('/bookHotel', async (req, res) => {
+    const hotel = await Hotel.findById(req.body.hotelId);
+    res.render('checkoutFiller', { hotel });
 });
 // End of Gurvir's Routes //////////////////////////////
 
