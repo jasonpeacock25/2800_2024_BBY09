@@ -232,8 +232,8 @@ app.get('/about', sessionValidation, (req, res) => {
 });
 
 // My bookings page route
-app.get('/myBookings', sessionValidation, (req, res) => {
-    res.render('myBookings', { departingFlights, returnFlights, hotels });
+app.get('/myBookings', sessionValidation, (req,res) => {
+    res.render('myBookings', {departingFlights, returnFlights, hotels });
 });
 
 app.get('/faq', sessionValidation, (req, res) => {
