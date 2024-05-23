@@ -52,22 +52,29 @@
   }
 
   #trigger {
-    position:absolute;
-    right:12vw;
-    height:10vh;
-    width:10vw;
-    top:50vh;
+    position: absolute;
+    top: 70%; 
+    right: 5%;
+    width: 100px; 
+    height: 100px; 
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0); 
+    cursor: pointer;
+    caret-color: transparent; 
   }
 
 
   @media (max-width: 768px) {
 
     #trigger {
-      position:absolute;
-      right:5vw;
-      height:10vh;
-      width:10vw;
-      top:50vh;
+      position: absolute;
+      top: 70%; 
+      right: 5%; 
+      width: 100px; 
+      height: 100px; 
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0); 
+      cursor: pointer;
     }
 
   }
