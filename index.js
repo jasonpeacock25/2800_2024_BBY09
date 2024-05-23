@@ -103,30 +103,33 @@ app.post('/search', async (req, res) => {
     const checkInDate = req.body.checkIn;
     const checkOutDate = req.body.checkOut;
 
+    req.session.region = region;
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    await User.findByIdAndUpdate(req.session.userId, {
-        $push: {
-            searchHistory: {
-                region,
-                checkInDate: new Date(checkInDate),
-                checkOutDate: new Date(checkOutDate)
-            }
-        }
-    })
+    // await User.findByIdAndUpdate(req.session.userId, {
+    //     $push: {
+    //         searchHistory: {
+    //             region,
+    //             checkInDate: new Date(checkInDate),
+    //             checkOutDate: new Date(checkOutDate)
+    //         }
+    //     }
+    // })
 
     res.redirect('availableHotels');
 });
 
 app.get('/availableHotels', sessionValidation, async (req, res) => {
-    try {
-        const hotels = await Hotel.find();
-        res.render('availableHotels', { hotels });
-    } catch (err) {
-        console.error('Error fetching hotels:', err);
-        res.status(500).send('Internal Server Error');
-    }
+    const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
+
+    const hotels = await Hotel.find({
+        region,
+        startDate: { $lte: new Date(hotelCheckInDate) }, 
+        endDate: { $gte: new Date(hotelCheckOutDate) }    
+    });
+
+    res.render('availableHotels', { hotels });
 });
 
 app.post('/hotelSelection', async (req, res) => {
