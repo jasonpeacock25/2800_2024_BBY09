@@ -1,27 +1,76 @@
-        #game-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            z-index: 1000;
-            text-align: center;
-        }
-        iframe {
-            width: 80%;
-            height: 80%;
-            border: none;
-            margin-top: 5%;
-        }
-        #close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px;
-            background: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+#game-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1000;
+    text-align: center;
+  }
+  iframe {
+    width: 80%;
+    height: 80%;
+    border: none;
+    margin-top: 5%;
+  }
+  #close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .controls {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  .control-button {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .about-user-info p {
+    color: red;
+  }
+
+  #trigger {
+    position:absolute;
+    right:12vw;
+    height:10vh;
+    width:10vw;
+    top:50vh;
+  }
+
+
+  @media (max-width: 768px) {
+
+    #trigger {
+      position:absolute;
+      right:5vw;
+      height:10vh;
+      width:10vw;
+      top:50vh;
+    }
+
+  }
+    
+
+  
