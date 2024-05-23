@@ -265,7 +265,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
 });
 
 app.get('/orderConfirmation', (req, res) => {
-    res.render('orderConfirmation');
+    res.render('orderConfirmation', { username: req.session.username});
 });
 
 // Define a schema for the inquiry collection
