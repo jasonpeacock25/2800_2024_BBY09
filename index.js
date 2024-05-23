@@ -15,8 +15,6 @@ const port = 8000;
 
 // Import the Hotel model
 const Hotel = require('./models/Hotel');
-// Import the Booking Info model
-const BookingInfo = require('./models/BookingInfo');
 
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
@@ -69,6 +67,11 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     user_type: { type: String, required: true, default: 'user' },
+    searchHistory: [{
+        region: String,
+        checkInDate: Date,
+        checkOutDate: Date
+    }]
 });
 
 // Creating a user model
@@ -99,34 +102,31 @@ app.post('/search', async (req, res) => {
     const region = req.body.region;
     const checkInDate = req.body.checkIn;
     const checkOutDate = req.body.checkOut;
-    
-    req.session.region = region;
+
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    // await BookingInfo.findOneAndUpdate(
-    //     { userId: req.session.userId }, // Find the document with the matching userId
-    //     {
-    //         region,
-    //         checkInDate: new Date(checkInDate),
-    //         checkOutDate: new Date(checkOutDate)
-    //     },
-    //     { upsert: true, new: true } // If the document doesn't exist, create a new one
-    // );
+    await User.findByIdAndUpdate(req.session.userId, {
+        $push: {
+            searchHistory: {
+                region,
+                checkInDate: new Date(checkInDate),
+                checkOutDate: new Date(checkOutDate)
+            }
+        }
+    })
 
     res.redirect('availableHotels');
 });
 
 app.get('/availableHotels', sessionValidation, async (req, res) => {
-        const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
-
-        const hotels = await Hotel.find({
-            region,
-            startDate: { $lte: new Date(hotelCheckInDate) }, 
-            endDate: { $gte: new Date(hotelCheckOutDate) }    
-        });
-
+    try {
+        const hotels = await Hotel.find();
         res.render('availableHotels', { hotels });
+    } catch (err) {
+        console.error('Error fetching hotels:', err);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 app.post('/hotelSelection', async (req, res) => {
@@ -137,11 +137,6 @@ app.post('/hotelSelection', async (req, res) => {
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel, reviews: hotel.reviews });
-});
-
-app.post('/bookHotel', async (req, res) => {
-    const hotel = await Hotel.findById(req.body.hotelId);
-    res.render('checkoutFiller', { hotel });
 });
 // End of Gurvir's Routes //////////////////////////////
 
@@ -212,8 +207,6 @@ app.post('/loggingin', async (req, res) => {
                 req.session.email = email;
                 req.session.user_type = user.user_type;
                 req.session.cookie.maxAge = expireTime;
-                req.session.userId = user._id;
-                console.log(req.session);
                 res.redirect('/main');
             } else {
                 res.render("signin", { message: "Invalid Password" })
@@ -252,18 +245,33 @@ app.get('/flights', sessionValidation, (req, res) => {
     res.render('flights');
 });
 
+// Departing flights page
+app.get('/flights/departing', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    res.render('departingFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
+// Returning flights page
+app.get('/flights/returning', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    res.render('returningFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
 // Search flights (temporary format to display post is functioning)
 app.post('/flights/search', (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
-    let html = `<div>Flight Type: ` + flightType + 
-    `<br>Travellers: ` + travellers +
-    `<br>From: ` + fromInput +
-    `<br>To: ` + toInput +
-    `<br>Depart: ` + departDate +
-    `<br>Arrive: ` + returnDate +
-    `</div>`;
-    res.send(html);
+    req.session.flightType = flightType;
+    req.session.travellers = travellers;
+    req.session.fromInput = fromInput;
+    req.session.toInput = toInput;
+    req.session.departDate = departDate;
+    req.session.returnDate = returnDate;
+    res.redirect('departing');
 });
+
+app.get('/payment', sessionValidation, (req, res) => {
+    res.render('payment');
+})
 
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
