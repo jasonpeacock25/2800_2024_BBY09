@@ -15,6 +15,7 @@ const port = 8000;
 
 // Import the Hotel model
 const Hotel = require('./models/Hotel');
+
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
 // Supporting function that checks if session is authenticated
@@ -102,30 +103,33 @@ app.post('/search', async (req, res) => {
     const checkInDate = req.body.checkIn;
     const checkOutDate = req.body.checkOut;
 
+    req.session.region = region;
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    await User.findByIdAndUpdate(req.session.userId, {
-        $push: {
-            searchHistory: {
-                region,
-                checkInDate: new Date(checkInDate),
-                checkOutDate: new Date(checkOutDate)
-            }
-        }
-    })
+    // await User.findByIdAndUpdate(req.session.userId, {
+    //     $push: {
+    //         searchHistory: {
+    //             region,
+    //             checkInDate: new Date(checkInDate),
+    //             checkOutDate: new Date(checkOutDate)
+    //         }
+    //     }
+    // })
 
     res.redirect('availableHotels');
 });
 
 app.get('/availableHotels', sessionValidation, async (req, res) => {
-    try {
-        const hotels = await Hotel.find();
-        res.render('availableHotels', { hotels });
-    } catch (err) {
-        console.error('Error fetching hotels:', err);
-        res.status(500).send('Internal Server Error');
-    }
+    const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
+
+    const hotels = await Hotel.find({
+        region,
+        startDate: { $lte: new Date(hotelCheckInDate) }, 
+        endDate: { $gte: new Date(hotelCheckOutDate) }    
+    });
+
+    res.render('availableHotels', { hotels });
 });
 
 app.post('/hotelSelection', async (req, res) => {
@@ -135,8 +139,13 @@ app.post('/hotelSelection', async (req, res) => {
 
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
-    res.render('hotelSummary', { hotel });
+    res.render('hotelSummary', { hotel, reviews: hotel.reviews });
 });
+
+app.post('/bookHotel', sessionValidation, async (req, res) => {
+    const hotel = await Hotel.findById(req.body.hotelId);
+    res.render('checkoutFiller', { hotel });
+})
 // End of Gurvir's Routes //////////////////////////////
 
 // Sign up page route
@@ -154,7 +163,7 @@ app.get('/main', (req, res) => {
         res.redirect('/signin');
         return;
     }
-    res.render('main', { username: req.session.username});
+    res.render('main', { username: req.session.username });
 });
 
 // Submitting a user to the db creating a session
@@ -257,7 +266,7 @@ app.get('/flights/returning', sessionValidation, (req, res) => {
 });
 
 // Search flights (temporary format to display post is functioning)
-app.post('/flights/search', (req,res) => {
+app.post('/flights/search', (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
     req.session.flightType = flightType;
     req.session.travellers = travellers;
@@ -419,16 +428,50 @@ app.post('/reset-password', async (req, res) => {
     }
 });
 
+// Submit review to database
+app.post('/submit-review', async (req, res) => {
+    const { title, details, rating, hotelId } = req.body;
 
+    try {
+        const hotel = await Hotel.findById(hotelId);
+
+        const newReview = {
+            title,
+            details,
+            rating: parseInt(rating, 10),
+            date: new Date()
+        };
+
+        hotel.reviews.push(newReview);
+
+        // Save the hotel with the new review
+        await hotel.save();
+
+        // Calculate the new average rating
+        const ratings = hotel.reviews.map(review => review.rating);
+        const totalRating = ratings.reduce((sum, rating) => sum + rating, 0);
+        const averageRating = ratings.length > 0 ? totalRating / ratings.length : 0;
+
+        // Update the hotel rating
+        hotel.rating = averageRating;
+        await hotel.save();
+
+        res.redirect(`hotelSummary/${hotelId}`);
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // 404 page for any routes that are not defined
+// make sure this is the last route before app.listen
 app.get("*", (req, res) => {
     res.status(404);
     res.render('404');
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
