@@ -138,6 +138,11 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
     res.render('hotelSummary', { hotel, reviews: hotel.reviews });
 });
+
+app.post('/bookHotel', sessionValidation, async (req, res) => {
+    const hotel = await Hotel.findById(req.body.hotelId);
+    res.render('checkoutFiller', { hotel });
+})
 // End of Gurvir's Routes //////////////////////////////
 
 // Sign up page route
