@@ -30,7 +30,19 @@
                         <th>Price</th>
                     </tr>
                 </thead>
-                <tbody id="orderItems">
+                <tbody>
+                    <% booking.forEach(booking=> { %>
+                        <tr>
+                            <td>
+                                <%= booking.hotelName %>
+                            </td>
+                            <td>
+                                <%= booking.hotelId %>
+                            </td>
+                            <td>$<%= booking.hotelPrice %>
+                            </td>
+                        </tr>
+                        <% }) %>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -49,56 +61,32 @@
             <a class="btn btn-dark" role="button" type="submit" href="/myBookings" style="background-color: #062c43;">My Bookings</a>
         </div>
 <script>
-    var items = [
-        { name: 'Departing Flight', item_ID: 'VAN-MOON 001', price: '2000.00' },
-        { name: 'Returning Flight', item_ID: 'MOON-VAN 001', price: '3000.00' },
-        { name: 'Hotel', item_ID: 'Crater Cove Hotel', price: '5009.00' }
-    ];
 
-
-    function generateOrderNumber() {
-            let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000 );
-            document.getElementById('orderNumber').textContent = orderNumber;
-        }
-    function formatDate(date) {
-        let day = String(date.getDate()).padStart(2, '0');
-        let month = String(date.getMonth() + 1).padStart(2, '0');
-        let year = date.getFullYear();
-        return month + '/' + day + '/' + year;
-    }
-    function populateOrderItems(items) {
-            var orderItemsContainer = document.getElementById('orderItems');
-            orderItemsContainer.innerHTML = ''; 
-
-            var totalAmount = 0;
-
-            items.forEach(function(item) {
-                var row = document.createElement('tr');
-
-                var itemName = document.createElement('td');
-                itemName.textContent = item.name;
-                row.appendChild(itemName);
-
-                var itemQuantity = document.createElement('td');
-                itemQuantity.textContent = item.item_ID;
-                row.appendChild(itemQuantity);
-
-                var itemPrice = document.createElement('td');
-                itemPrice.textContent = '$' + item.price;
-                row.appendChild(itemPrice);
-
-                orderItemsContainer.appendChild(row);
-
-                totalAmount += parseFloat(item.price);
-            });
-            document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
-        }
-        generateOrderNumber();
-        var currentDate = new Date();
-        var formattedDate = formatDate(currentDate);
-        document.getElementById('orderDate').textContent = formattedDate;
+    document.addEventListener('DOMContentLoaded', function () {
         
-        populateOrderItems(items);
-  
+
+            function generateOrderNumber() {
+                let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('orderNumber').textContent = orderNumber;
+            }
+            function formatDate(date) {
+                let day = String(date.getDate()).padStart(2, '0');
+                let month = String(date.getMonth() + 1).padStart(2, '0');
+                let year = date.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+            
+            generateOrderNumber();
+            var currentDate = new Date();
+            var formattedDate = formatDate(currentDate);
+            document.getElementById('orderDate').textContent = formattedDate;
+            
+            var totalAmount = 0;
+                var items = document.querySelectorAll('tbody tr td:nth-child(3)');
+                items.forEach(function(item) {
+                    totalAmount += parseFloat(item.textContent.replace('$', ''));
+                });
+                document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+        });
 </script>
 <%- include('templates/footer') %>
