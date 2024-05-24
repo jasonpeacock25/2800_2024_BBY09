@@ -7,13 +7,6 @@
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <h6 class="my-0">Flights</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary" id="flight-amount">$5908</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
             <h6 class="my-0">Hotel</h6>
             <small class="text-body-secondary">
               <% if (hotel) { %>
@@ -191,16 +184,13 @@
         return '$' + amount.toFixed(2).toLocaleString();
       }
 
-      // flight, hotel and total amount constants
-      const flightAmountElement = document.getElementById('flight-amount');
+      // hotel and total amount constants
       const hotelAmountElement = document.getElementById('hotel-amount');
       const totalAmountElement = document.getElementById('total-amount');
-
-      const flightAmount = parseAmount(flightAmountElement.textContent);
       const hotelAmount = parseAmount(hotelAmountElement.textContent);
 
       // Calculates total amount
-      const totalAmount = flightAmount + hotelAmount;
+      const totalAmount = hotelAmount;
 
       // Updates total amount
       totalAmountElement.textContent = formatAmount(totalAmount);
