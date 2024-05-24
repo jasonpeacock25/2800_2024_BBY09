@@ -15,6 +15,7 @@ const port = 8000;
 
 // Import the Hotel model
 const Hotel = require('./models/Hotel');
+const BookingInfo = require('./models/BookingInfo');
 
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
@@ -144,9 +145,32 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
 
 app.post('/bookHotel', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.body.hotelId);
-    res.render('checkoutFiller', { hotel });
-})
+    res.render('payment', { hotel });
+});
 // End of Gurvir's Routes //////////////////////////////
+app.post('/confirmPayment', sessionValidation, async (req, res) => {
+    const userId = req.session.userId;
+    const { hotelId, hotelName, hotelRegion, hotelPrice, hotelRating } = req.body;
+    
+
+    try {
+        const bookingInfo = new BookingInfo({
+            userId,
+            hotelName,
+            hotelId,
+            hotelRegion,
+            hotelPrice,
+            hotelRating
+        });
+
+        await bookingInfo.save();
+
+        res.status(200).send('Booking information saved successfully');
+    }  catch (error) {
+        console.error('Error saving booking information', error)
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // Sign up page route
 app.get('/signup', (req, res) => {
@@ -210,6 +234,7 @@ app.post('/loggingin', async (req, res) => {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
                 // Session gets created here
+                req.session.userId = user._id;
                 req.session.authenticated = true;
                 req.session.username = user.username;
                 req.session.email = email;
@@ -278,7 +303,8 @@ app.post('/flights/search', (req, res) => {
 });
 
 app.get('/payment', sessionValidation, async (req, res) => {
-    const hotel = await Hotel.find();
+    // const hotel = await Hotel.find();
+    const hotel = await Hotel.findById(req.body.hotelId);
     res.render('payment', { hotel });
 })
 
