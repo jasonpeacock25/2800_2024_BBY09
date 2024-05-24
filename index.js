@@ -83,7 +83,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/favicon_io', express.static('favicon_io'));
 app.use(express.static('.'));
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Simple route
@@ -252,7 +252,27 @@ app.get('/flights/departing', sessionValidation, (req, res) => {
 // Returning flights page
 app.get('/flights/returning', sessionValidation, (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    res.render('returningFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+    res.render('returningFlights', { returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
+// Review flights page
+app.get('/flights/review', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
+    res.render('reviewFlights', { departingFlights, returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight });
+});
+
+app.post('/flights/clicked', (req,res) => {
+    let type = req.body.type;
+    let flightNumber = req.body.flightNumber;
+    if (type == "departing") {
+        req.session.departingFlight = flightNumber;
+        res.sendStatus(200);
+    } else if (type == "returning") {
+        req.session.returningFlight = flightNumber;
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(400);
+    }
 });
 
 // Search flights (temporary format to display post is functioning)

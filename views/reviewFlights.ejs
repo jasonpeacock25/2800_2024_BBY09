@@ -1,0 +1,82 @@
+<%- include('templates/header-back-arrow'); %>
+<% let totalPrice = 0;%>
+
+    <div>
+        <h2 class="text-center">Review:</h2>
+    </div>
+    <div>
+        <br>
+        <h4>Departing Flight:</h4>
+    </div>
+
+    <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
+    <div class="container">
+        <div class="row justify-content-center ">
+            <% departingFlights.forEach(function(flight, index) {%>
+                <% if(flight.flightNumber == departingFlight){%>
+                <div class="container">
+                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
+                        <div class="d-flex align-items-center justify-content-center ps-3">
+                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
+                            </h5>
+                            <p class="card-text">Destination: <%= flight.destination %>
+                            </p>
+                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                            </p>
+                            <p class="card-text">Price: $<%= flight.price %>
+                            </p>
+                            <% totalPrice += flight.price;%>
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+                <% }); %>
+        </div>
+    </div>
+
+    <div>
+        <br>
+        <h4>Returning Flight:</h4>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center ">
+            <% returnFlights.forEach(function(flight, index) {%>
+                <% if(flight.flightNumber == returningFlight){%>
+                <div class="container">
+                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
+                        <div class="d-flex align-items-center justify-content-center ps-3">
+                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
+                            </h5>
+                            <p class="card-text">Destination: <%= flight.destination %>
+                            </p>
+                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                            </p>
+                            <p class="card-text">Price: $<%= flight.price %>
+                            </p>
+                            <% totalPrice += flight.price;%>
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+                <% }); %>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <br>
+        <br>
+        <h2>Total Price: $<%= totalPrice%></h2>
+        <br>
+        <div class="button-container">
+            <a href="/main" class="btn btn-primary btn-lg" role="button" type="submit">Pay</a>
+        </div>
+    </div>
+
+    <%- include('templates/footer'); %>
