@@ -4,19 +4,22 @@ const departingFlights = [
         flightNumber: "VAN-MOON-001",
         destination: "Moon",
         departureTime: "2024-06-01 08:00",
-        imageURL: "images/nasa.png"
+        imageURL: "images/nasa.png",
+        price: 2450
     },
     {
         flightNumber: "VAN-MOON-002",
         destination: "Moon",
         departureTime: "2024-06-02 10:00",
-        imageURL: "images/blueOrigin.png"
+        imageURL: "images/blueOrigin.png",
+        price: 2200
     },
     {
         flightNumber: "VAN-MOON-003",
         destination: "Moon",
         departureTime: "2024-06-03 12:00",
-        imageURL: "images/spacex.png"
+        imageURL: "images/spacex.png",
+        price: 2125
     }
 ];
 
@@ -25,12 +28,16 @@ const returnFlights = [
     {
         flightNumber: "MOON-VAN-001",
         destination: "Vancouver",
-        departureTime: "2024-06-10 12:00"
+        departureTime: "2024-06-10 12:00",
+        imageURL: "images/spacex.png",
+        price: 2300
     },
     {
         flightNumber: "MOON-VAN-002",
         destination: "Vancouver",
-        departureTime: "2024-06-11 14:00"
+        departureTime: "2024-06-11 14:00",
+        imageURL: "images/nasa.png",
+        price: 2250
     }
 ];
 

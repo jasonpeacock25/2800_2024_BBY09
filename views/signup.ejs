@@ -1,4 +1,20 @@
 <%- include('templates/header-basic') %>
+<style>
+    .checkbox-container {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        border: solid 1px;
+        border-color: #dfdfdf;
+        border-radius: 5px;
+    }
+
+    .checkbox-container label {
+        margin-left: 5px;
+    }
+</style>
+
     <h1 class="display-6 text-center">Sign up with your information</h1><br>
     <div class="container text-center">
         <form action="/submit-signup" method="POST">
@@ -7,6 +23,13 @@
             <input class="form-control" type="email" name="email" required="true" placeholder="email">
             <br><br>
             <input class="form-control" type="password" name="password" required="true" placeholder="password">
+            <br><br>
+            <div class="checkbox-container">
+                <input type="checkbox" id="terms-and-conditions" name="terms-and-conditions" value="true" required>
+                <label for="terms-and-conditions">By creating an account with Galaxy Getaways, I accept the 
+                    <a href="/terms-and-conditions" target="_blank">terms and conditions</a> of use.
+                </label>
+            </div>
             <br><br>
             <input class="btn btn-secondary btn-block w-50 mx-auto" type="submit" value="Submit">
         </form>

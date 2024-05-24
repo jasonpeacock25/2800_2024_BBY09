@@ -1,8 +1,9 @@
-<!-- flightType, travellers, fromInput, toInput, departDate, returnDate -->
 <%- include('templates/header-back-arrow'); %>
+<script src="/js/flights.js"></script>
+
     <div>
-        <h2 class="text-center">Returning Flights Search Details:</h2>
-        <div class="container">
+        <h2 class="text-center">Returning Flights:</h2>
+        <!-- <div class="container">
             <p>Flight Type: <%= flightType%>
             </p>
             <p>Travellers: <%= travellers%>
@@ -15,26 +16,32 @@
             </p>
             <p>Return Date: <%= returnDate%>
             </p>
-        </div>
+        </div> -->
     </div>
 
     <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
     <div class="container">
         <div class="row justify-content-center ">
-            <% departingFlights.forEach(function(flight, index) {%>
+            <% returnFlights.forEach(function(flight, index) {%>
                 <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="location.href='/flights/returning';" style="cursor: pointer;">
+                    <div class="card flex-row flex-wrap d-flex" onclick="sendSelected('returning', '<%= flight.flightNumber%>')" style="cursor: pointer;" id="<%= index%>">
                         <div class="d-flex align-items-center justify-content-center ps-3">
                             <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %></h5>
-                            <p class="card-text">Destination: <%= flight.destination %></p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %></p>
+                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
+                            </h5>
+                            <p class="card-text">Destination: <%= flight.destination %>
+                            </p>
+                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                            </p>
+                            <p class="card-text">Price: $<%= flight.price %>
+                            </p>
                         </div>
                     </div>
                 </div>
-            <% }); %>
+                <% }); %>
         </div>
     </div>
+
     <%- include('templates/footer'); %>

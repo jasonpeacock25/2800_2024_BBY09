@@ -85,7 +85,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/favicon_io', express.static('favicon_io'));
 app.use(express.static('.'));
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Simple route
@@ -126,8 +126,8 @@ app.get('/availableHotels', sessionValidation, async (req, res) => {
 
     const hotels = await Hotel.find({
         region,
-        startDate: { $lte: new Date(hotelCheckInDate) }, 
-        endDate: { $gte: new Date(hotelCheckOutDate) }    
+        startDate: { $lte: new Date(hotelCheckInDate) },
+        endDate: { $gte: new Date(hotelCheckOutDate) }
     });
 
     res.render('availableHotels', { hotels });
@@ -148,10 +148,11 @@ app.post('/bookHotel', sessionValidation, async (req, res) => {
     res.render('payment', { hotel });
 });
 // End of Gurvir's Routes //////////////////////////////
+
 app.post('/confirmPayment', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     const { hotelId, hotelName, hotelRegion, hotelPrice, hotelRating } = req.body;
-    
+
 
     try {
         const bookingInfo = new BookingInfo({
@@ -164,7 +165,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         });
 
         await bookingInfo.save();
-
+        
         // Fetch all booking information for the user
         const bookings = await BookingInfo.find({ userId }).exec();
 
@@ -195,36 +196,36 @@ app.get('/main', (req, res) => {
 
 // Submitting a user to the db creating a session
 app.post('/submit-signup', async (req, res) => {
-    const { name, email, password } = req.body;
+        const { name, email, password } = req.body;
 
-    // Validate user input
-    const schema = Joi.object({
-        name: Joi.string().max(20).required(),
-        email: Joi.string().email().required(),
-        password: Joi.string().required(),
-    });
+        // Validate user input
+        const schema = Joi.object({
+            name: Joi.string().max(20).required(),
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+        });
 
-    const { error } = schema.validate({ name, email, password });
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
+        const { error } = schema.validate({ name, email, password });
+        if (error) {
+            return res.status(400).send(error.details[0].message);
+        }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create a new user and save to MongoDB
-    const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
-    await newUser.save();
+        // Create a new user and save to MongoDB
+        const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
+        await newUser.save();
 
-    // Session gets created here
-    req.session.authenticated = true;
-    req.session.username = newUser.username;
-    req.session.email = email;
-    req.session.user_type = newUser.user_type;
-    req.session.cookie.maxAge = expireTime;
-    req.session.userId = newUser._id;
+        // Session gets created here
+        req.session.authenticated = true;
+        req.session.username = newUser.username;
+        req.session.email = email;
+        req.session.user_type = newUser.user_type;
+        req.session.cookie.maxAge = expireTime;
+        req.session.userId = newUser._id;
 
-    res.redirect('/main');
+        res.redirect('/main');
 });
 
 // Finding a user and creating a session for that user
@@ -282,8 +283,6 @@ app.get('/myBookings', sessionValidation, async (req,res) => {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
     }
-
-    
 });
 
 app.get('/faq', sessionValidation, (req, res) => {
@@ -304,7 +303,27 @@ app.get('/flights/departing', sessionValidation, (req, res) => {
 // Returning flights page
 app.get('/flights/returning', sessionValidation, (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    res.render('returningFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+    res.render('returningFlights', { returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+});
+
+// Review flights page
+app.get('/flights/review', sessionValidation, (req, res) => {
+    const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
+    res.render('reviewFlights', { departingFlights, returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight });
+});
+
+app.post('/flights/clicked', (req,res) => {
+    let type = req.body.type;
+    let flightNumber = req.body.flightNumber;
+    if (type == "departing") {
+        req.session.departingFlight = flightNumber;
+        res.sendStatus(200);
+    } else if (type == "returning") {
+        req.session.returningFlight = flightNumber;
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(400);
+    }
 });
 
 // Search flights (temporary format to display post is functioning)
@@ -529,6 +548,23 @@ app.post('/submit-review', async (req, res) => {
     }
 });
 
+// For terms and conditions page
+app.get('/terms-and-conditions', (req, res) => {
+    res.render('terms-and-conditions');
+});
+
+// For deleteing account 
+/**
+app.post('/delete-account', async (req, res) => {
+
+    const user = await User.findById(req.session.userId);
+
+    await user.deleteOne();
+
+    res.redirect('/');
+});  */
+
+
 // 404 page for any routes that are not defined
 // make sure this is the last route before app.listen
 app.get("*", (req, res) => {
@@ -537,7 +573,7 @@ app.get("*", (req, res) => {
 });
 
 // Start the server
-app.listen(port, '0.0.0.0',() => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
