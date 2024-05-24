@@ -1,5 +1,5 @@
 <%- include('templates/header-hamburger-main-only') %>
-
+<link rel="stylesheet" href="/public/css/game.css">
     <div class="background-container ">
         <div class="container text-center">
             <h3 class="custom-color">
@@ -11,6 +11,28 @@
                 <a href="/hotels" class="btn btn-light" role="button" type="submit">Explore Hotels</a>
             </div>
         </div>
+        <div id="trigger"></div>
+        <div id="game-container">
+            <button id="close-button">Close</button>
+            <iframe height="300" style="width: 100%;" scrolling="no" title="Abandoned Planet (metaverse)" src="https://codepen.io/b29/embed/LoaRKx?default-tab=result&editors=1010" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+                See the Pen <a href="https://codepen.io/b29/pen/LoaRKx">Abandoned Planet (metaverse)</a> by Baron (<a href="https://codepen.io/b29">@b29</a>)
+                on <a href="https://codepen.io">CodePen</a>.
+            </iframe>
+            
+        </div>
+              
     </div>
+    <script>
+        document.getElementById('trigger').addEventListener('click', function() {
+            document.getElementById('game-container').style.display = 'block';
+        });
+
+        document.getElementById('close-button').addEventListener('click', function() {
+            document.getElementById('game-container').style.display = 'none';
+        });
+    </script>
+
+
+
 
     <%- include('templates/footer') %>
