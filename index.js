@@ -165,7 +165,10 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
 
         await bookingInfo.save();
 
-        res.render('orderConfirmation');
+        // Fetch all booking information for the user
+        const bookings = await BookingInfo.find({ userId }).exec();
+
+        res.render('orderConfirmation', { username: req.session.username, booking: bookings} );
     }  catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
@@ -265,8 +268,22 @@ app.get('/about', sessionValidation, (req, res) => {
 });
 
 // My bookings page route
-app.get('/myBookings', sessionValidation, (req,res) => {
-    res.render('myBookings', {departingFlights, returnFlights, hotels });
+app.get('/myBookings', sessionValidation, async (req,res) => {
+    const userId = req.session.userId;
+    try {
+        // Fetch bookings for the user
+        const bookings = await BookingInfo.find({ userId });
+
+        
+        const hotels = bookings.filter(booking => booking.hotelName); 
+
+        res.render('myBookings', { hotels, departingFlights, returnFlights});
+    } catch (error) {
+        console.error('Error fetching booking information:', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+    
 });
 
 app.get('/faq', sessionValidation, (req, res) => {
@@ -318,6 +335,24 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
 
 app.get('/orderConfirmation', sessionValidation, (req, res) => {
     res.render('orderConfirmation', { username: req.session.username});
+});
+
+app.get('/orderConfirmation', sessionValidation, async (req, res) => {
+    const userId = req.session.userId;
+
+    try {
+        // Fetch all booking information for the user
+        const bookings = await BookingInfo.find({ userId }).sort({createdAt: -1}).exec;
+
+        // Render orderConfirmation template with bookings
+        res.render('orderConfirmation', { 
+            username: req.session.username,
+            booking: bookings 
+        });
+    } catch (error) {
+        console.error('Error fetching booking information', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
