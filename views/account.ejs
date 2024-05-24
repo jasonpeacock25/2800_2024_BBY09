@@ -1,34 +1,43 @@
 <%- include('templates/header-back-arrow') %>
+
     <h1 class="display-6 text-center">Account Settings</h1><br>
     <div class="container">
+
+        <!-- This form is for updating and resetting passwords -->
         <form action="/update-profile" method="post">
             <div>
                 <label for="username">Username:</label><br>
-                <input class="form-control" type="text" id="username" name="name" required="true"
-                    value="<%= username %>">
+                <input class="form-control" type="text" id="username" name="name" required value="<%= username %>">
             </div>
 
             <br><br>
 
             <div>
                 <label for="email">Email:</label><br>
-                <input class="form-control" type="email" id="email" name="email" required="true" value="<%= email %>">
+                <input class="form-control" type="email" id="email" name="email" required value="<%= email %>">
             </div>
 
             <br><br>
             <div class="text-center">
                 <input class="btn btn-secondary btn-block w-50 mx-auto" type="submit" value="Submit">
-                <br><br><br>
             </div>
         </form>
         <hr>
-        <br><br>
+
+        <!-- This is for resetting the password for the user.-->
         <div class="text-center">
             <a href="/change-password">
                 <button class="btn btn-secondary btn-block w-50 mx-auto">Reset Password</button>
             </a>
-            <br><br><br>
         </div>
+        <hr>
 
+        <!-- Issues with this code at this moment 
+        <div class="text-center">
+            <a href="/delete-account">
+                <button class="btn btn-secondary btn-block w-50 mx-auto">Delete Account</button>
+            </a>
+        </div>
+    -->
     </div>
     <%- include('templates/footer') %>
