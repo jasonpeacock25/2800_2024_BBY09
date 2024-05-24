@@ -165,7 +165,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
 
         await bookingInfo.save();
 
-        res.status(200).send('Booking information saved successfully');
+        res.render('orderConfirmation');
     }  catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
