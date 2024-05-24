@@ -55,7 +55,7 @@
         { name: 'Hotel', item_ID: 'Crater Cove Hotel', price: '5009.00' }
     ];
 
-document.addEventListener('DOMContentLoaded', function() {
+
     function generateOrderNumber() {
             let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000 );
             document.getElementById('orderNumber').textContent = orderNumber;
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     function populateOrderItems(items) {
             var orderItemsContainer = document.getElementById('orderItems');
-            orderItemsContainer.innerHTML = ''; // Clear existing items if any
+            orderItemsContainer.innerHTML = ''; 
 
             var totalAmount = 0;
 
@@ -99,6 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('orderDate').textContent = formattedDate;
         
         populateOrderItems(items);
-    });
+  
 </script>
 <%- include('templates/footer') %>

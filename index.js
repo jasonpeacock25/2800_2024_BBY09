@@ -201,6 +201,7 @@ app.post('/loggingin', async (req, res) => {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
                 // Session gets created here
+                req.session.userId = user._id;
                 req.session.authenticated = true;
                 req.session.username = user.username;
                 req.session.email = email;
@@ -283,6 +284,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
 app.get('/orderConfirmation', sessionValidation, (req, res) => {
     res.render('orderConfirmation', { username: req.session.username});
 });
+
 
 // Define a schema for the inquiry collection
 const inquirySchema = new mongoose.Schema({
