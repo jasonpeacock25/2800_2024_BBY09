@@ -3,19 +3,22 @@ const mongoose = require('mongoose');
 const BookingInfoSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
         required: true
     },
-    region: {
+    hotelName: {
         type: String,
         required: true
     },
-    checkInDate: {
-        type: Date,
+    hotelRegion: {
+        type: String,
         required: true
     },
-    checkOutDate: {
-        type: Date,
+    hotelPrice: {
+        type: Number,
+        required: true
+    },
+    hotelRating: {
+        type: Number,
         required: true
     }
 });
