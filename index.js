@@ -11,6 +11,9 @@ const mongoose = require('mongoose');
 const SMTPPool = require('nodemailer/lib/smtp-pool');
 const { departingFlights, returnFlights, hotels } = require('./myBookings');
 
+const { OpenAI } = require('openai');
+const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
+
 const port = 8000;
 
 // Import the Hotel model
@@ -138,9 +141,25 @@ app.post('/hotelSelection', async (req, res) => {
     res.redirect(`hotelSummary/${hotelID}`);
 });
 
+// This route displays important information about the hotel plus a AI Reviw box
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     const hotel = await Hotel.findById(req.params.id);
-    res.render('hotelSummary', { hotel, reviews: hotel.reviews });
+
+    // Get the last 5 reviews
+    const lastFiveReviews = hotel.reviews.slice(-5).map(review => review.details).join("\n\n");
+
+    // Generate the summary using OpenAI API
+    const aiResponse = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+            { role: "system", content: "Summarize the following reviews." },
+            { role: "user", content: lastFiveReviews }
+        ]
+    });
+    const reviewSummary = aiResponse.choices[0].message.content;
+    //
+
+    res.render('hotelSummary', { hotel, reviews: hotel.reviews, reviewSummary });
 });
 
 app.post('/bookHotel', sessionValidation, async (req, res) => {
