@@ -5,7 +5,7 @@
       "type": "text"
     },
     {
-      "text": "1. Navigate to the [Explore Flights Page](/flights):",
+      "text": "1. Navigate to the [Flights Page](/flights):",
       "type": "text"
     },
     {
@@ -25,10 +25,6 @@
       "type": "text"
     },
     {
-      "text": "To sign in to your account, click [here](/signin).",
-      "type": "text"
-    },
-    {
       "text": "To view frequently asked questions, click [here](/faq).",
       "type": "text"
     },
@@ -36,13 +32,8 @@
       "text": "To contact customer support, click [here](/contact).",
       "type": "text"
     },
-
     {
       "text": "Should you have any specific questions or inquiries, feel free to provide your details in the form below and submit them. We're here to assist you!, click [here](/contact/inquiry).",
-      "type": "text"
-    },
-    {
-      "text": "To sign up with your information, click [here](/signup).",
       "type": "text"
     }
   ]
