@@ -153,7 +153,7 @@
 
           <div class="col-md-3">
             <label for="cc-cvv" class="form-label">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+            <input type="password" class="form-control" id="cc-cvv" placeholder="" required="">
             <div class="invalid-feedback">
               Security code required
             </div>
@@ -163,7 +163,7 @@
         <hr class="my-4">
 
         <div>
-          <form action="/confirmPayment" method="post">
+          <form id="paymentForm" action="/confirmPayment" method="post">
             
             <input type="hidden" name="hotelId" value="<%= hotel._id %>">
             <input type="hidden" name="hotelName" value="<%= hotel.name %>">
