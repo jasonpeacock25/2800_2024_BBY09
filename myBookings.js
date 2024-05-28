@@ -1,5 +1,5 @@
 // Placeholder data for departing flights
-const departingFlights = [
+const flights = [
     {
         number: "VAN-MOON-001",
         departing: "Vancouver",
@@ -41,11 +41,7 @@ const departingFlights = [
         emissions: 55,
         imageURL: "images/spacex.png",
         price: 2125
-    }
-];
-
-
-const returnFlights = [
+    },
     {
         number: "MOON-VAN-001",
         departing: "Moon",
@@ -64,9 +60,9 @@ const returnFlights = [
         number: "MOON-VAN-002",
         departing: "Moon",
         arriving: "Vancouver",
-        departureDate: "2024-06-21",
+        departureDate: "2024-06-22",
         departureTime: 8,
-        arrivalDate: "2024-06-22",
+        arrivalDate: "2024-06-23",
         arrivalTime: 14,
         type: "Body to Body",
         model: "Shepherd 3",
@@ -111,4 +107,4 @@ const hotels = [
         details: "A cozy inn with stunning views of the Earthrise."
     }
 ];
-module.exports = { departingFlights, returnFlights, hotels };
+module.exports = { flights, hotels };

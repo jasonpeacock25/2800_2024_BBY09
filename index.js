@@ -9,7 +9,7 @@ const saltRounds = 12;
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const SMTPPool = require('nodemailer/lib/smtp-pool');
-const { departingFlights, returnFlights, hotels } = require('./myBookings');
+const { flights, hotels } = require('./myBookings');
 
 //
 const { OpenAI } = require('openai');
@@ -320,33 +320,39 @@ app.get('/flights', sessionValidation, (req, res) => {
 app.get('/flights/departing', sessionValidation, (req, res) => {
     let validDepartingFlights = [];
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    for(let i = 0; i < departingFlights.length; i++){
-        if(departingFlights[i].departureDate === departDate){
-            validDepartingFlights.push(departingFlights[i]);
+    for(let i = 0; i < flights.length; i++){
+        if(flights[i].departureDate === departDate &&
+            flights[i].departing === fromInput &&
+            flights[i].arriving === toInput
+        ){
+            validDepartingFlights.push(flights[i]);
         }
     }
-    res.render('departingFlights', { validDepartingFlights});
+    res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
 // Returning flights page
 app.get('/flights/returning', sessionValidation, (req, res) => {
     let validReturnFlights = [];
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    for(let i = 0; i < returnFlights.length; i++){
-        if(returnFlights[i].arrivalDate === returnDate){
-            validReturnFlights.push(returnFlights[i]);
+    for(let i = 0; i < flights.length; i++){
+        if(flights[i].arrivalDate === returnDate &&
+            flights[i].departing === toInput &&
+            flights[i].arriving === fromInput
+        ){
+            validReturnFlights.push(flights[i]);
         }
     }
-    res.render('returningFlights', { validReturnFlights });
+    res.render('returningFlights', { validReturnFlights, travellers });
 });
 
 // Review flights page
 app.get('/flights/review', sessionValidation, (req, res) => {
     //const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
-    const { departingFlight, returningFlight } = req.session;
+    const { departingFlight, returningFlight, travellers } = req.session;
     console.log(departingFlight);
     console.log(departingFlight.type);
-    res.render('reviewFlights', { departingFlight, returningFlight });
+    res.render('reviewFlights', { departingFlight, returningFlight, travellers });
 });
 
 app.post('/flights/clicked', (req,res) => {

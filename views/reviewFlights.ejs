@@ -27,8 +27,8 @@
                             <p class="card-text">Arrival Time: <%= departingFlight.arrivalTime %></p>
                             <p class="card-text">Flight Type: <%= departingFlight.type %></p>
                             <p class="card-text">Model: <%= departingFlight.model %></p>
-                            <p class="card-text">Price: $<%= departingFlight.price %></p>
-                            <% totalPrice += departingFlight.price;%>
+                            <p class="card-text">Price: $<%= departingFlight.price * travellers%></p>
+                            <% totalPrice += departingFlight.price * travellers;%>
                         </div>
                     </div>
                 </div>
@@ -57,8 +57,8 @@
                             <p class="card-text">Arrival Time: <%= returningFlight.arrivalTime %></p>
                             <p class="card-text">Flight Type: <%= returningFlight.type %></p>
                             <p class="card-text">Model: <%= returningFlight.model %></p>
-                            <p class="card-text">Price: $<%= returningFlight.price %></p>
-                            <% totalPrice += returningFlight.price;%>
+                            <p class="card-text">Price: $<%= returningFlight.price * travellers%></p>
+                            <% totalPrice += returningFlight.price * travellers;%>
                         </div>
                     </div>
                 </div>
