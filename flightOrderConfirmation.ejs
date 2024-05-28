@@ -1,0 +1,92 @@
+<%- include('templates/header-back-arrow') %>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1>Order Confirmed</h1>
+        </div>
+        <!-- Start of card body -->
+        <div class="card-body">
+            <p><%= username %>,</p>
+            <p>Your order has been confirmed! A receipt has been sent to your email.</p>
+            <p>Here are the details of your purchase:</p>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">Order Number:</th>
+                        <td id="orderNumber"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Order Date:</th>
+                        <td id="orderDate"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>Items Ordered</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Item ID</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% booking.forEach(booking=> { %>
+                        <tr>
+                            <td>
+                                <%= booking.hotelName %>
+                            </td>
+                            <td>
+                                <%= booking.hotelId %>
+                            </td>
+                            <td>$<%= booking.hotelPrice %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Total</th>
+                        <th id="totalAmount">$0.00</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <p>If you have any questions, feel free to contact our customer service team.</p>
+            <p>Best regards,</p>
+            <p>Galaxy Getaways</p>
+        </div>
+        <!-- End of card body -->
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <span>&copy; Galaxy Getaways. All rights reserved.</span>
+            <a class="btn btn-dark" role="button" type="submit" href="/myBookings" style="background-color: #062c43;">My Bookings</a>
+        </div>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        
+
+            function generateOrderNumber() {
+                let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('orderNumber').textContent = orderNumber;
+            }
+            function formatDate(date) {
+                let day = String(date.getDate()).padStart(2, '0');
+                let month = String(date.getMonth() + 1).padStart(2, '0');
+                let year = date.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+            
+            generateOrderNumber();
+            var currentDate = new Date();
+            var formattedDate = formatDate(currentDate);
+            document.getElementById('orderDate').textContent = formattedDate;
+            
+            var totalAmount = 0;
+                var items = document.querySelectorAll('tbody tr td:nth-child(3)');
+                items.forEach(function(item) {
+                    totalAmount += parseFloat(item.textContent.replace('$', ''));
+                });
+                document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+        });
+</script>
+<%- include('templates/footer') %>
