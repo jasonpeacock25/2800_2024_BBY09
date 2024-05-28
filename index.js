@@ -333,7 +333,7 @@ app.get('/flights/returning', sessionValidation, (req, res) => {
     let validReturnFlights = [];
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
     for(let i = 0; i < returnFlights.length; i++){
-        if(returnFlights[i].arrivalDateDate === returnDate){
+        if(returnFlights[i].arrivalDate === returnDate){
             validReturnFlights.push(returnFlights[i]);
         }
     }
@@ -342,18 +342,21 @@ app.get('/flights/returning', sessionValidation, (req, res) => {
 
 // Review flights page
 app.get('/flights/review', sessionValidation, (req, res) => {
-    const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
-    res.render('reviewFlights', { departingFlights, returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight });
+    //const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
+    const { departingFlight, returningFlight } = req.session;
+    console.log(departingFlight);
+    console.log(departingFlight.type);
+    res.render('reviewFlights', { departingFlight, returningFlight });
 });
 
 app.post('/flights/clicked', (req,res) => {
     let type = req.body.type;
-    let flightNumber = req.body.flightNumber;
+    let flight = req.body.flight;
     if (type == "departing") {
-        req.session.departingFlight = flightNumber;
+        req.session.departingFlight = flight;
         res.sendStatus(200);
     } else if (type == "returning") {
-        req.session.returningFlight = flightNumber;
+        req.session.returningFlight = flight;
         res.sendStatus(200);
     } else {
         res.sendStatus(400);
