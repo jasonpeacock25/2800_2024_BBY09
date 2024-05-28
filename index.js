@@ -43,6 +43,14 @@ function sessionValidation(req, res, next) {
     }
 }
 
+// Middleware to check if hotel data exists
+function checkHotelData(req, res, next) {
+    if (!req.session.hotel && !req.hotel) {
+        return res.status(404).render('404', { message: 'Hotel not found' });
+    }
+    next();
+}
+
 // MongoDB URI
 const mongoUri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`;
 
@@ -189,9 +197,9 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         await bookingInfo.save();
         
         // Fetch all booking information for the user
-        const bookings = await BookingInfo.find({ userId }).exec();
+        const hotel = await Hotel.findById(req.body.hotelId);
 
-        res.render('orderConfirmation', { username: req.session.username, booking: bookings} );
+        res.render('orderConfirmation', { username: req.session.username, hotel} );
     }  catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
@@ -374,11 +382,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
 
-app.get('/orderConfirmation', sessionValidation, (req, res) => {
-    res.render('orderConfirmation', { username: req.session.username});
-});
-
-app.get('/orderConfirmation', sessionValidation, async (req, res) => {
+app.get('/orderConfirmation', sessionValidation, checkHotelData, async (req, res) => {
     const userId = req.session.userId;
 
     try {
@@ -388,7 +392,7 @@ app.get('/orderConfirmation', sessionValidation, async (req, res) => {
         // Render orderConfirmation template with bookings
         res.render('orderConfirmation', { 
             username: req.session.username,
-            booking: bookings 
+            booking: bookings
         });
     } catch (error) {
         console.error('Error fetching booking information', error);
