@@ -26,23 +26,20 @@
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th>Item ID</th>
+                        <th></th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% booking.forEach(booking=> { %>
-                        <tr>
-                            <td>
-                                <%= booking.hotelName %>
-                            </td>
-                            <td>
-                                <%= booking.hotelId %>
-                            </td>
-                            <td>$<%= booking.hotelPrice %>
-                            </td>
-                        </tr>
-                        <% }) %>
+                    <tr>
+                        <td>
+                            <%= hotel.name %>
+                        </td>
+                        <td>
+                        </td>
+                        <td>$<%= hotel.price %>
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
