@@ -7,35 +7,44 @@
             <div class="col-12">
                 <h1 class="my-4">Available Hotels</h1>
             </div>
-            <% hotels.forEach(hotel=> { %>
-                <div class="col-md-6 mb-4">
-                    <div class="card hotel-card" id="<%= hotel._id %>">
-                        <img src="/<%= hotel.imageURL %>" class="card-img-top" alt="<%= hotel.name %>">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= hotel.name %>
-                            </h5>
-                            <p class="card-text"><%= hotel.details %>
-                            </p>
-                            <p class="card-text"><strong>Rating:</strong>
-                                <%= hotel.rating %>
-                            </p>
-                            <p class="card-text"><strong>Price:</strong> $<%= hotel.price %>
-                            </p>
-                            <p class="card-text"><strong>Region:</strong> <%= hotel.region %>
-                            </p>
-                            <p class="card-text"><strong>Available from:</strong>
-                                <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
-                            </p>
-                            <form action="/hotelSelection" method="POST">
-                                <input type="hidden" name="hotelId" value="<%= hotel._id %>">
-                                <button type="submit" class="btn btn-primary mt-2">View Details</button>
-                            </form>
+            <% if (!hotels || hotels.length === 0) { %>
+                <div class="col-12">
+                    <h1>No Available Listings</h1>
+                </div>
+            <% } else { %>
+                <% hotels.forEach(hotel => { %>
+                    <div class="col-md-6 mb-4">
+                        <div class="card hotel-card" id="<%- hotel._id %>">
+                            <img src="/<%- hotel.imageURL %>" class="card-img-top" alt="<%- hotel.name %>">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%- hotel.name %>
+                                </h5>
+                                <p class="card-text">
+                                    <%- hotel.details %>
+                                </p>
+                                <p class="card-text"><strong>Rating:</strong> 
+                                    <%- hotel.rating %>
+                                </p>
+                                <p class="card-text"><strong>Price:</strong> $<%- hotel.price %>
+                                </p>
+                                <p class="card-text"><strong>Region:</strong> 
+                                    <%- hotel.region %>
+                                </p>
+                                <p class="card-text"><strong>Available from:</strong> 
+                                    <%- hotel.startDate.toDateString() %> to <%- hotel.endDate.toDateString() %>
+                                </p>
+                                <form action="/hotelSelection" method="POST">
+                                    <input type="hidden" name="hotelId" value="<%- hotel._id %>">
+                                    <button type="submit" class="btn btn-primary mt-2">View Details</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <% }); %>
+            <% } %>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <%- include('templates/footer') %>
+</body>
