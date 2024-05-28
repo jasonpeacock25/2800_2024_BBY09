@@ -3,40 +3,28 @@
 
     <div>
         <h2 class="text-center">Returning Flights:</h2>
-        <!-- <div class="container">
-            <p>Flight Type: <%= flightType%>
-            </p>
-            <p>Travellers: <%= travellers%>
-            </p>
-            <p>From Input: <%= fromInput%>
-            </p>
-            <p>To Input: <%= toInput%>
-            </p>
-            <p>Depart Date: <%= departDate%>
-            </p>
-            <p>Return Date: <%= returnDate%>
-            </p>
-        </div> -->
     </div>
 
     <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
     <div class="container">
         <div class="row justify-content-center ">
-            <% returnFlights.forEach(function(flight, index) {%>
+            <% returnFlights.forEach(flight => {%>
                 <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="sendSelected('returning', '<%= flight.flightNumber%>')" style="cursor: pointer;" id="<%= index%>">
+                    <div class="card flex-row flex-wrap d-flex" onclick="sendSelected('returning', '<%= flight.number%>')" style="cursor: pointer;" id="<%= flight.number%>">
                         <div class="d-flex align-items-center justify-content-center ps-3">
                             <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
-                            </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
-                            </p>
-                            <p class="card-text">Price: $<%= flight.price %>
-                            </p>
+                            <h5 class="card-title">Flight #: <%= flight.number %></h5>
+                            <p class="card-text">From: <%= flight.departing %></p>
+                            <p class="card-text">To: <%= flight.arriving %></p>
+                            <p class="card-text">Departure Date: <%= flight.departureDate %></p>
+                            <p class="card-text">Departure Time: <%= flight.departureTime %></p>
+                            <p class="card-text">Arrival Date: <%= flight.arrivalDate %></p>
+                            <p class="card-text">Arrival Time: <%= flight.arrivalTime %></p>
+                            <p class="card-text">Flight Type: <%= flight.type %></p>
+                            <p class="card-text">Model: <%= flight.model %></p>
+                            <p class="card-text">Price: $<%= flight.price %></p>
                         </div>
                     </div>
                 </div>

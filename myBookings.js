@@ -1,43 +1,92 @@
 // Placeholder data for departing flights
 const departingFlights = [
     {
-        flightNumber: "VAN-MOON-001",
-        destination: "Moon",
-        departureTime: "2024-06-01 08:00",
+        number: "VAN-MOON-001",
+        departing: "Vancouver",
+        arriving: "Moon",
+        departureDate: "2024-06-09",
+        departureTime: 6,
+        arrivalDate: "2024-07-10",
+        arrivalTime: 12,
+        type: "Body to Body",
+        model: "Curiosity 4",
+        emissions: 45,
         imageURL: "images/nasa.png",
         price: 2450
     },
     {
-        flightNumber: "VAN-MOON-002",
-        destination: "Moon",
-        departureTime: "2024-06-02 10:00",
+        number: "VAN-MOON-002",
+        departing: "Vancouver",
+        arriving: "Moon",
+        departureDate: "2024-06-09",
+        departureTime: 8,
+        arrivalDate: "2024-07-10",
+        arrivalTime: 14,
+        type: "Body to Body",
+        model: "Shepherd 3",
+        emissions: 35,
         imageURL: "images/blueOrigin.png",
         price: 2200
     },
     {
-        flightNumber: "VAN-MOON-003",
-        destination: "Moon",
-        departureTime: "2024-06-03 12:00",
+        number: "VAN-MOON-003",
+        departing: "Vancouver",
+        arriving: "Moon",
+        departureDate: "2024-06-10",
+        departureTime: 7,
+        arrivalDate: "2024-07-11",
+        arrivalTime: 13,
+        type: "Body to Body",
+        model: "Dragon 5",
+        emissions: 55,
         imageURL: "images/spacex.png",
         price: 2125
     }
 ];
 
-// Placeholder data for return flights
+
 const returnFlights = [
     {
-        flightNumber: "MOON-VAN-001",
-        destination: "Vancouver",
-        departureTime: "2024-06-10 12:00",
-        imageURL: "images/spacex.png",
-        price: 2300
+        number: "MOON-VAN-001",
+        departing: "Moon",
+        arriving: "Vancouver",
+        departureDate: "2024-06-09",
+        departureTime: 6,
+        arrivalDate: "2024-07-10",
+        arrivalTime: 12,
+        type: "Body to Body",
+        model: "Curiosity 4",
+        emissions: 45,
+        imageURL: "images/nasa.png",
+        price: 2450
     },
     {
-        flightNumber: "MOON-VAN-002",
-        destination: "Vancouver",
-        departureTime: "2024-06-11 14:00",
-        imageURL: "images/nasa.png",
-        price: 2250
+        number: "MOON-VAN-002",
+        departing: "Moon",
+        arriving: "Vancouver",
+        departureDate: "2024-06-09",
+        departureTime: 8,
+        arrivalDate: "2024-07-10",
+        arrivalTime: 14,
+        type: "Body to Body",
+        model: "Shepherd 3",
+        emissions: 35,
+        imageURL: "images/blueOrigin.png",
+        price: 2200
+    },
+    {
+        number: "MOON-VAN-003",
+        departing: "Moon",
+        arriving: "Vancouver",
+        departureDate: "2024-06-10",
+        departureTime: 7,
+        arrivalDate: "2024-07-11",
+        arrivalTime: 13,
+        type: "Body to Body",
+        model: "Dragon 5",
+        emissions: 55,
+        imageURL: "images/spacex.png",
+        price: 2125
     }
 ];
 

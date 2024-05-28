@@ -318,14 +318,26 @@ app.get('/flights', sessionValidation, (req, res) => {
 
 // Departing flights page
 app.get('/flights/departing', sessionValidation, (req, res) => {
+    let validDepartingFlights = [];
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    res.render('departingFlights', { departingFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+    for(let i = 0; i < departingFlights.length; i++){
+        if(departingFlights[i].departureDate === departDate){
+            validDepartingFlights.push(departingFlights[i]);
+        }
+    }
+    res.render('departingFlights', { validDepartingFlights});
 });
 
 // Returning flights page
 app.get('/flights/returning', sessionValidation, (req, res) => {
+    let validReturnFlights = [];
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    res.render('returningFlights', { returnFlights, flightType, travellers, fromInput, toInput, departDate, returnDate });
+    for(let i = 0; i < returnFlights.length; i++){
+        if(returnFlights[i].arrivalDateDate === returnDate){
+            validReturnFlights.push(returnFlights[i]);
+        }
+    }
+    res.render('returningFlights', { validReturnFlights });
 });
 
 // Review flights page
