@@ -348,11 +348,38 @@ app.get('/myBookings', sessionValidation, async (req,res) => {
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
+ 
+        const departingFlights = [];
+        const returningFlights = [];
+        const hotels = [];
 
+        bookings.forEach(booking => {
+            if (booking.departingFlightNumber) {
+                departingFlights.push({
+                    flightNumber: booking.departingFlightNumber,
+                    price: booking.departingFlightPrice,
+                    travellers: booking.travellers
+                });
+            } 
+            if (booking.returningFlightNumber) {
+                returningFlights.push({
+                    flightNumber: booking.returningFlightNumber,
+                    price: booking.returningFlightPrice,
+                    travellers: booking.travellers
+                });
+            }
+            if (booking.hotelName) {
+                hotels.push({
+                    hotelName: booking.hotelName,
+                    hotelRating: booking.hotelRating,
+                    hotelPrice: booking.hotelPrice,
+                    hotelRegion: booking.hotelRegion
+                });
+            }
+        });
         
-        const hotels = bookings.filter(booking => booking.hotelName); 
 
-        res.render('myBookings', { hotels});
+        res.render('myBookings', { hotels, departingFlights, returningFlights});
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');

@@ -12,9 +12,9 @@
                             <div class="card-body">
                                 <h5 class="card-title"> Flight Number: <%= departingFlight.flightNumber %>
                                 </h5>
-                                <p class="card-text">Destination: <%= departingFlight.destination %>
+                                <p class="card-text">Price: $<%= departingFlight.price %>
                                 </p>
-                                <p class="card-text">Departure Time: <%= departingFlight.departureTime %>
+                                <p class="card-text">Travellers: <%= departingFlight.travellers %>
                                 </p>
                             </div>
                         </div>
@@ -24,7 +24,7 @@
         </div>
     
     
-        <h2 class="text-center">Return Flights</h2>
+        <h2 class="text-center">Returning Flights</h2>
         <div class="container">
             <div class="row justify-content-center ">
                 <% returningFlights.forEach(function(returningFlight, index) { %>
@@ -33,9 +33,9 @@
                             <div class="card-body">
                                 <h5 class="card-title">Flight Number: <%= returningFlight.flightNumber %>
                                 </h5>
-                                <p class="card-text">Destination: <%= returningFlight.destination %>
+                                <p class="card-text">Price: $<%= returningFlight.price %>
                                 </p>
-                                <p class="card-text">Departure Time: <%= returningFlight.departureTime %>
+                                <p class="card-text">Travellers: <%= returningFlight.travellers %>
                                 </p>
                             </div>
                         </div>
