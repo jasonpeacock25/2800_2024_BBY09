@@ -314,7 +314,7 @@ app.get('/myBookings', sessionValidation, async (req,res) => {
         
         const hotels = bookings.filter(booking => booking.hotelName); 
 
-        res.render('myBookings', { hotels, departingFlights, returnFlights});
+        res.render('myBookings', { hotels});
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
