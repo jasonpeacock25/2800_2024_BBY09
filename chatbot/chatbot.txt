@@ -128,3 +128,149 @@ Located on the edge of the Valles Marineris, Marineris Vista Resort provides stu
 Rating: 8.7
 Price: $2416
 Region: Mars
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Flights
+
+
+Choose Flight Type: Select the type of flight from the dropdown menu. Options include Round Trip, One Way, and Sub-Orbital.
+
+Specify Number of Travellers: Enter the number of travellers. You can use the buttons next to the input box to increment or decrement the number of travellers, ensuring it is between 1 and 10.
+
+Select Departure and Destination Locations: Enter the 'From' and 'To' locations. You can either type in the location or choose from the provided list, which includes options like Moon, Mars, and Houston Space Center.
+
+Set Departure and Return Dates: Choose your departure date and, if you selected a round trip, your return date using the date input fields.
+
+Submit the Form: After filling in all required fields, click the 'Search' button to submit the form and search for available flights.
+
+Here's a breakdown of the form fields and options:
+
+Flight Type:
+Round Trip
+One Way
+Sub-Orbital
+Travellers: Input number between 1 and 10. Use increment/decrement buttons for adjustment.
+Locations: Choose from predefined options or type in a custom location.
+Predefined options: Moon, Mars.
+Dates: Select appropriate departure and return dates using the date picker.
+
+
+
+View Available Departing Flights:
+
+The available departing flights will be displayed with details including flight number, destination, departure time, and price.
+Each flight is shown in a card format with an image.
+Choose a Departing Flight:
+
+Click on the card of the departing flight you wish to select. This will send your selection to the system.
+Select Returning Flight (for Round Trip)
+View Available Returning Flights:
+
+If you selected a round trip, available returning flights will be displayed similarly to departing flights.
+Choose a Returning Flight:
+
+Click on the card of the returning flight you wish to select. This will send your selection to the system.
+Review Your Selections
+Review Selected Flights:
+
+Both the selected departing and returning flights (if applicable) will be displayed for review.
+Details include flight number, destination, departure time, and price for each flight.
+Total Price:
+
+The total price for the selected flights will be calculated and displayed.
+Proceed to Payment
+Pay for Your Flights:
+After reviewing the selected flights and total price, click the 'Pay' button to proceed to the payment page.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Hotel Review 
+
+This section allows users to view and submit reviews for a specific hotel. Here’s how it works:
+
+Viewing Previous Reviews:
+
+Users can see a list of previous reviews displayed in a scrollable box.
+Each review includes:
+Title: A brief summary of the review.
+Details: The main content of the review.
+Rating: A numeric rating (between 1 and 10)..
+Date: The date the review was submitted.
+Submitting a New Review:
+
+Users can fill out a form to submit their own review.
+The form includes fields for:
+Title: A short summary of the review.
+Details: The main content of the review.
+Rating: A numeric rating (between 1 and 10).
+Once the form is filled out, users can submit it to add their review to the list.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Payment Page
+
+This summary provides an overview of the payment process for a user booking a hotel through Galaxy Getaways. Here's a detailed breakdown:
+
+Cart Summary Section
+Cart Header: Displays "Your cart" to the user.
+Hotel Information:
+Name: The name of the hotel.
+Rating: The hotel's rating.
+Region: The hotel's region.
+Price: The price of the hotel booking.
+If no hotel is booked, it shows "No hotel booked".
+Total Amount: Displays the total cost of the hotel booking in CAD.
+Payment Information Section
+Personal Details:
+
+First Name: Input field for the user's first name.
+Last Name: Input field for the user's last name.
+Email: Optional input field for the user's email.
+Country: Dropdown to select the country (default: Canada).
+Province/State: Dropdown to select the province or state.
+Zip: Input field for the zip code.
+Save Information: Checkbox option to save the entered information for future use.
+
+Payment Method:
+
+Select Credit or Debit Card
+
+Card Details:
+
+Name on Card: Input field for the name on the card.
+Credit or Debit Card Number: Input field for the card number.
+Expiration Date: Input field for the card's expiration date.
+CVV: Input field for the card's CVV (security code).
+Confirm Payment Section
+Hidden Inputs: Contains hidden fields to pass hotel details (ID, name, region, price, rating) to the server upon form submission.
+Confirm Payment Button: A button to submit the payment form.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Order Confirmation
+This section provides a summary of the order confirmation process for a user who has booked a hotel through Galaxy Getaways. Here's how it works:
+
+Confirmation Message:
+
+The user is greeted by their name and informed that their order has been confirmed.
+A receipt has been sent to the user's email.
+Order Details:
+
+The order number is generated and displayed on the page.
+The order date is formatted and displayed.
+Items Ordered:
+
+A table lists the items ordered, including:
+Item: The name of the hotel booked.
+Item ID: The ID of the hotel.
+Price: The price of the hotel booking.
+The total amount for the booking is calculated and displayed.
+Customer Service:
+
+A message is included, inviting the user to contact customer service if they have any questions.
+
+At the bottom of the page, there is a button that leads to the user's to the My Bookings page.

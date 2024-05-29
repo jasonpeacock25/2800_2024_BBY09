@@ -3,46 +3,36 @@
 
     <div>
         <h2 class="text-center">Departing Flights:</h2>
-        <!-- <div class="container">
-            <p>Flight Type: <%= flightType%>
-            </p>
-            <p>Travellers: <%= travellers%>
-            </p>
-            <p>From Input: <%= fromInput%>
-            </p>
-            <p>To Input: <%= toInput%>
-            </p>
-            <p>Depart Date: <%= departDate%>
-            </p>
-            <p>Return Date: <%= returnDate%>
-            </p>
-        </div> -->
     </div>
 
     <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
     <div class="container">
         <div class="row justify-content-center ">
-            <% departingFlights.forEach(function(flight, index) {%>
+            <% for(let i = 0; i < validDepartingFlights.length; i++){%>
                 <div class="container">
                     <div class="card flex-row flex-wrap d-flex"
-                        onclick="sendSelected('departing', '<%= flight.flightNumber%>')" style="cursor: pointer;"
-                        id="<%= index%>">
+                        onclick="sendSelected('departing', '<%= JSON.stringify(validDepartingFlights[i])%>')" style="cursor: pointer;"
+                        id="<%= validDepartingFlights[i].number%>">
                         <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+                            <img src="/images/<%= validDepartingFlights[i].provider%>.png" class="image-fluid" alt="">
                         </div>
+                        <% console.log(validDepartingFlights[i]);%>
                         <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
-                            </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
-                            </p>
-                            <p class="card-text">Price: $<%= flight.price %>
-                            </p>
+                            <h5 class="card-title">Flight #: <%= validDepartingFlights[i].number %></h5>
+                            <p class="card-text">From: <%= validDepartingFlights[i].departing %></p>
+                            <p class="card-text">To: <%= validDepartingFlights[i].arriving %></p>
+                            <p class="card-text">Departure Date: <%= validDepartingFlights[i].departureDate %></p>
+                            <p class="card-text">Departure Time: <%= validDepartingFlights[i].departureTime %></p>
+                            <p class="card-text">Arrival Date: <%= validDepartingFlights[i].arrivalDate %></p>
+                            <p class="card-text">Arrival Time: <%= validDepartingFlights[i].arrivalTime %></p>
+                            <p class="card-text">Flight Type: <%= validDepartingFlights[i].type %></p>
+                            <p class="card-text">Provider: <%= validDepartingFlights[i].provider %></p>
+                            <p class="card-text">Model: <%= validDepartingFlights[i].model %></p>
+                            <p class="card-text">Price: $<%= validDepartingFlights[i].price * travellers%></p>
                         </div>
                     </div>
                 </div>
-                <% }); %>
+                <% }; %>
         </div>
     </div>
 
