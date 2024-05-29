@@ -32,7 +32,7 @@
 
     <div class="col-md-7 col-lg-8">
       <h4 class="mb-3">Payment</h4>
-      
+      <form id="paymentForm" action="/confirmPayment" method="post" novalidate>
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">First name</label>
@@ -109,19 +109,19 @@
 
         <div class="my-3">
           <div class="form-check">
-            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
             <label class="form-check-label" for="credit">Credit card</label>
           </div>
-          <div class="form-check">
+          <!-- <div class="form-check">
             <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
             <label class="form-check-label" for="debit">Debit card</label>
-          </div>
+          </div> -->
         </div>
 
         <div class="row gy-3">
           <div class="col-md-6">
             <label for="cc-name" class="form-label">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+            <input type="text" class="form-control" id="cc-name" placeholder="" required>
             <small class="text-body-secondary">Full name as displayed on card</small>
             <div class="invalid-feedback">
               Name on card is required
@@ -130,7 +130,7 @@
 
           <div class="col-md-6">
             <label for="cc-number" class="form-label">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+            <input type="text" class="form-control" id="cc-number" placeholder="" required>
             <div class="invalid-feedback">
               Credit card number is required
             </div>
@@ -138,7 +138,7 @@
 
           <div class="col-md-3">
             <label for="cc-expiration" class="form-label">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
             <div class="invalid-feedback">
               Expiration date required
             </div>
@@ -146,7 +146,7 @@
 
           <div class="col-md-3">
             <label for="cc-cvv" class="form-label">CVV</label>
-            <input type="password" class="form-control" id="cc-cvv" placeholder="" required="">
+            <input type="password" class="form-control" id="cc-cvv" placeholder="" required>
             <div class="invalid-feedback">
               Security code required
             </div>
@@ -155,19 +155,19 @@
 
         <hr class="my-4">
 
-        <div>
-          <form id="paymentForm" action="/confirmPayment" method="post">
-            
-            <input type="hidden" name="hotelId" value="<%= hotel._id %>">
-            <input type="hidden" name="hotelName" value="<%= hotel.name %>">
-            <input type="hidden" name="hotelRegion" value="<%= hotel.region %>">
-            <input type="hidden" name="hotelPrice" value="<%= hotel.price %>">
-            <input type="hidden" name="hotelRating" value="<%= hotel.rating %>">
-            
-            <button type="submit" class="w-100 btn btn-dark btn-lg"  style="background-color: #062c43;">Confirm
-              payment</button>
-          </form>
-        </div>
+
+
+
+        <input type="hidden" name="hotelId" value="<%= hotel._id %>">
+        <input type="hidden" name="hotelName" value="<%= hotel.name %>">
+        <input type="hidden" name="hotelRegion" value="<%= hotel.region %>">
+        <input type="hidden" name="hotelPrice" value="<%= hotel.price %>">
+        <input type="hidden" name="hotelRating" value="<%= hotel.rating %>">
+
+        <button type="submit" class="w-100 btn btn-dark btn-lg" style="background-color: #062c43;">Confirm
+          payment</button>
+      </form>
+
     </div>
   </div>
   <script>
@@ -194,6 +194,15 @@
 
       // Updates total amount
       totalAmountElement.textContent = formatAmount(totalAmount);
+
+      const form = document.getElementById('paymentForm');
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
     });
   </script>
   <%- include('templates/footer') %>
