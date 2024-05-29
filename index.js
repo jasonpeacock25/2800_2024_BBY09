@@ -70,7 +70,7 @@ app.use(session({
 
 // The schema for user that the db will follow for the users collection
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, maxlength: 20, trim: true, unique: true },
+    username: { type: String, required: true, maxlength: 20, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     user_type: { type: String, required: true, default: 'user' },
@@ -200,7 +200,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
 
 // Sign up page route
 app.get('/signup', (req, res) => {
-    res.render('signup');
+    res.render('signup', { message: null });
 });
 
 // Sign in page route
@@ -217,21 +217,23 @@ app.get('/main', (req, res) => {
 });
 
 // Submitting a user to the db creating a session
+
 app.post('/submit-signup', async (req, res) => {
-        const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-        // Validate user input
-        const schema = Joi.object({
-            name: Joi.string().max(20).required(),
-            email: Joi.string().email().required(),
-            password: Joi.string().required(),
-        });
+    // Validate user input
+    const schema = Joi.object({
+        name: Joi.string().max(20).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required(),
+    });
 
-        const { error } = schema.validate({ name, email, password });
-        if (error) {
-            return res.status(400).send(error.details[0].message);
-        }
+    const { error } = schema.validate({ name, email, password });
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
 
+    try {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -248,6 +250,10 @@ app.post('/submit-signup', async (req, res) => {
         req.session.userId = newUser._id;
 
         res.redirect('/main');
+    } catch (err) {
+        console.error('Error saving user:', err); 
+        res.render('signup', {message: "Email Already Exists"});
+    }
 });
 
 // Finding a user and creating a session for that user
