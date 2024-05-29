@@ -7,19 +7,19 @@
         <form action="/contact/inquiry" method="post" style="max-width: 400px; margin: 0 auto;">
             <div class="mb-3">
                 <label for="inputName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="inputName" name="name" aria-describedby="nameHelp">
+                <input type="text" class="form-control" id="inputName" name="name" aria-describedby="nameHelp" required>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp">
+                <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp" required>
             </div>
             <div class="mb-3">
                 <label for="inputSubject" class="form-label">Subject</label>
-                <input type="text" class="form-control" id="inputSubject" name="subject">
+                <input type="text" class="form-control" id="inputSubject" name="subject" required>
             </div>
             <div class="mb-3">
                 <label for="inputDescription" class="form-label">Description</label>
-                <textarea class="form-control" id="inputDescription" name="description" rows="4"></textarea>
+                <textarea class="form-control" id="inputDescription" name="description" rows="4" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
