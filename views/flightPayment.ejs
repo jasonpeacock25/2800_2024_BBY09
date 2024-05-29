@@ -7,21 +7,33 @@
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <h6 class="my-0">Hotel</h6>
+            <h6 class="my-0">Departing Flight</h6>
             <small class="text-body-secondary">
-              <% if (hotel) { %>
-                <div>Name: <%= hotel.name %>
-                </div>
-                <div>Rating: <%= hotel.rating %>
-                </div>
-                <div>Region: <%= hotel.region %>
-                </div>
-                <% } else { %>
-                  <div>No hotel booked</div>
-                  <% } %>
+              <div>Flight #: <%= departingFlight.number %>
+              </div>
+              <div>From: <%= departingFlight.departing %>
+              </div>
+              <div>To: <%= departingFlight.arriving %>
+              </div>
+              <div>Price: $<%= departingFlight.price * travellers %></div>
             </small>
           </div>
-          <span class="text-body-secondary" id="hotel-amount">$<%= hotel ? hotel.price : 0 %></span>
+          <span class="text-body-secondary" id="departing-flight-amount">$<%= departingFlight.price * travellers %></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <div>
+            <h6 class="my-0">Returning Flight</h6>
+            <small class="text-body-secondary">
+              <div>Flight #: <%= returningFlight.number %>
+              </div>
+              <div>From: <%= returningFlight.departing %>
+              </div>
+              <div>To: <%= returningFlight.arriving %>
+              </div>
+              <div>Price: $<%= returningFlight.price * travellers%></div>
+            </small>
+          </div>
+          <span class="text-body-secondary" id="return-flight-amount">$<%= returningFlight.price * travellers %></span>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>Total (CAD)</span>
@@ -156,15 +168,16 @@
         <hr class="my-4">
 
         <div>
-          <form id="paymentForm" action="/confirmPayment" method="post">
+          <form id="paymentForm" action="/confirmFlightPayment" method="post">
+          
             
-            <input type="hidden" name="hotelId" value="<%= hotel._id %>">
-            <input type="hidden" name="hotelName" value="<%= hotel.name %>">
-            <input type="hidden" name="hotelRegion" value="<%= hotel.region %>">
-            <input type="hidden" name="hotelPrice" value="<%= hotel.price %>">
-            <input type="hidden" name="hotelRating" value="<%= hotel.rating %>">
+            <input type="hidden" name="departingFlightNumber" value="<%= departingFlight.number %>">
+            <input type="hidden" name="departingFlightPrice" value="<%= departingFlight.price %>">
             
-            <button type="submit" class="w-100 btn btn-dark btn-lg"  style="background-color: #062c43;">Confirm
+            <input type="hidden" name="returningFlightNumber" value="<%= returningFlight.number %>">
+            <input type="hidden" name="returningFlightPrice" value="<%= returningFlight.price %>">
+          
+            <button type="submit" class="w-100 btn btn-dark btn-lg" style="background-color: #062c43;">Confirm
               payment</button>
           </form>
         </div>
@@ -184,13 +197,17 @@
         return '$' + amount.toFixed(2).toLocaleString();
       }
 
-      // hotel and total amount constants
-      const hotelAmountElement = document.getElementById('hotel-amount');
+      // flight and total amount constants
+      const departingFlightAmountElement = document.getElementById('departing-flight-amount');
+      const returningFlightAmountElement = document.getElementById('return-flight-amount');
       const totalAmountElement = document.getElementById('total-amount');
-      const hotelAmount = parseAmount(hotelAmountElement.textContent);
+
+      // Parse the amounts
+      const departingFlightAmount = parseAmount(departingFlightAmountElement.textContent);
+      const returningFlightAmount = parseAmount(returningFlightAmountElement.textContent);
 
       // Calculates total amount
-      const totalAmount = hotelAmount;
+      const totalAmount = departingFlightAmount + returningFlightAmount;
 
       // Updates total amount
       totalAmountElement.textContent = formatAmount(totalAmount);
