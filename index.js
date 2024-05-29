@@ -70,7 +70,7 @@ app.use(session({
 
 // The schema for user that the db will follow for the users collection
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, maxlength: 20, trim: true, unique: true },
+    username: { type: String, required: true, maxlength: 20, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     user_type: { type: String, required: true, default: 'user' },
@@ -191,8 +191,8 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         // Fetch all booking information for the user
         const bookings = await BookingInfo.find({ userId }).exec();
 
-        res.render('orderConfirmation', { username: req.session.username, booking: bookings });
-    } catch (error) {
+        res.render('orderConfirmation', { username: req.session.username, booking: bookings} );
+    }  catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
     }
@@ -200,7 +200,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
 
 // Sign up page route
 app.get('/signup', (req, res) => {
-    res.render('signup');
+    res.render('signup', { message: null });
 });
 
 // Sign in page route
@@ -217,6 +217,7 @@ app.get('/main', (req, res) => {
 });
 
 // Submitting a user to the db creating a session
+
 app.post('/submit-signup', async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -232,22 +233,27 @@ app.post('/submit-signup', async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create a new user and save to MongoDB
-    const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
-    await newUser.save();
+        // Create a new user and save to MongoDB
+        const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
+        await newUser.save();
 
-    // Session gets created here
-    req.session.authenticated = true;
-    req.session.username = newUser.username;
-    req.session.email = email;
-    req.session.user_type = newUser.user_type;
-    req.session.cookie.maxAge = expireTime;
-    req.session.userId = newUser._id;
+        // Session gets created here
+        req.session.authenticated = true;
+        req.session.username = newUser.username;
+        req.session.email = email;
+        req.session.user_type = newUser.user_type;
+        req.session.cookie.maxAge = expireTime;
+        req.session.userId = newUser._id;
 
-    res.redirect('/main');
+        res.redirect('/main');
+    } catch (err) {
+        console.error('Error saving user:', err); 
+        res.render('signup', {message: "Email Already Exists"});
+    }
 });
 
 // Finding a user and creating a session for that user
@@ -291,16 +297,16 @@ app.get('/about', sessionValidation, (req, res) => {
 });
 
 // My bookings page route
-app.get('/myBookings', sessionValidation, async (req, res) => {
+app.get('/myBookings', sessionValidation, async (req,res) => {
     const userId = req.session.userId;
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
 
+        
+        const hotels = bookings.filter(booking => booking.hotelName); 
 
-        const hotels = bookings.filter(booking => booking.hotelName);
-
-        res.render('myBookings', { hotels, departingFlights, returnFlights });
+        res.render('myBookings', { hotels, departingFlights, returnFlights});
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
@@ -498,7 +504,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
 });
 
 app.get('/orderConfirmation', sessionValidation, (req, res) => {
-    res.render('orderConfirmation', { username: req.session.username });
+    res.render('orderConfirmation', { username: req.session.username});
 });
 
 app.get('/orderConfirmation', sessionValidation, async (req, res) => {
@@ -506,12 +512,12 @@ app.get('/orderConfirmation', sessionValidation, async (req, res) => {
 
     try {
         // Fetch all booking information for the user
-        const bookings = await BookingInfo.find({ userId }).sort({ createdAt: -1 }).exec;
+        const bookings = await BookingInfo.find({ userId }).sort({createdAt: -1}).exec;
 
         // Render orderConfirmation template with bookings
-        res.render('orderConfirmation', {
+        res.render('orderConfirmation', { 
             username: req.session.username,
-            booking: bookings
+            booking: bookings 
         });
     } catch (error) {
         console.error('Error fetching booking information', error);
