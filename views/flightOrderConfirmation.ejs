@@ -26,19 +26,20 @@
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th></th>
+                        <th>Travellers</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <%= hotel.name %>
-                        </td>
-                        <td>
-                        </td>
-                        <td>$<%= hotel.price * amountOfDays %>
-                        </td>
+                        <td>Departing Flight #: <%= departingFlight.number %></td>
+                        <td><%= departingFlight.travellers %></td>
+                        <td>$<%= departingFlight.price * departingFlight.travellers %></td>
+                    </tr>
+                    <tr>
+                        <td>Returning Flight #: <%= returningFlight.number %></td>
+                        <td><%= returningFlight.travellers %></td>
+                        <td>$<%= returningFlight.price * returningFlight.travellers %></td>
                     </tr>
                 </tbody>
                 <tfoot>
