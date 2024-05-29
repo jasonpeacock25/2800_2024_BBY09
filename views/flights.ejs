@@ -11,7 +11,8 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="flightType" class="form-label">Flight Type</label>
-                                    <select id="flightType" name="flightType" class="form-select" onchange="changeFlightType()">
+                                    <select id="flightType" name="flightType" class="form-select"
+                                        onchange="changeFlightType()">
                                         <option selected>Round Trip</option>
                                         <option>One Way</option>
                                     </select>
@@ -19,7 +20,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="travellers" class="form-label">Travellers</label>
                                     <input id="travellers" name="travellers" type="number" class="form-control w-25"
-                                        value="1" min="1" max="10">
+                                        value="1" min="1" max="10" readonly>
                                     <div>
                                         <button class="btn" type="button" onclick="incrementTravellers()">
                                             <i class="bi bi-caret-up-square"></i>
@@ -95,7 +96,12 @@
         // tomorrowsDate = addDays(todaysDate, 1);
         document.getElementById("departDate").valueAsDate = todaysDate;
         // document.getElementById("returnDate").valueAsDate = tomorrowsDate;
-        changeToFrom();
+
+        //https://stackoverflow.com/questions/2638292/after-travelling-back-in-firefox-history-javascript-wont-run
+        window.onload = window.onpageshow = function () {
+            changeToFrom();
+            changeFlightType();
+        };
 
         function addDays(date, days) {
             var result = new Date(date);
@@ -112,7 +118,7 @@
             let departDate;
             let returnDate;
 
-            if(from == to && flightType == "Round Trip"){
+            if (from == to && flightType == "Round Trip") {
                 document.getElementById("toInput").value = "";
                 document.getElementById("fromInput").value = "";
             }
@@ -144,14 +150,24 @@
             }
         }
 
-        function changeFlightType(){
+        function changeFlightType() {
             let from = document.getElementById("fromInput").value;
             let to = document.getElementById("toInput").value;
-            if(from == to){
+            let flightType = document.getElementById("flightType").value;
+            if (from == to) {
                 document.getElementById("toInput").value = "";
                 document.getElementById("fromInput").value = "";
             }
-            document.getElementById("returnDateDiv").classList.toggle("hidden");
+            if (flightType == "One Way") {
+                if (!document.getElementById("returnDateDiv").classList.contains("hidden")) {
+                    document.getElementById("returnDateDiv").classList.toggle("hidden");
+                    console.log("BINGLE");
+                }
+            } else {
+                if (document.getElementById("returnDateDiv").classList.contains("hidden")) {
+                    document.getElementById("returnDateDiv").classList.toggle("hidden");
+                }
+            }
         }
 
         function incrementTravellers() {

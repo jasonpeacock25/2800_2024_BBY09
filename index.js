@@ -327,6 +327,8 @@ app.get('/faq', sessionValidation, (req, res) => {
 
 // Flights page route
 app.get('/flights', sessionValidation, (req, res) => {
+    delete req.session.departingFlight;
+    delete req.session.returningFlight;
     //createFlights();
     res.render('flights');
 });
@@ -345,6 +347,10 @@ app.get('/flights/departing', sessionValidation, async (req, res) => {
 // Returning flights page
 app.get('/flights/returning', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    if(flightType == "One Way"){
+        res.redirect('review');
+    }
+    
     let returnDateDate = new Date(returnDate);
     // console.log(departDateDate);
     let returnDateDatePlus = addDays(returnDateDate, 1);
@@ -468,7 +474,11 @@ async function createFlights() {
 // Review flights page
 app.get('/flights/review', sessionValidation, async (req, res) => {
     const { departingFlight, returningFlight, travellers } = req.session;
-    res.render('reviewFlights', { departingFlight, returningFlight, travellers });
+    if (!departingFlight){
+        res.redirect("/main")
+    } else {
+        res.render('reviewFlights', { departingFlight, returningFlight, travellers });
+    }
 });
 
 app.post('/flights/clicked', (req, res) => {
