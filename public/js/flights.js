@@ -1,7 +1,11 @@
-function sendSelected(type, flightNumber) {
-    console.log(flightNumber);
+function sendSelected(type, flight) {
+    decodedFlight = JSON.parse(flight);
+    // console.log(type);
+    // console.log(flight);
+    // console.log(decodedFlight);
+    // console.log(decodedFlight.number);
 
-    const json = { type: type, flightNumber: flightNumber };
+    const json = { type: type, flight: decodedFlight };
     const nextPage = (type == "departing") ? "returning" : "review";
 
     fetch("/flights/clicked", {
