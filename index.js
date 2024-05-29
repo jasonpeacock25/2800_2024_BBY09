@@ -313,6 +313,7 @@ app.get('/faq', sessionValidation, (req, res) => {
 
 // Flights page route
 app.get('/flights', sessionValidation, (req, res) => {
+    //createFlights();
     res.render('flights');
 });
 
@@ -349,97 +350,6 @@ function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-async function createFlights2() {
-    let flightArray = [
-        {
-            number: "VAN-MOON-001",
-            departing: "Vancouver",
-            arriving: "Moon",
-            departureDate: new Date(2024, 5, 9),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 6, 10),
-            arrivalTime: 12,
-            type: "Body to Body",
-            model: "Curiosity 4",
-            emissions: 45,
-            provider: "NASA",
-            price: 2450
-        },
-        {
-            number: "VAN-MOON-002",
-            departing: "Vancouver",
-            arriving: "Moon",
-            departureDate: new Date(2024, 5, 9),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 6, 10),
-            arrivalTime: 14,
-            type: "Body to Body",
-            model: "Shepherd 3",
-            emissions: 35,
-            provider: "Blue Origin",
-            price: 2200
-        },
-        {
-            number: "VAN-MOON-003",
-            departing: "Vancouver",
-            arriving: "Moon",
-            departureDate: new Date(2024, 5, 9),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 6, 10),
-            arrivalTime: 13,
-            type: "Body to Body",
-            model: "Dragon 5",
-            emissions: 55,
-            provider: "SpaceX",
-            price: 2125
-        },
-        {
-            number: "MOON-VAN-001",
-            departing: "Moon",
-            arriving: "Vancouver",
-            departureDate: new Date(2024, 5, 21),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 5, 22),
-            arrivalTime: 12,
-            type: "Body to Body",
-            model: "Curiosity 4",
-            emissions: 45,
-            provider: "NASA",
-            price: 2450
-        },
-        {
-            number: "MOON-VAN-002",
-            departing: "Moon",
-            arriving: "Vancouver",
-            departureDate: new Date(2024, 5, 21),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 5, 22),
-            arrivalTime: 14,
-            type: "Body to Body",
-            model: "Shepherd 3",
-            emissions: 35,
-            provider: "Blue Origin",
-            price: 2200
-        },
-        {
-            number: "MOON-VAN-003",
-            departing: "Moon",
-            arriving: "Vancouver",
-            departureDate: new Date(2024, 5, 21),
-            departureTime: 6,
-            arrivalDate: new Date(2024, 5, 22),
-            arrivalTime: 13,
-            type: "Body to Body",
-            model: "Dragon 5",
-            emissions: 55,
-            provider: "SpaceX",
-            price: 2125
-        }
-    ];
-
-await Flight.create(flightArray);
-}
-
 async function createFlights() {
     let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
     let locationCodes = ["BEJ", "HOU", "PAR", "VAN", "LUN", "MRS"];
@@ -451,7 +361,7 @@ async function createFlights() {
 
     let tempInteger;
     let tempScale;
-    let tempNumberCode = "0000";
+    let tempNumberCode = 0;
     let tempNumber;
     let tempDeparting;
     let tempArriving;
@@ -470,11 +380,9 @@ async function createFlights() {
     for (let from = 0; from < locations.length; from++) {
         for (let to = 0; to < locations.length; to++) {
             for (let month = 0; month < daysInEachMonth.length; month++) {
-                for (let day = 1; day <= daysInEachMonth[i]; day++) {
-                    for (let y = 0; y < randomInteger(0, 3); y++) {
+                for (let day = 1; day <= daysInEachMonth[month]; day++) {
+                    for (let y = 0; y < randomInteger(1, 3); y++) {
                         if (from != to) {
-                            //reset after location change!
-                            tempNumberCode.padStart(4, "0");
                             tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
                             tempNumberCode++;
 
@@ -495,7 +403,7 @@ async function createFlights() {
 
                             if(tempScale == 1){
                                 tempArrivalDate = addDays(tempDepartureDate, 1);
-                            } else if (tempScale == 6) {
+                            } else if (tempScale == 10) {
                                 tempArrivalDate = addDays(tempDepartureDate, randomInteger(90,140));
                             } else {
                                 tempArrivalDate = addDays(tempDepartureDate, randomInteger(2,3));
@@ -510,7 +418,7 @@ async function createFlights() {
                             }
                             
                             tempInteger = randomInteger(0,2)
-                            tempProvider = providers(tempInteger);
+                            tempProvider = providers[tempInteger];
                             tempModel = models[tempInteger][randomInteger(0,2)];
                             tempEmissions = randomInteger(5, 10) * tempScale;
                             tempPrice = randomInteger(750, 1900) * tempScale;
@@ -535,7 +443,8 @@ async function createFlights() {
                     }
                 }
             }
-            tempNumberCode = "0000";
+            tempNumberCode = 0;
+            console.log("Completed " + locations[from] + " to " + locations[to]);
         }
     }
 
