@@ -199,8 +199,8 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         // Fetch all booking information for the user
         const hotel = await Hotel.findById(req.body.hotelId);
 
-        res.render('orderConfirmation', { username: req.session.username, hotel} );
-    }  catch (error) {
+        res.render('orderConfirmation', { username: req.session.username, hotel });
+    } catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
     }
@@ -259,8 +259,8 @@ app.post('/submit-signup', async (req, res) => {
 
         res.redirect('/main');
     } catch (err) {
-        console.error('Error saving user:', err); 
-        res.render('signup', {message: "Email Already Exists"});
+        console.error('Error saving user:', err);
+        res.render('signup', { message: "Email Already Exists" });
     }
 });
 
@@ -305,16 +305,16 @@ app.get('/about', sessionValidation, (req, res) => {
 });
 
 // My bookings page route
-app.get('/myBookings', sessionValidation, async (req,res) => {
+app.get('/myBookings', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
 
-        
-        const hotels = bookings.filter(booking => booking.hotelName); 
 
-        res.render('myBookings', { hotels});
+        const hotels = bookings.filter(booking => booking.hotelName);
+
+        res.render('myBookings', { hotels });
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
@@ -329,7 +329,6 @@ app.get('/faq', sessionValidation, (req, res) => {
 app.get('/flights', sessionValidation, (req, res) => {
     delete req.session.departingFlight;
     delete req.session.returningFlight;
-    //createFlights();
     res.render('flights');
 });
 
@@ -340,23 +339,23 @@ app.get('/flights/departing', sessionValidation, async (req, res) => {
     // console.log(departDateDate);
     let departDateDatePlus = addDays(departDateDate, 1);
     // console.log(departDateDatePlus);
-    let validDepartingFlights = await Flight.find({ departureDate: {$lte: departDateDatePlus, $gte: departDateDate}, departing: fromInput, arriving: toInput });
+    let validDepartingFlights = await Flight.find({ departureDate: { $lte: departDateDatePlus, $gte: departDateDate }, departing: fromInput, arriving: toInput });
     res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
 // Returning flights page
 app.get('/flights/returning', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    if(flightType == "One Way"){
+    if (flightType == "One Way") {
         res.redirect('review');
+    } else {
+        let returnDateDate = new Date(returnDate);
+        // console.log(departDateDate);
+        let returnDateDatePlus = addDays(returnDateDate, 1);
+        // console.log(departDateDatePlus);
+        let validReturnFlights = await Flight.find({ arrivalDate: { $lte: returnDateDatePlus, $gte: returnDateDate }, departing: toInput, arriving: fromInput });
+        res.render('returningFlights', { validReturnFlights, travellers });
     }
-    
-    let returnDateDate = new Date(returnDate);
-    // console.log(departDateDate);
-    let returnDateDatePlus = addDays(returnDateDate, 1);
-    // console.log(departDateDatePlus);
-    let validReturnFlights = await Flight.find({ arrivalDate: {$lte: returnDateDatePlus, $gte: returnDateDate}, departing: toInput, arriving: fromInput });
-    res.render('returningFlights', { validReturnFlights, travellers });
 });
 
 //https://stackoverflow.com/questions/563406/how-to-add-days-to-date
@@ -402,14 +401,14 @@ async function createFlights() {
             for (let month = 0; month < daysInEachMonth.length; month++) {
                 for (let day = 1; day <= daysInEachMonth[month]; day++) {
                     for (let y = 0; y < randomInteger(1, 3); y++) {
-                        if (from != to) {
+                        if (true) {
                             tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
                             tempNumberCode++;
 
                             tempDeparting = locations[from];
                             tempArriving = locations[to];
 
-                            if(locationBody[from] == locationBody[to]){
+                            if (locationBody[from] == locationBody[to]) {
                                 tempScale = 1;
                             } else if (locationBody[from] == "Mars" || locationBody[to] == "Mars") {
                                 tempScale = 10;
@@ -417,45 +416,45 @@ async function createFlights() {
                                 tempScale = 3;
                             }
 
-                            tempDepartureDate = new Date (2024, month, day);
+                            tempDepartureDate = new Date(2024, month, day);
 
-                            tempDepartureTime = randomInteger(0,23);
+                            tempDepartureTime = randomInteger(0, 23);
 
-                            if(tempScale == 1){
+                            if (tempScale == 1) {
                                 tempArrivalDate = addDays(tempDepartureDate, 1);
                             } else if (tempScale == 10) {
-                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(90,140));
+                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(90, 140));
                             } else {
-                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(2,3));
+                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(2, 3));
                             }
 
-                            tempArrivalTime = randomInteger(0,23);
+                            tempArrivalTime = randomInteger(0, 23);
 
-                            if (locationBody[from] == locationBody[to]){
+                            if (locationBody[from] == locationBody[to]) {
                                 tempType = "Sub-Orbital";
                             } else {
                                 tempType = "Body to Body";
                             }
-                            
-                            tempInteger = randomInteger(0,2)
+
+                            tempInteger = randomInteger(0, 2)
                             tempProvider = providers[tempInteger];
-                            tempModel = models[tempInteger][randomInteger(0,2)];
+                            tempModel = models[tempInteger][randomInteger(0, 2)];
                             tempEmissions = randomInteger(5, 10) * tempScale;
                             tempPrice = randomInteger(750, 1900) * tempScale;
 
                             tempFlight = {
-                                    number: tempNumber,
-                                    departing: tempDeparting,
-                                    arriving: tempArriving,
-                                    departureDate: tempDepartureDate,
-                                    departureTime: tempDepartureTime,
-                                    arrivalDate: tempArrivalDate,
-                                    arrivalTime: tempArrivalTime,
-                                    type: tempType,
-                                    model: tempModel,
-                                    emissions: tempEmissions,
-                                    provider: tempProvider,
-                                    price: tempPrice
+                                number: tempNumber,
+                                departing: tempDeparting,
+                                arriving: tempArriving,
+                                departureDate: tempDepartureDate,
+                                departureTime: tempDepartureTime,
+                                arrivalDate: tempArrivalDate,
+                                arrivalTime: tempArrivalTime,
+                                type: tempType,
+                                model: tempModel,
+                                emissions: tempEmissions,
+                                provider: tempProvider,
+                                price: tempPrice
                             }
 
                             flightArray.push(tempFlight);
@@ -474,7 +473,7 @@ async function createFlights() {
 // Review flights page
 app.get('/flights/review', sessionValidation, async (req, res) => {
     const { departingFlight, returningFlight, travellers } = req.session;
-    if (!departingFlight){
+    if (!departingFlight) {
         res.redirect("/main")
     } else {
         res.render('reviewFlights', { departingFlight, returningFlight, travellers });
@@ -526,10 +525,10 @@ app.get('/orderConfirmation', sessionValidation, checkHotelData, async (req, res
 
     try {
         // Fetch all booking information for the user
-        const bookings = await BookingInfo.find({ userId }).sort({createdAt: -1}).exec;
+        const bookings = await BookingInfo.find({ userId }).sort({ createdAt: -1 }).exec;
 
         // Render orderConfirmation template with bookings
-        res.render('orderConfirmation', { 
+        res.render('orderConfirmation', {
             username: req.session.username,
             booking: bookings
         });
