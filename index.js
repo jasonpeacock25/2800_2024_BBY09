@@ -503,6 +503,11 @@ app.get('/payment', sessionValidation, async (req, res) => {
     res.render('payment', { hotel });
 })
 
+app.get('/flightPayment', sessionValidation, (req, res) => {
+    const { departingFlight, returningFlight, travellers } = req.session;
+    res.render('flightPayment', { departingFlight, returningFlight, travellers });
+})
+
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
 });
