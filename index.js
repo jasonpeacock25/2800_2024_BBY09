@@ -9,7 +9,6 @@ const saltRounds = 12;
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const SMTPPool = require('nodemailer/lib/smtp-pool');
-const { flights, hotels } = require('./myBookings');
 
 //
 const { OpenAI } = require('openai');
@@ -22,6 +21,7 @@ const port = 8000;
 // Import the Hotel model
 const Hotel = require('./models/Hotel');
 const BookingInfo = require('./models/BookingInfo');
+const Flight = require('./models/Flight');
 
 const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
 
@@ -187,12 +187,12 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         });
 
         await bookingInfo.save();
-        
+
         // Fetch all booking information for the user
         const bookings = await BookingInfo.find({ userId }).exec();
 
-        res.render('orderConfirmation', { username: req.session.username, booking: bookings} );
-    }  catch (error) {
+        res.render('orderConfirmation', { username: req.session.username, booking: bookings });
+    } catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
     }
@@ -218,36 +218,36 @@ app.get('/main', (req, res) => {
 
 // Submitting a user to the db creating a session
 app.post('/submit-signup', async (req, res) => {
-        const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-        // Validate user input
-        const schema = Joi.object({
-            name: Joi.string().max(20).required(),
-            email: Joi.string().email().required(),
-            password: Joi.string().required(),
-        });
+    // Validate user input
+    const schema = Joi.object({
+        name: Joi.string().max(20).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required(),
+    });
 
-        const { error } = schema.validate({ name, email, password });
-        if (error) {
-            return res.status(400).send(error.details[0].message);
-        }
+    const { error } = schema.validate({ name, email, password });
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Create a new user and save to MongoDB
-        const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
-        await newUser.save();
+    // Create a new user and save to MongoDB
+    const newUser = new User({ username: name, email: email, password: hashedPassword, user_type: "user" });
+    await newUser.save();
 
-        // Session gets created here
-        req.session.authenticated = true;
-        req.session.username = newUser.username;
-        req.session.email = email;
-        req.session.user_type = newUser.user_type;
-        req.session.cookie.maxAge = expireTime;
-        req.session.userId = newUser._id;
+    // Session gets created here
+    req.session.authenticated = true;
+    req.session.username = newUser.username;
+    req.session.email = email;
+    req.session.user_type = newUser.user_type;
+    req.session.cookie.maxAge = expireTime;
+    req.session.userId = newUser._id;
 
-        res.redirect('/main');
+    res.redirect('/main');
 });
 
 // Finding a user and creating a session for that user
@@ -291,16 +291,16 @@ app.get('/about', sessionValidation, (req, res) => {
 });
 
 // My bookings page route
-app.get('/myBookings', sessionValidation, async (req,res) => {
+app.get('/myBookings', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
 
-        
-        const hotels = bookings.filter(booking => booking.hotelName); 
 
-        res.render('myBookings', { hotels, departingFlights, returnFlights});
+        const hotels = bookings.filter(booking => booking.hotelName);
+
+        res.render('myBookings', { hotels, departingFlights, returnFlights });
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
@@ -317,45 +317,165 @@ app.get('/flights', sessionValidation, (req, res) => {
 });
 
 // Departing flights page
-app.get('/flights/departing', sessionValidation, (req, res) => {
-    let validDepartingFlights = [];
+app.get('/flights/departing', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    for(let i = 0; i < flights.length; i++){
-        if(flights[i].departureDate === departDate &&
-            flights[i].departing === fromInput &&
-            flights[i].arriving === toInput
-        ){
-            validDepartingFlights.push(flights[i]);
-        }
-    }
+    let validDepartingFlights = await Flight.find({ departureDate: departDate, departing: fromInput, arriving: toInput });
     res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
 // Returning flights page
-app.get('/flights/returning', sessionValidation, (req, res) => {
-    let validReturnFlights = [];
+app.get('/flights/returning', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    for(let i = 0; i < flights.length; i++){
-        if(flights[i].arrivalDate === returnDate &&
-            flights[i].departing === toInput &&
-            flights[i].arriving === fromInput
-        ){
-            validReturnFlights.push(flights[i]);
-        }
-    }
+    let validReturnFlights = await Flight.find({ arrivalDate: returnDate, departing: toInput, arriving: fromInput });
     res.render('returningFlights', { validReturnFlights, travellers });
 });
 
+async function createFlights() {
+    // let locations = ["Vancouver", ];
+    // let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    // let flightArray = [];
+
+    // let tempNumber;
+    // let tempDeparting;
+    // let tempArriving;
+    // let tempDepartureDate;
+    // let tempDepartureTime;
+    // let tempArrivalDate;
+    // let tempArrivalTime;
+    // let tempType;
+    // let tempProvider;
+    // let tempModel;
+    // let tempEmissions;
+    // let tempImageURL;
+    // let tempPrice;
+
+    // let tempFlight;
+
+    // y < Math.floor(Math.random() * 4)
+    // for () {
+    //     for (let i = 0; i < daysInEachMonth.length; i++) {
+    //         for (let x = 0; x < daysInEachMonth[i]; x++) {
+    //             for (let y = 0; y < 3; y++) {
+
+    //             }
+    //         }
+    //     }
+    // }
+
+
+    let flightArray = [
+        {
+            number: "VAN-MOON-001",
+            departing: "Vancouver",
+            arriving: "Moon",
+            departureDate: "2024-06-09",
+            departureTime: 6,
+            arrivalDate: "2024-07-10",
+            arrivalTime: 12,
+            type: "Body to Body",
+            model: "Curiosity 4",
+            emissions: 45,
+            provider: "NASA",
+            price: 2450
+        },
+        {
+            number: "VAN-MOON-002",
+            departing: "Vancouver",
+            arriving: "Moon",
+            departureDate: "2024-06-09",
+            departureTime: 8,
+            arrivalDate: "2024-07-10",
+            arrivalTime: 14,
+            type: "Body to Body",
+            model: "Shepherd 3",
+            emissions: 35,
+            provider: "Blue Origin",
+            price: 2200
+        },
+        {
+            number: "VAN-MOON-003",
+            departing: "Vancouver",
+            arriving: "Moon",
+            departureDate: "2024-06-10",
+            departureTime: 7,
+            arrivalDate: "2024-07-11",
+            arrivalTime: 13,
+            type: "Body to Body",
+            model: "Dragon 5",
+            emissions: 55,
+            provider: "SpaceX",
+            price: 2125
+        },
+        {
+            number: "MOON-VAN-001",
+            departing: "Moon",
+            arriving: "Vancouver",
+            departureDate: "2024-06-21",
+            departureTime: 6,
+            arrivalDate: "2024-06-22",
+            arrivalTime: 12,
+            type: "Body to Body",
+            model: "Curiosity 4",
+            emissions: 45,
+            provider: "NASA",
+            price: 2450
+        },
+        {
+            number: "MOON-VAN-002",
+            departing: "Moon",
+            arriving: "Vancouver",
+            departureDate: "2024-06-22",
+            departureTime: 8,
+            arrivalDate: "2024-06-23",
+            arrivalTime: 14,
+            type: "Body to Body",
+            model: "Shepherd 3",
+            emissions: 35,
+            provider: "Blue Origin",
+            price: 2200
+        },
+        {
+            number: "MOON-VAN-003",
+            departing: "Moon",
+            arriving: "Vancouver",
+            departureDate: "2024-06-21",
+            departureTime: 7,
+            arrivalDate: "2024-06-22",
+            arrivalTime: 13,
+            type: "Body to Body",
+            model: "Dragon 5",
+            emissions: 55,
+            provider: "SpaceX",
+            price: 2125
+        }
+    ];
+
+    await Flight.create(flightArray);
+
+    //     let myFlight = new Flight({
+    //     number: "VAN-MOON-001",
+    //     departing: "Vancouver",
+    //     arriving: "Moon",
+    //     departureDate: "2024-06-09",
+    //     departureTime: 6,
+    //     arrivalDate: "2024-07-10",
+    //     arrivalTime: 12,
+    //     type: "Body to Body",
+    //     model: "Curiosity 4",
+    //     emissions: 45,
+    //     imageURL: "images/nasa.png",
+    //     price: 2450
+    // });
+    // await myFlight.save();
+}
+
 // Review flights page
-app.get('/flights/review', sessionValidation, (req, res) => {
-    //const { flightType, travellers, fromInput, toInput, departDate, returnDate, departingFlight, returningFlight } = req.session;
+app.get('/flights/review', sessionValidation, async (req, res) => {
     const { departingFlight, returningFlight, travellers } = req.session;
-    console.log(departingFlight);
-    console.log(departingFlight.type);
     res.render('reviewFlights', { departingFlight, returningFlight, travellers });
 });
 
-app.post('/flights/clicked', (req,res) => {
+app.post('/flights/clicked', (req, res) => {
     let type = req.body.type;
     let flight = req.body.flight;
     if (type == "departing") {
@@ -396,7 +516,7 @@ app.get('/contact/inquiry', sessionValidation, (req, res) => {
 });
 
 app.get('/orderConfirmation', sessionValidation, (req, res) => {
-    res.render('orderConfirmation', { username: req.session.username});
+    res.render('orderConfirmation', { username: req.session.username });
 });
 
 app.get('/orderConfirmation', sessionValidation, async (req, res) => {
@@ -404,12 +524,12 @@ app.get('/orderConfirmation', sessionValidation, async (req, res) => {
 
     try {
         // Fetch all booking information for the user
-        const bookings = await BookingInfo.find({ userId }).sort({createdAt: -1}).exec;
+        const bookings = await BookingInfo.find({ userId }).sort({ createdAt: -1 }).exec;
 
         // Render orderConfirmation template with bookings
-        res.render('orderConfirmation', { 
+        res.render('orderConfirmation', {
             username: req.session.username,
-            booking: bookings 
+            booking: bookings
         });
     } catch (error) {
         console.error('Error fetching booking information', error);
