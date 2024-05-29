@@ -1,4 +1,5 @@
 <%- include('templates/header-back-arrow') %>
+<div class="container">
   <div class="row g-5">
     <div class="col-md-5 col-lg-4 order-md-last">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -16,12 +17,14 @@
                 </div>
                 <div>Region: <%= hotel.region %>
                 </div>
+                <div>Days booked: <%= amountOfDays %>
+                </div>
                 <% } else { %>
                   <div>No hotel booked</div>
                   <% } %>
             </small>
           </div>
-          <span class="text-body-secondary" id="hotel-amount">$<%= hotel ? hotel.price : 0 %></span>
+          <span class="text-body-secondary" id="hotel-amount">$<%= hotel ? hotel.price * amountOfDays : 0 %></span>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <span>Total (CAD)</span>
@@ -161,7 +164,7 @@
         <input type="hidden" name="hotelId" value="<%= hotel._id %>">
         <input type="hidden" name="hotelName" value="<%= hotel.name %>">
         <input type="hidden" name="hotelRegion" value="<%= hotel.region %>">
-        <input type="hidden" name="hotelPrice" value="<%= hotel.price %>">
+        <input type="hidden" name="hotelPrice" value="<%= hotel.price * amountOfDays %>">
         <input type="hidden" name="hotelRating" value="<%= hotel.rating %>">
 
         <button type="submit" class="w-100 btn btn-dark btn-lg" style="background-color: #062c43;">Confirm
@@ -169,6 +172,7 @@
       </form>
 
     </div>
+  </div>
   </div>
   <script>
 

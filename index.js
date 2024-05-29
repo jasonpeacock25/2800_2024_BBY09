@@ -154,6 +154,12 @@ app.post('/hotelSelection', async (req, res) => {
 
 // This route displays important information about the hotel plus a AI Reviw box
 app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
+
+    const checkInDate = new Date(req.session.hotelCheckInDate);
+    const checkOutDate = new Date(req.session.hotelCheckOutDate);
+
+    const amountOfDays = Math.round((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+
     const hotel = await Hotel.findById(req.params.id);
 
     // Get the last 5 reviews
@@ -168,14 +174,25 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
         ]
     });
     const reviewSummary = aiResponse.choices[0].message.content;
-    //
+    
 
-    res.render('hotelSummary', { hotel, reviews: hotel.reviews, reviewSummary });
+    const formattedCheckInDate = checkInDate.toDateString();
+    const formattedCheckOutDate = checkOutDate.toDateString();
+
+    res.render('hotelSummary', { hotel, reviews: hotel.reviews, reviewSummary, amountOfDays, formattedCheckInDate, formattedCheckOutDate });
 });
 
 app.post('/bookHotel', sessionValidation, async (req, res) => {
+    const checkInDate = new Date(req.session.hotelCheckInDate);
+    const checkOutDate = new Date(req.session.hotelCheckOutDate);
+
+    const formattedCheckInDate = checkInDate.toDateString();
+    const formattedCheckOutDate = checkOutDate.toDateString();
+
+    const amountOfDays = Math.round((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+
     const hotel = await Hotel.findById(req.body.hotelId);
-    res.render('payment', { hotel });
+    res.render('payment', { hotel, amountOfDays });
 });
 // End of Gurvir's Routes //////////////////////////////
 
@@ -183,6 +200,13 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     const { hotelId, hotelName, hotelRegion, hotelPrice, hotelRating } = req.body;
 
+    const checkInDate = new Date(req.session.hotelCheckInDate);
+    const checkOutDate = new Date(req.session.hotelCheckOutDate);
+
+    const formattedCheckInDate = checkInDate.toDateString();
+    const formattedCheckOutDate = checkOutDate.toDateString();
+
+    const amountOfDays = Math.round((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
     try {
         const bookingInfo = new BookingInfo({
@@ -199,7 +223,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         // Fetch all booking information for the user
         const hotel = await Hotel.findById(req.body.hotelId);
 
-        res.render('orderConfirmation', { username: req.session.username, hotel} );
+        res.render('orderConfirmation', { username: req.session.username, hotel, amountOfDays} );
     }  catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');

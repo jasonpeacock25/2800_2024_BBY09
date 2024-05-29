@@ -2,6 +2,10 @@
 
     <link rel="stylesheet" href="/css/hotelSummary.css">
 
+<%
+const totalPrice = amountOfDays * hotel.price;
+%>
+
     <!-- Inside hotelSummary.ejs -->
     <div class="container">
         <div class="row">
@@ -16,7 +20,11 @@
                 <p><strong>Rating:</strong>
                     <%= hotel.rating %>
                 </p>
-                <p><strong>Price:</strong> $<%= hotel.price %>
+                <p><strong>Your dates:</strong>
+                    <%= formattedCheckInDate %> to <%= formattedCheckOutDate %>
+                </p>
+                <p><strong>Total price: $</strong>
+                    <%= totalPrice %>
                 </p>
                 <p><strong>Available from:</strong>
                     <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
