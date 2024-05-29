@@ -7,20 +7,25 @@ const BookingInfoSchema = new mongoose.Schema({
     },
     hotelName: {
         type: String,
-        required: true
+        required: false
     },
     hotelRegion: {
         type: String,
-        required: true
+        required: false
     },
     hotelPrice: {
         type: Number,
-        required: true
+        required: false
     },
     hotelRating: {
         type: Number,
-        required: true
-    }
+        required: false
+    },
+    departingFlightNumber: String,
+    departingFlightPrice: Number,
+    returningFlightNumber: String,
+    returningFlightPrice: Number,
+    travellers: Number
 });
 
 const BookingInfo = mongoose.model('BookingInfo', BookingInfoSchema);

@@ -206,6 +206,44 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
     }
 });
 
+app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
+    const userId = req.session.userId;
+    const { departingFlightNumber, departingFlightPrice,
+        returningFlightNumber, returningFlightPrice,
+        travellers } = req.body;
+
+
+    try {
+        const bookingInfo = new BookingInfo({
+            userId,
+            departingFlightNumber,
+            departingFlightPrice,
+            returningFlightNumber,
+            returningFlightPrice,
+            travellers
+        });
+
+        await bookingInfo.save();
+
+    res.render('flightOrderConfirmation', {
+        username: req.session.username,
+        departingFlight: {
+            number: departingFlightNumber,
+            price: departingFlightPrice,
+            travellers
+        },
+        returningFlight: {
+            number: returningFlightNumber,
+            price: returningFlightPrice,
+            travellers
+        }
+    });
+} catch (error) {
+    console.error('Error saving booking information', error);
+    res.status(500).send('Internal Server Error');
+}
+});
+
 // Sign up page route
 app.get('/signup', (req, res) => {
     res.render('signup', { message: null });
