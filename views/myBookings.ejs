@@ -6,20 +6,18 @@
         <h2 class="text-center">Departing Flights</h2>
         <div class="container">
             <div class="row justify-content-center ">
-                <% departingFlights.forEach(function(flight, index) {%>
-                    <div class="col-md-4 mb-4" id="departing-flights-<% index %>">
+                    <div class="col-md-4 mb-4" id="">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">Flight Number: <%= flight.flightNumber %>
+                                <h5 class="card-title">
                                 </h5>
-                                <p class="card-text">Destination: <%= flight.destination %>
+                                <p class="card-text">Destination: 
                                 </p>
-                                <p class="card-text">Departure Time: <%= flight.departureTime %>
+                                <p class="card-text">Departure Time: 
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
             </div>
         </div>
     
@@ -27,20 +25,20 @@
         <h2 class="text-center">Return Flights</h2>
         <div class="container">
             <div class="row justify-content-center ">
-                <% returnFlights.forEach(function(flight, index) {%>
-                    <div class="col-md-4 mb-4" id="return-flight-<%= index %>">
+                
+                    <div class="col-md-4 mb-4" id="">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">Flight Number: <%= flight.flightNumber %>
+                                <h5 class="card-title">Flight Number: 
                                 </h5>
-                                <p class="card-text">Destination: <%= flight.destination %>
+                                <p class="card-text">Destination: 
                                 </p>
-                                <p class="card-text">Departure Time: <%= flight.departureTime %>
+                                <p class="card-text">Departure Time: 
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
+                    
             </div>
         </div>
     
@@ -60,7 +58,7 @@
                                 </p>
                                 <p class="card-text">Location: <%= hotel.hotelRegion %>
                                 </p>
-        
+                                
                             </div>
                         </div>
                     </div>

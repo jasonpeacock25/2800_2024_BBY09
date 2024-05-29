@@ -12,28 +12,27 @@
     <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
     <div class="container">
         <div class="row justify-content-center ">
-            <% departingFlights.forEach(function(flight, index) {%>
-                <% if(flight.flightNumber == departingFlight){%>
                 <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
+                    <div class="card flex-row flex-wrap d-flex" style="cursor: pointer;" id="<%=departingFlight.number%>">
                         <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+                            <img src="/images/<%= departingFlight.provider%>.png" class="image-fluid" alt="">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
-                            </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
-                            </p>
-                            <p class="card-text">Price: $<%= flight.price %>
-                            </p>
-                            <% totalPrice += flight.price;%>
+                            <h5 class="card-title">Flight #: <%= departingFlight.number %></h5>
+                            <p class="card-text">From: <%= departingFlight.departing %></p>
+                            <p class="card-text">To: <%= departingFlight.arriving %></p>
+                            <p class="card-text">Departure Date: <%= departingFlight.departureDate %></p>
+                            <p class="card-text">Departure Time: <%= departingFlight.departureTime %></p>
+                            <p class="card-text">Arrival Date: <%= departingFlight.arrivalDate %></p>
+                            <p class="card-text">Arrival Time: <%= departingFlight.arrivalTime %></p>
+                            <p class="card-text">Flight Type: <%= departingFlight.type %></p>
+                            <p class="card-text">Provider: <%= departingFlight.provider %></p>
+                            <p class="card-text">Model: <%= departingFlight.model %></p>
+                            <p class="card-text">Price: $<%= departingFlight.price * travellers%></p>
+                            <% totalPrice += departingFlight.price * travellers;%>
                         </div>
                     </div>
                 </div>
-                <% }%>
-                <% }); %>
         </div>
     </div>
 
@@ -44,28 +43,27 @@
 
     <div class="container">
         <div class="row justify-content-center ">
-            <% returnFlights.forEach(function(flight, index) {%>
-                <% if(flight.flightNumber == returningFlight){%>
                 <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
+                    <div class="card flex-row flex-wrap d-flex" style="cursor: pointer;" id="<%=returningFlight.number%>">
                         <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+                            <img src="/images/<%= returningFlight.provider%>.png" class="image-fluid" alt="">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
-                            </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
-                            </p>
-                            <p class="card-text">Price: $<%= flight.price %>
-                            </p>
-                            <% totalPrice += flight.price;%>
+                            <h5 class="card-title">Flight #: <%= returningFlight.number %></h5>
+                            <p class="card-text">From: <%= returningFlight.departing %></p>
+                            <p class="card-text">To: <%= returningFlight.arriving %></p>
+                            <p class="card-text">Departure Date: <%= returningFlight.departureDate %></p>
+                            <p class="card-text">Departure Time: <%= returningFlight.departureTime %></p>
+                            <p class="card-text">Arrival Date: <%= returningFlight.arrivalDate %></p>
+                            <p class="card-text">Arrival Time: <%= returningFlight.arrivalTime %></p>
+                            <p class="card-text">Flight Type: <%= returningFlight.type %></p>
+                            <p class="card-text">Provider: <%= returningFlight.provider %></p>
+                            <p class="card-text">Model: <%= returningFlight.model %></p>
+                            <p class="card-text">Price: $<%= returningFlight.price * travellers%></p>
+                            <% totalPrice += returningFlight.price * travellers;%>
                         </div>
                     </div>
                 </div>
-                <% }%>
-                <% }); %>
         </div>
     </div>
 
