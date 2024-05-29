@@ -230,6 +230,44 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
     }
 });
 
+app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
+    const userId = req.session.userId;
+    const { departingFlightNumber, departingFlightPrice,
+        returningFlightNumber, returningFlightPrice,
+        travellers } = req.body;
+
+
+    try {
+        const bookingInfo = new BookingInfo({
+            userId,
+            departingFlightNumber,
+            departingFlightPrice,
+            returningFlightNumber,
+            returningFlightPrice,
+            travellers
+        });
+
+        await bookingInfo.save();
+
+    res.render('flightOrderConfirmation', {
+        username: req.session.username,
+        departingFlight: {
+            number: departingFlightNumber,
+            price: departingFlightPrice,
+            travellers
+        },
+        returningFlight: {
+            number: returningFlightNumber,
+            price: returningFlightPrice,
+            travellers
+        }
+    });
+} catch (error) {
+    console.error('Error saving booking information', error);
+    res.status(500).send('Internal Server Error');
+}
+});
+
 // Sign up page route
 app.get('/signup', (req, res) => {
     res.render('signup', { message: null });
@@ -334,11 +372,38 @@ app.get('/myBookings', sessionValidation, async (req,res) => {
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
+ 
+        const departingFlights = [];
+        const returningFlights = [];
+        const hotels = [];
 
+        bookings.forEach(booking => {
+            if (booking.departingFlightNumber) {
+                departingFlights.push({
+                    flightNumber: booking.departingFlightNumber,
+                    price: booking.departingFlightPrice,
+                    travellers: booking.travellers
+                });
+            } 
+            if (booking.returningFlightNumber) {
+                returningFlights.push({
+                    flightNumber: booking.returningFlightNumber,
+                    price: booking.returningFlightPrice,
+                    travellers: booking.travellers
+                });
+            }
+            if (booking.hotelName) {
+                hotels.push({
+                    hotelName: booking.hotelName,
+                    hotelRating: booking.hotelRating,
+                    hotelPrice: booking.hotelPrice,
+                    hotelRegion: booking.hotelRegion
+                });
+            }
+        });
         
-        const hotels = bookings.filter(booking => booking.hotelName); 
 
-        res.render('myBookings', { hotels});
+        res.render('myBookings', { hotels, departingFlights, returningFlights});
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
@@ -525,6 +590,11 @@ app.get('/payment', sessionValidation, async (req, res) => {
     // const hotel = await Hotel.find();
     const hotel = await Hotel.findById(req.body.hotelId);
     res.render('payment', { hotel });
+})
+
+app.get('/flightPayment', sessionValidation, (req, res) => {
+    const { departingFlight, returningFlight, travellers } = req.session;
+    res.render('flightPayment', { departingFlight, returningFlight, travellers });
 })
 
 app.get('/contact', sessionValidation, (req, res) => {
