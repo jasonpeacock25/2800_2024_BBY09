@@ -11,10 +11,9 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="flightType" class="form-label">Flight Type</label>
-                                    <select id="flightType" name="flightType" class="form-select">
+                                    <select id="flightType" name="flightType" class="form-select" onchange="changeFlightType()">
                                         <option selected>Round Trip</option>
                                         <option>One Way</option>
-                                        <option>Sub-Orbital</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -31,33 +30,54 @@
                                     </div>
                                 </div>
                             </div>
-                            <datalist id="locations">
+                            <!-- <datalist id="locations">
                                 <option value="Beijing">
                                 <option value="Houston">
                                 <option value="Paris">
                                 <option value="Vancouver">
                                 <option value="Moon">
                                 <option value="Mars">
-                            </datalist>
-                            <div class="mb-3">
+                            </datalist> -->
+                            <div class="col-md-6 mb-3">
+                                <label for="fromInput" class="form-label">From</label>
+                                <select id="fromInput" name="fromInput" class="form-select" onchange="changeToFrom()">
+                                    <option value="Beijing">Beijing</option>
+                                    <option value="Houston">Houston</option>
+                                    <option value="Paris">Paris</option>
+                                    <option selected value="Vancouver">Vancouver</option>
+                                    <option value="Moon">Moon</option>
+                                    <option value="Mars">Mars</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="toInput" class="form-label">To</label>
+                                <select id="toInput" name="toInput" class="form-select" onchange="changeToFrom()">
+                                    <option value="Beijing">Beijing</option>
+                                    <option value="Houston">Houston</option>
+                                    <option value="Paris">Paris</option>
+                                    <option value="Vancouver">Vancouver</option>
+                                    <option selected value="Moon">Moon</option>
+                                    <option value="Mars">Mars</option>
+                                </select>
+                                </select>
+                            </div>
+                            <!-- <div class="mb-3">
                                 <label for="fromInput" class="form-label">From</label>
                                 <input id="fromInput" name="fromInput" type="text" class="form-control"
-                                    placeholder="Where From?" list="locations">
+                                    placeholder="Where From?" list="locations" onchange="changeToFrom()">
                             </div>
                             <div class="mb-3">
                                 <label for="toInput" class="form-label">To</label>
                                 <input type="text" class="form-control" id="toInput" name="toInput"
-                                    placeholder="Where To?" list="locations">
-                            </div>
+                                    placeholder="Where To?" list="locations" onchange="changeToFrom()">
+                            </div> -->
                             <div class="mb-3">
                                 <label for="departDate" class="form-label">Depart</label>
-                                <input type="date" class="form-control" id="departDate" name="departDate"
-                                    value="2024-06-09">
+                                <input type="date" class="form-control" id="departDate" name="departDate">
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="returnDateDiv">
                                 <label for="returnDate" class="form-label">Return</label>
-                                <input type="date" class="form-control" id="returnDate" name="returnDate"
-                                    value="2024-06-22">
+                                <input type="date" class="form-control" id="returnDate" name="returnDate">
                             </div>
                             <button type="submit" class="btn btn-primary">Search</button>
                         </form>
@@ -68,6 +88,72 @@
     </div>
 
     <script>
+        let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
+        let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
+        let todaysDate = new Date();
+        // let tomorrowsDate = new Date();
+        // tomorrowsDate = addDays(todaysDate, 1);
+        document.getElementById("departDate").valueAsDate = todaysDate;
+        // document.getElementById("returnDate").valueAsDate = tomorrowsDate;
+        changeToFrom();
+
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function changeToFrom() {
+            let from = document.getElementById("fromInput").value;
+            let to = document.getElementById("toInput").value;
+            let flightType = document.getElementById("flightType").value;
+            let fromIndex = locations.indexOf(from);
+            let toIndex = locations.indexOf(to);
+            let departDate;
+            let returnDate;
+
+            if(from == to && flightType == "Round Trip"){
+                document.getElementById("toInput").value = "";
+                document.getElementById("fromInput").value = "";
+            }
+
+            departDate = document.getElementById("departDate").valueAsDate;
+
+            if (fromIndex != -1 && toIndex != -1) {
+                if (locationBody[fromIndex] != locationBody[toIndex]) {
+                    if (from == "Mars" || to == "Mars") {
+                        returnDate = addDays(departDate, 180);
+                        document.getElementById("returnDate").valueAsDate = returnDate;
+                        // console.log("Changed with mars input");
+                        // console.log("Depart Date: ", departDate);
+                        // console.log("Return Date: ", returnDate);
+                    } else {
+                        returnDate = addDays(departDate, 10);
+                        document.getElementById("returnDate").valueAsDate = returnDate;
+                        // console.log("Changed with moon input");
+                        // console.log("Depart Date: ", departDate);
+                        // console.log("Return Date: ", returnDate);
+                    }
+                } else {
+                    returnDate = addDays(departDate, 1);
+                    document.getElementById("returnDate").valueAsDate = returnDate;
+                    // console.log("Same body");
+                }
+            } else {
+                // console.log("At least one is empty or invalid");
+            }
+        }
+
+        function changeFlightType(){
+            let from = document.getElementById("fromInput").value;
+            let to = document.getElementById("toInput").value;
+            if(from == to){
+                document.getElementById("toInput").value = "";
+                document.getElementById("fromInput").value = "";
+            }
+            document.getElementById("returnDateDiv").classList.toggle("hidden");
+        }
+
         function incrementTravellers() {
             console.log("Increment");
             let input = document.getElementById("travellers");
