@@ -319,58 +319,45 @@ app.get('/flights', sessionValidation, (req, res) => {
 // Departing flights page
 app.get('/flights/departing', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    let validDepartingFlights = await Flight.find({ departureDate: departDate, departing: fromInput, arriving: toInput });
+    let departDateDate = new Date(departDate);
+    // console.log(departDateDate);
+    let departDateDatePlus = addDays(departDateDate, 1);
+    // console.log(departDateDatePlus);
+    let validDepartingFlights = await Flight.find({ departureDate: {$lte: departDateDatePlus, $gte: departDateDate}, departing: fromInput, arriving: toInput });
     res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
 // Returning flights page
 app.get('/flights/returning', sessionValidation, async (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
-    let validReturnFlights = await Flight.find({ arrivalDate: returnDate, departing: toInput, arriving: fromInput });
+    let returnDateDate = new Date(returnDate);
+    // console.log(departDateDate);
+    let returnDateDatePlus = addDays(returnDateDate, 1);
+    // console.log(departDateDatePlus);
+    let validReturnFlights = await Flight.find({ arrivalDate: {$lte: returnDateDatePlus, $gte: returnDateDate}, departing: toInput, arriving: fromInput });
     res.render('returningFlights', { validReturnFlights, travellers });
 });
 
-async function createFlights() {
-    // let locations = ["Vancouver", ];
-    // let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    // let flightArray = [];
+//https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
 
-    // let tempNumber;
-    // let tempDeparting;
-    // let tempArriving;
-    // let tempDepartureDate;
-    // let tempDepartureTime;
-    // let tempArrivalDate;
-    // let tempArrivalTime;
-    // let tempType;
-    // let tempProvider;
-    // let tempModel;
-    // let tempEmissions;
-    // let tempImageURL;
-    // let tempPrice;
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-    // let tempFlight;
-
-    // y < Math.floor(Math.random() * 4)
-    // for () {
-    //     for (let i = 0; i < daysInEachMonth.length; i++) {
-    //         for (let x = 0; x < daysInEachMonth[i]; x++) {
-    //             for (let y = 0; y < 3; y++) {
-
-    //             }
-    //         }
-    //     }
-    // }
-
-
+async function createFlights2() {
     let flightArray = [
         {
             number: "VAN-MOON-001",
             departing: "Vancouver",
             arriving: "Moon",
-            departureDate: "2024-06-09",
+            departureDate: new Date(2024, 5, 9),
             departureTime: 6,
-            arrivalDate: "2024-07-10",
+            arrivalDate: new Date(2024, 6, 10),
             arrivalTime: 12,
             type: "Body to Body",
             model: "Curiosity 4",
@@ -382,9 +369,9 @@ async function createFlights() {
             number: "VAN-MOON-002",
             departing: "Vancouver",
             arriving: "Moon",
-            departureDate: "2024-06-09",
-            departureTime: 8,
-            arrivalDate: "2024-07-10",
+            departureDate: new Date(2024, 5, 9),
+            departureTime: 6,
+            arrivalDate: new Date(2024, 6, 10),
             arrivalTime: 14,
             type: "Body to Body",
             model: "Shepherd 3",
@@ -396,9 +383,9 @@ async function createFlights() {
             number: "VAN-MOON-003",
             departing: "Vancouver",
             arriving: "Moon",
-            departureDate: "2024-06-10",
-            departureTime: 7,
-            arrivalDate: "2024-07-11",
+            departureDate: new Date(2024, 5, 9),
+            departureTime: 6,
+            arrivalDate: new Date(2024, 6, 10),
             arrivalTime: 13,
             type: "Body to Body",
             model: "Dragon 5",
@@ -410,9 +397,9 @@ async function createFlights() {
             number: "MOON-VAN-001",
             departing: "Moon",
             arriving: "Vancouver",
-            departureDate: "2024-06-21",
+            departureDate: new Date(2024, 5, 21),
             departureTime: 6,
-            arrivalDate: "2024-06-22",
+            arrivalDate: new Date(2024, 5, 22),
             arrivalTime: 12,
             type: "Body to Body",
             model: "Curiosity 4",
@@ -424,9 +411,9 @@ async function createFlights() {
             number: "MOON-VAN-002",
             departing: "Moon",
             arriving: "Vancouver",
-            departureDate: "2024-06-22",
-            departureTime: 8,
-            arrivalDate: "2024-06-23",
+            departureDate: new Date(2024, 5, 21),
+            departureTime: 6,
+            arrivalDate: new Date(2024, 5, 22),
             arrivalTime: 14,
             type: "Body to Body",
             model: "Shepherd 3",
@@ -438,9 +425,9 @@ async function createFlights() {
             number: "MOON-VAN-003",
             departing: "Moon",
             arriving: "Vancouver",
-            departureDate: "2024-06-21",
-            departureTime: 7,
-            arrivalDate: "2024-06-22",
+            departureDate: new Date(2024, 5, 21),
+            departureTime: 6,
+            arrivalDate: new Date(2024, 5, 22),
             arrivalTime: 13,
             type: "Body to Body",
             model: "Dragon 5",
@@ -450,23 +437,109 @@ async function createFlights() {
         }
     ];
 
-    await Flight.create(flightArray);
+await Flight.create(flightArray);
+}
 
-    //     let myFlight = new Flight({
-    //     number: "VAN-MOON-001",
-    //     departing: "Vancouver",
-    //     arriving: "Moon",
-    //     departureDate: "2024-06-09",
-    //     departureTime: 6,
-    //     arrivalDate: "2024-07-10",
-    //     arrivalTime: 12,
-    //     type: "Body to Body",
-    //     model: "Curiosity 4",
-    //     emissions: 45,
-    //     imageURL: "images/nasa.png",
-    //     price: 2450
-    // });
-    // await myFlight.save();
+async function createFlights() {
+    let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
+    let locationCodes = ["BEJ", "HOU", "PAR", "VAN", "LUN", "MRS"];
+    let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
+    let providers = ["NASA", "Blue Origin", "SpaceX"];
+    let models = [["Curiosity 4", "Gemini XVI", "Pioneer 16"], ["Shepherd 3", "Blue 7", "Goddard"], ["Dragon 5", "Falcon 12", "Starship 2"]];
+    let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let flightArray = [];
+
+    let tempInteger;
+    let tempScale;
+    let tempNumberCode = "0000";
+    let tempNumber;
+    let tempDeparting;
+    let tempArriving;
+    let tempDepartureDate;
+    let tempDepartureTime;
+    let tempArrivalDate;
+    let tempArrivalTime;
+    let tempType;
+    let tempProvider;
+    let tempModel;
+    let tempEmissions;
+    let tempPrice;
+
+    let tempFlight;
+
+    for (let from = 0; from < locations.length; from++) {
+        for (let to = 0; to < locations.length; to++) {
+            for (let month = 0; month < daysInEachMonth.length; month++) {
+                for (let day = 1; day <= daysInEachMonth[i]; day++) {
+                    for (let y = 0; y < randomInteger(0, 3); y++) {
+                        if (from != to) {
+                            //reset after location change!
+                            tempNumberCode.padStart(4, "0");
+                            tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
+                            tempNumberCode++;
+
+                            tempDeparting = locations[from];
+                            tempArriving = locations[to];
+
+                            if(locationBody[from] == locationBody[to]){
+                                tempScale = 1;
+                            } else if (locationBody[from] == "Mars" || locationBody[to] == "Mars") {
+                                tempScale = 10;
+                            } else {
+                                tempScale = 3;
+                            }
+
+                            tempDepartureDate = new Date (2024, month, day);
+
+                            tempDepartureTime = randomInteger(0,23);
+
+                            if(tempScale == 1){
+                                tempArrivalDate = addDays(tempDepartureDate, 1);
+                            } else if (tempScale == 6) {
+                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(90,140));
+                            } else {
+                                tempArrivalDate = addDays(tempDepartureDate, randomInteger(2,3));
+                            }
+
+                            tempArrivalTime = randomInteger(0,23);
+
+                            if (locationBody[from] == locationBody[to]){
+                                tempType = "Sub-Orbital";
+                            } else {
+                                tempType = "Body to Body";
+                            }
+                            
+                            tempInteger = randomInteger(0,2)
+                            tempProvider = providers(tempInteger);
+                            tempModel = models[tempInteger][randomInteger(0,2)];
+                            tempEmissions = randomInteger(5, 10) * tempScale;
+                            tempPrice = randomInteger(750, 1900) * tempScale;
+
+                            tempFlight = {
+                                    number: tempNumber,
+                                    departing: tempDeparting,
+                                    arriving: tempArriving,
+                                    departureDate: tempDepartureDate,
+                                    departureTime: tempDepartureTime,
+                                    arrivalDate: tempArrivalDate,
+                                    arrivalTime: tempArrivalTime,
+                                    type: tempType,
+                                    model: tempModel,
+                                    emissions: tempEmissions,
+                                    provider: tempProvider,
+                                    price: tempPrice
+                            }
+
+                            flightArray.push(tempFlight);
+                        }
+                    }
+                }
+            }
+            tempNumberCode = "0000";
+        }
+    }
+
+    await Flight.create(flightArray);
 }
 
 // Review flights page
