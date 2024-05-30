@@ -424,6 +424,8 @@ app.get('/flights', sessionValidation, (req, res) => {
 
 // Departing flights page
 app.get('/flights/departing', sessionValidation, async (req, res) => {
+    delete req.session.departingFlight;
+    delete req.session.returningFlight;
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
     let departDateDate = new Date(departDate);
     // console.log(departDateDate);
