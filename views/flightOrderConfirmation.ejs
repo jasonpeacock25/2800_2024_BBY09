@@ -31,16 +31,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <tr>
                         <td>Departing Flight #: <%= departingFlight.number %></td>
                         <td><%= departingFlight.travellers %></td>
                         <td>$<%= departingFlight.price * departingFlight.travellers %></td>
                     </tr>
+                    <% if(returningFlight && returningFlight.number){ %>
                     <tr>
                         <td>Returning Flight #: <%= returningFlight.number %></td>
                         <td><%= returningFlight.travellers %></td>
                         <td>$<%= returningFlight.price * returningFlight.travellers %></td>
                     </tr>
+                    <% } %>
                 </tbody>
                 <tfoot>
                     <tr>

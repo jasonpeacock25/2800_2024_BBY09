@@ -21,8 +21,10 @@
           </div>
           <span class="text-body-secondary" id="departing-flight-amount">$<%= departingFlight.price * travellers %></span>
         </li>
+        <% if(returningFlight){ %>
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
+            
             <h6 class="my-0">Returning Flight</h6>
             <small class="text-body-secondary">
               <div>Flight #: <%= returningFlight.number %>
@@ -33,9 +35,11 @@
               </div>
               <div>Price: $<%= returningFlight.price * travellers%></div>
             </small>
+            
           </div>
           <span class="text-body-secondary" id="return-flight-amount">$<%= returningFlight.price * travellers%></span>
         </li>
+        <% } %>
         <li class="list-group-item d-flex justify-content-between">
           <span>Total (CAD)</span>
           <strong id="total-amount"></strong>
@@ -161,9 +165,10 @@
         
         <input type="hidden" name="departingFlightNumber" value="<%= departingFlight.number %>">
         <input type="hidden" name="departingFlightPrice" value="<%= departingFlight.price %>">
-        
+        <% if(returningFlight){ %>
         <input type="hidden" name="returningFlightNumber" value="<%= returningFlight.number %>">
         <input type="hidden" name="returningFlightPrice" value="<%= returningFlight.price %>">
+        <% } %>
         <input type="hidden" name="travellers" value="<%= travellers %>">
         
         <button type="submit" class="w-100 btn btn-dark btn-lg" style="background-color: #062c43;">Confirm
