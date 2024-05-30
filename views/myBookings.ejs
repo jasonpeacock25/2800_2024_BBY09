@@ -1,70 +1,210 @@
 <%- include('templates/header-hamburger') %>
     <h1 class="display-6 text-center">My Bookings</h1>
     <br>
-    
-    
-        <h2 class="text-center">Departing Flights</h2>
-        <div class="container">
-            <div class="row justify-content-center ">
-                <% departingFlights.forEach(function(departingFlight, index) { %>
-                    <div class="col-md-4 mb-4" id="departing-flight-<%= index %>">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title"> Flight Number: <%= departingFlight.flightNumber %>
-                                </h5>
-                                <p class="card-text">Price: $<%= departingFlight.price %>
-                                </p>
-                                <p class="card-text">Travellers: <%= departingFlight.travellers %>
-                                </p>
+
+    <h2 class="text-center">Departing Flights</h2>
+    <div class="container">
+                <% for(let i=0; i < departingFlights.length; i++){%>
+                    <div class="card mt-3">
+                        <h5 class="card-header d-flex justify-content-between align-items-center ps-1"
+                            onclick="headerClicked(event, '<%=JSON.stringify(departingFlights[i])%>')">
+                            <div class="d-flex align-items-center pe-2 ps-2">
+                                <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                                    <img src="/images/<%= departingFlights[i].provider%>.png"
+                                        alt="<%= departingFlights[i].provider%>"
+                                        style="max-height: 100%; max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">
+                                        <%= departingFlights[i].number %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">From: <%= departingFlights[i].departing %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">To: <%= departingFlights[i].arriving %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3 flex-fill">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">$<%= departingFlights[i].price *
+                                            departingFlights[i].travellers%>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Depart: <%=
+                                            departingFlights[i].departureDate.toISOString().split('T')[0]; %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Arrive: <%=
+                                            departingFlights[i].arrivalDate.toISOString().split('T')[0]; %>
+                                    </p>
+                                </div>
+                            </div>
+                            <a class="collapsed d-block" data-bs-toggle="collapse" href="#collapse-collapsed-<%=i%>-d"
+                                aria-expanded="false" aria-controls="collapse-collapsed-<%=i%>-d"
+                                id="heading-collapsed-<%=i%>-d">
+                                <i class="fas fa-chevron-down fa-lg" style="color: #062c43"></i>
+                            </a>
+                        </h5>
+                        <div id="collapse-collapsed-<%=i%>-d" class="collapse" aria-labelledby="heading-collapsed-<%=i%>-d">
+                            <div class="d-flex justify-content-between align-items-center pe-3">
+                                <div class="d-flex flex-column card-content p-2">
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Flight Type: <%= departingFlights[i].type %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Provider: <%= departingFlights[i].provider %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Model: <%= departingFlights[i].model %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Emissions: <%= departingFlights[i].emissions %>t CO2e
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column card-content p-2 align-self-start flex-fill">
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Departure Time: <%= departingFlights[i].departureTime %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Arrival Time: <%= departingFlights[i].arrivalTime %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Travellers: <%= departingFlights[i].travellers %>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
-            </div>
-        </div>
-    
-    
-        <h2 class="text-center">Returning Flights</h2>
-        <div class="container">
-            <div class="row justify-content-center ">
-                <% returningFlights.forEach(function(returningFlight, index) { %>
-                    <div class="col-md-4 mb-4" id="returning-flight-<%= index %>">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">Flight Number: <%= returningFlight.flightNumber %>
-                                </h5>
-                                <p class="card-text">Price: $<%= returningFlight.price %>
-                                </p>
-                                <p class="card-text">Travellers: <%= returningFlight.travellers %>
-                                </p>
+                    <% }; %>
+    </div>
+
+
+    <h2 class="text-center">Returning Flights</h2>
+    <div class="container">
+                <% for(let i=0; i < returningFlights.length; i++){%>
+                    <div class="card mt-3">
+                        <h5 class="card-header d-flex justify-content-between align-items-center ps-1"
+                            onclick="headerClicked(event, '<%=JSON.stringify(returningFlights[i])%>')">
+                            <div class="d-flex align-items-center pe-2 ps-2">
+                                <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                                    <img src="/images/<%= returningFlights[i].provider%>.png"
+                                        alt="<%= returningFlights[i].provider%>"
+                                        style="max-height: 100%; max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">
+                                        <%= returningFlights[i].number %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">From: <%= returningFlights[i].departing %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">To: <%= returningFlights[i].arriving %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3 flex-fill">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">$<%= returningFlights[i].price *
+                                            returningFlights[i].travellers%>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Depart: <%=
+                                            returningFlights[i].departureDate.toISOString().split('T')[0]; %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Arrive: <%=
+                                            returningFlights[i].arrivalDate.toISOString().split('T')[0]; %>
+                                    </p>
+                                </div>
+                            </div>
+                            <a class="collapsed d-block" data-bs-toggle="collapse" href="#collapse-collapsed-<%=i%>-r"
+                                aria-expanded="false" aria-controls="collapse-collapsed-<%=i%>-r"
+                                id="heading-collapsed-<%=i%>-r">
+                                <i class="fas fa-chevron-down fa-lg" style="color: #062c43"></i>
+                            </a>
+                        </h5>
+                        <div id="collapse-collapsed-<%=i%>-r" class="collapse" aria-labelledby="heading-collapsed-<%=i%>-r">
+                            <div class="d-flex justify-content-between align-items-center pe-3">
+                                <div class="d-flex flex-column card-content p-2">
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Flight Type: <%= returningFlights[i].type %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Provider: <%= returningFlights[i].provider %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Model: <%= returningFlights[i].model %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Emissions: <%= returningFlights[i].emissions %>t CO2e
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column card-content p-2 align-self-start flex-fill">
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Departure Time: <%= returningFlights[i].departureTime %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Arrival Time: <%= returningFlights[i].arrivalTime %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex m-1">
+                                        <p class="card-text">Travellers: <%= returningFlights[i].travellers %>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
-            </div>
-        </div>
-    
-   
-        <h2 class="text-center">Hotels</h2>
-        <div class="container">
-            <div class="row justify-content-center ">
-                <% hotels.forEach(function(hotel, index) {%>
-                    <div class="col-md-4 mb-4" id="hotels-<%= index %>">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">Hotel name: <%= hotel.hotelName %>
-                                </h5>
-                                <p class="card-text">Rating: <%= hotel.hotelRating %>
-                                </p>
-                                <p class="card-text">Price: $<%= hotel.hotelPrice %>
-                                </p>
-                                <p class="card-text">Location: <%= hotel.hotelRegion %>
-                                </p>
-                                
-                            </div>
+                    <% }; %>
+    </div>
+
+    <h2 class="text-center">Hotels</h2>
+    <div class="container">
+        <div class="row justify-content-center ">
+            <% hotels.forEach(function(hotel, index) {%>
+                <div class="col-md-4 mb-4" id="hotels-<%= index %>">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Hotel name: <%= hotel.hotelName %>
+                            </h5>
+                            <p class="card-text">Rating: <%= hotel.hotelRating %>
+                            </p>
+                            <p class="card-text">Price: $<%= hotel.hotelPrice %>
+                            </p>
+                            <p class="card-text">Location: <%= hotel.hotelRegion %>
+                            </p>
+
                         </div>
                     </div>
-                    <% }); %>
-            </div>
+                </div>
+                <% }); %>
         </div>
-        <%- include('templates/footer') %>
+    </div>
+    <%- include('templates/footer') %>
