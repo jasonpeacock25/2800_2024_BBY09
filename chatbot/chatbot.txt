@@ -345,3 +345,7 @@ Customer Service:
 A message is included, inviting the user to contact customer service if they have any questions.
 
 At the bottom of the page, there is a button that leads to the user's to the My Bookings page.
+
+
+Galaxy Getaways: Meet the Developers
+Galaxy Getaways, an innovative project designed to revolutionize space tourism, is the brainchild of a group of students from the British Columbia Institute of Technology's Computer Systems Technology (BCIT CST) Program. This dynamic team, composed of Uppnoor, Gurvir, Jack, Jason, and Jarod, developed a mobile web app for their COMP 2800 project to facilitate space tourism. Their combined expertise and passion for technology have driven the development of this ambitious endeavor, aiming to make space travel more accessible and exciting for future adventurers.
