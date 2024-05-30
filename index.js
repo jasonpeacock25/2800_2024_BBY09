@@ -174,7 +174,7 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
         ]
     });
     const reviewSummary = aiResponse.choices[0].message.content;
-    
+
 
     const formattedCheckInDate = checkInDate.toDateString();
     const formattedCheckOutDate = checkOutDate.toDateString();
@@ -223,7 +223,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
         // Fetch all booking information for the user
         const hotel = await Hotel.findById(req.body.hotelId);
 
-        res.render('orderConfirmation', { username: req.session.username, hotel, amountOfDays} );
+        res.render('orderConfirmation', { username: req.session.username, hotel, amountOfDays });
     } catch (error) {
         console.error('Error saving booking information', error)
         res.status(500).send('Internal Server Error');
@@ -232,40 +232,83 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
 
 app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
-    const { departingFlightNumber, departingFlightPrice,
-        returningFlightNumber, returningFlightPrice,
-        travellers } = req.body;
-
+    let tempDepartingFlightNumber;
+    let tempDepartingFlightPrice;
+    let tempReturningFlightNumber;
+    let tempReturningFlightPrice;
+    const { departingFlight, returningFlight, travellers } = req.session;
 
     try {
-        const bookingInfo = new BookingInfo({
-            userId,
-            departingFlightNumber,
-            departingFlightPrice,
-            returningFlightNumber,
-            returningFlightPrice,
-            travellers
-        });
+        if (departingFlight) {
+            const bookingInfo = new BookingInfo({
+                userId: userId,
+                departingOrReturning: "departing",
+                number: departingFlight.number,
+                departing: departingFlight.departing,
+                arriving: departingFlight.arriving,
+                departureDate: departingFlight.departureDate,
+                departureTime: departingFlight.departureTime,
+                arrivalDate: departingFlight.arrivalDate,
+                arrivalTime: departingFlight.arrivalTime,
+                type: departingFlight.type,
+                provider: departingFlight.provider,
+                model: departingFlight.model,
+                emissions: departingFlight.emissions,
+                price: departingFlight.price,
+                travellers: travellers
+            })
+            tempDepartingFlightNumber = departingFlight.number;
+            tempDepartingFlightPrice = departingFlight.price;
+            await bookingInfo.save();
+        };
+    } catch (error) {
+        console.error('Error saving booking information', error);
+        res.status(500).send('Internal Server Error');
+    }
 
-        await bookingInfo.save();
+    try {
+        if (returningFlight) {
+            const bookingInfo = new BookingInfo({
+                userId: userId,
+                departingOrReturning: "returning",
+                number: returningFlight.number,
+                departing: returningFlight.departing,
+                arriving: returningFlight.arriving,
+                departureDate: returningFlight.departureDate,
+                departureTime: returningFlight.departureTime,
+                arrivalDate: returningFlight.arrivalDate,
+                arrivalTime: returningFlight.arrivalTime,
+                type: returningFlight.type,
+                provider: returningFlight.provider,
+                model: returningFlight.model,
+                emissions: returningFlight.emissions,
+                price: returningFlight.price,
+                travellers: travellers
+            })
+            tempReturningFlightNumber = returningFlight.number;
+            tempReturningFlightPrice = returningFlight.price;
+            await bookingInfo.save();
+        };
+    } catch (error) {
+        console.error('Error saving booking information', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+    let returnNum
 
     res.render('flightOrderConfirmation', {
         username: req.session.username,
         departingFlight: {
-            number: departingFlightNumber,
-            price: departingFlightPrice,
-            travellers
+            number: tempDepartingFlightNumber,
+            price: tempDepartingFlightPrice,
+            travellers: travellers
         },
         returningFlight: {
-            number: returningFlightNumber,
-            price: returningFlightPrice,
-            travellers
+            number: tempReturningFlightNumber,
+            price: tempReturningFlightPrice,
+            travellers: travellers
         }
     });
-} catch (error) {
-    console.error('Error saving booking information', error);
-    res.status(500).send('Internal Server Error');
-}
 });
 
 // Sign up page route
@@ -372,23 +415,45 @@ app.get('/myBookings', sessionValidation, async (req, res) => {
     try {
         // Fetch bookings for the user
         const bookings = await BookingInfo.find({ userId });
- 
+
         const departingFlights = [];
         const returningFlights = [];
         const hotels = [];
 
         bookings.forEach(booking => {
-            if (booking.departingFlightNumber) {
+            if (booking.departingOrReturning === "departing") {
                 departingFlights.push({
-                    flightNumber: booking.departingFlightNumber,
-                    price: booking.departingFlightPrice,
+                    userId: userId,
+                    number: booking.number,
+                    departing: booking.departing,
+                    arriving: booking.arriving,
+                    departureDate: booking.departureDate,
+                    departureTime: booking.departureTime,
+                    arrivalDate: booking.arrivalDate,
+                    arrivalTime: booking.arrivalTime,
+                    type: booking.type,
+                    provider: booking.provider,
+                    model: booking.model,
+                    emissions: booking.emissions,
+                    price: booking.price,
                     travellers: booking.travellers
                 });
-            } 
-            if (booking.returningFlightNumber) {
+            }
+            if (booking.departingOrReturning === "returning") {
                 returningFlights.push({
-                    flightNumber: booking.returningFlightNumber,
-                    price: booking.returningFlightPrice,
+                    userId: userId,
+                    number: booking.number,
+                    departing: booking.departing,
+                    arriving: booking.arriving,
+                    departureDate: booking.departureDate,
+                    departureTime: booking.departureTime,
+                    arrivalDate: booking.arrivalDate,
+                    arrivalTime: booking.arrivalTime,
+                    type: booking.type,
+                    provider: booking.provider,
+                    model: booking.model,
+                    emissions: booking.emissions,
+                    price: booking.price,
                     travellers: booking.travellers
                 });
             }
@@ -401,9 +466,9 @@ app.get('/myBookings', sessionValidation, async (req, res) => {
                 });
             }
         });
-        
 
-        res.render('myBookings', { hotels, departingFlights, returningFlights});
+
+        res.render('myBookings', { hotels, departingFlights, returningFlights });
     } catch (error) {
         console.error('Error fetching booking information:', error);
         res.status(500).send('Internal Server Error');
@@ -461,7 +526,7 @@ function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function randomHour(){
+function randomHour() {
     let hours = randomInteger(0, 23);
     let minutes = randomInteger(0, 3) * 15;
     hours = ("0" + hours).slice(-2);
