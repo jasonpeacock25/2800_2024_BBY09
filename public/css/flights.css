@@ -5,6 +5,30 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.hidden{
+.hidden {
     display: none;
+}
+
+h5 {
+    cursor: pointer;
+}
+
+.card-header .fas {
+    transition: .3s transform ease-in-out;
+}
+
+.card-header .collapsed .fas {
+    transform: rotate(90deg);
+}
+
+.card-content p {
+    font-size: 14px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.noWrap{
+    white-space: nowrap;
 }

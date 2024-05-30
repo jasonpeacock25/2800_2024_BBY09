@@ -1,5 +1,5 @@
 <%- include('templates/header-hamburger'); %>
-    <div class="container">
+    <div class="container my-3">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -31,14 +31,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <datalist id="locations">
-                                <option value="Beijing">
-                                <option value="Houston">
-                                <option value="Paris">
-                                <option value="Vancouver">
-                                <option value="Moon">
-                                <option value="Mars">
-                            </datalist> -->
                             <div class="col-md-6 mb-3">
                                 <label for="fromInput" class="form-label">From</label>
                                 <select id="fromInput" name="fromInput" class="form-select" onchange="changeToFrom()">
@@ -62,16 +54,6 @@
                                 </select>
                                 </select>
                             </div>
-                            <!-- <div class="mb-3">
-                                <label for="fromInput" class="form-label">From</label>
-                                <input id="fromInput" name="fromInput" type="text" class="form-control"
-                                    placeholder="Where From?" list="locations" onchange="changeToFrom()">
-                            </div>
-                            <div class="mb-3">
-                                <label for="toInput" class="form-label">To</label>
-                                <input type="text" class="form-control" id="toInput" name="toInput"
-                                    placeholder="Where To?" list="locations" onchange="changeToFrom()">
-                            </div> -->
                             <div class="mb-3">
                                 <label for="departDate" class="form-label">Depart</label>
                                 <input type="date" class="form-control" id="departDate" name="departDate">
@@ -92,10 +74,8 @@
         let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
         let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
         let todaysDate = new Date();
-        // let tomorrowsDate = new Date();
-        // tomorrowsDate = addDays(todaysDate, 1);
+        
         document.getElementById("departDate").valueAsDate = todaysDate;
-        // document.getElementById("returnDate").valueAsDate = tomorrowsDate;
 
         //https://stackoverflow.com/questions/2638292/after-travelling-back-in-firefox-history-javascript-wont-run
         window.onload = window.onpageshow = function () {
