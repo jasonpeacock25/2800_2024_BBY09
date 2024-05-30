@@ -416,6 +416,7 @@ app.get('/faq', sessionValidation, (req, res) => {
 
 // Flights page route
 app.get('/flights', sessionValidation, (req, res) => {
+    //createFlights();
     delete req.session.departingFlight;
     delete req.session.returningFlight;
     res.render('flights');
@@ -458,12 +459,22 @@ function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function randomHour(){
+    let hours = randomInteger(0, 23);
+    let minutes = randomInteger(0, 3) * 15;
+    hours = ("0" + hours).slice(-2);
+    minutes = ("0" + minutes).slice(-2);
+    let time = hours + ":" + minutes;
+    return time;
+}
+
 async function createFlights() {
     let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
     let locationCodes = ["BEJ", "HOU", "PAR", "VAN", "LUN", "MRS"];
     let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
-    let providers = ["NASA", "Blue Origin", "SpaceX"];
-    let models = [["Curiosity 4", "Gemini XVI", "Pioneer 16"], ["Shepherd 3", "Blue 7", "Goddard"], ["Dragon 5", "Falcon 12", "Starship 2"]];
+    let providers = ["NASA", "Blue Origin", "SpaceX", "Virgin Galactic"];
+    let modelsBodyToBody = [["Curiosity 4", "Gemini XVI", "Pioneer 16"], ["Shepherd 3", "Blue 7", "Goddard"], ["Dragon 5", "Falcon 12", "Starship 2"], ["VSS Imagine", "VSS Enterprise", "VSS Voyager"]];
+    let modelsSubOrbital = [["Space Shuttle 3", "Endeavour 2", "CST-250"], ["Starliner", "Turquoise 7", "Daintree 3"], ["Owl 2", "Komodo", "Scout 2"], ["VSS-S-1", "VSS-S-2", "VSS-B-1"]];
     let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     let flightArray = [];
 
@@ -489,7 +500,7 @@ async function createFlights() {
         for (let to = 0; to < locations.length; to++) {
             for (let month = 0; month < daysInEachMonth.length; month++) {
                 for (let day = 1; day <= daysInEachMonth[month]; day++) {
-                    for (let y = 0; y < randomInteger(1, 3); y++) {
+                    for (let y = 0; y < randomInteger(1, 4); y++) {
                         if (true) {
                             tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
                             tempNumberCode++;
@@ -507,7 +518,7 @@ async function createFlights() {
 
                             tempDepartureDate = new Date(2024, month, day);
 
-                            tempDepartureTime = randomInteger(0, 23);
+                            tempDepartureTime = randomHour();
 
                             if (tempScale == 1) {
                                 tempArrivalDate = addDays(tempDepartureDate, 1);
@@ -517,17 +528,20 @@ async function createFlights() {
                                 tempArrivalDate = addDays(tempDepartureDate, randomInteger(2, 3));
                             }
 
-                            tempArrivalTime = randomInteger(0, 23);
+                            tempArrivalTime = randomHour();
+
+                            tempInteger = randomInteger(0, 3)
+
+                            tempProvider = providers[tempInteger];
 
                             if (locationBody[from] == locationBody[to]) {
                                 tempType = "Sub-Orbital";
+                                tempModel = modelsSubOrbital[tempInteger][randomInteger(0, 2)];
                             } else {
                                 tempType = "Body to Body";
+                                tempModel = modelsBodyToBody[tempInteger][randomInteger(0, 2)];
                             }
 
-                            tempInteger = randomInteger(0, 2)
-                            tempProvider = providers[tempInteger];
-                            tempModel = models[tempInteger][randomInteger(0, 2)];
                             tempEmissions = randomInteger(5, 10) * tempScale;
                             tempPrice = randomInteger(750, 1900) * tempScale;
 
