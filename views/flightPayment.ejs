@@ -53,25 +53,25 @@
         <div class="row g-3">
           <div class="col-sm-6">
             <label for="firstName" class="form-label">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+            <input type="text" class="form-control" id="firstName" name="firstName" pattern="[A-Za-z]+" required>
             <div class="invalid-feedback">
-              Valid first name is required.
+              Valid first name is required - English alphabet only.
             </div>
           </div>
 
           <div class="col-sm-6">
             <label for="lastName" class="form-label">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+            <input type="text" class="form-control" id="lastName" name="lastName" pattern="[A-Za-z]+" required>
             <div class="invalid-feedback">
-              Valid last name is required.
+              Valid last name is required - English alphabet only.
             </div>
           </div>
 
           <div class="col-12">
-            <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
-            <input type="email" class="form-control" id="email" placeholder="you@example.com">
+            <label for="email" class="form-label">Email </label>
+            <input type="email" class="form-control" id="email" placeholder="(you@example.com)" required>
             <div class="invalid-feedback">
-              Please enter a valid email address for shipping updates.
+              Please enter a valid email address (you@example.com).
             </div>
           </div>
 
@@ -107,9 +107,9 @@
 
           <div class="col-md-3">
             <label for="zip" class="form-label">Zip</label>
-            <input type="text" class="form-control" id="zip" placeholder="" required>
+            <input type="text" class="form-control" id="zip" name="zip" pattern="[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d" required>
             <div class="invalid-feedback">
-              Zip code required.
+              Valid ZIP code required (A1A 1A1).
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@
         <div class="row gy-3">
           <div class="col-md-6">
             <label for="cc-name" class="form-label">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <input type="text" class="form-control" id="cc-name" name="cc-name" pattern="[A-Za-z]+" required>
             <small class="text-body-secondary">Full name as displayed on card</small>
             <div class="invalid-feedback">
               Name on card is required
@@ -138,25 +138,27 @@
 
           <div class="col-md-6">
             <label for="cc-number" class="form-label">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+            <input type="text" class="form-control" id="cc-number"
+              pattern="^4[0-9]{12}(?:[0-9]{3})?$|^5[1-5][0-9]{14}$|^2[2-7][0-9]{14}$|^3[47][0-9]{13}$|^6(?:011|5[0-9]{2})[0-9]{12}$|^6(?:22(?:12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]))[0-9]{10}$|^64[4-9][0-9]{13}$"
+              required>
             <div class="invalid-feedback">
-              Credit card number is required
+              Valid credit card number required.
             </div>
           </div>
 
           <div class="col-md-3">
             <label for="cc-expiration" class="form-label">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+            <input type="text" class="form-control" id="cc-expiration" pattern="^(0[1-9]|1[0-2])\/?([0-9]{2})$" required>
             <div class="invalid-feedback">
-              Expiration date required
+              Expiration date required (MM/YY).
             </div>
           </div>
 
           <div class="col-md-3">
             <label for="cc-cvv" class="form-label">CVV</label>
-            <input type="password" class="form-control" id="cc-cvv" placeholder="" required>
+            <input type="password" class="form-control" id="cc-cvv" name="cc-cvv" pattern="^[0-9]{3,4}$" required>
             <div class="invalid-feedback">
-              Security code required
+              Valid CVV required (3 or 4 digits).
             </div>
           </div>
         </div>
