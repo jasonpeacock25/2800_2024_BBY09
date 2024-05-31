@@ -1,6 +1,29 @@
-/* https://css-tricks.com/snippets/css/turn-off-number-input-spinners/ */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.hidden {
+    display: none;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/* Collapsing card layout transform CSS adapted from the following
+Source: https://disjfa.github.io/bootstrap-tricks/card-collapse-tricks/ */
+.card-header .fas {
+    transition: .3s transform ease-in-out;
+}
+
+.card-header .collapsed .fas {
+    transform: rotate(90deg);
+}
+
+.card-content p {
+    font-size: 14px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.noWrap{
+    white-space: nowrap;
 }

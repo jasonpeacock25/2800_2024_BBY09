@@ -1,7 +1,9 @@
-function sendSelected(type, flightNumber) {
-    console.log(flightNumber);
+// Using Fetch to POST data to node server adapted from the following
+// Source: https://www.geeksforgeeks.org/how-to-post-json-data-to-server/
+function sendSelected(type, flight) {
+    decodedFlight = JSON.parse(flight);
 
-    const json = { type: type, flightNumber: flightNumber };
+    const json = { type: type, flight: decodedFlight };
     const nextPage = (type == "departing") ? "returning" : "review";
 
     fetch("/flights/clicked", {
@@ -10,18 +12,12 @@ function sendSelected(type, flightNumber) {
         body: JSON.stringify(json),
     }).then(response => {
         if (response.status == 200) {
-            console.log("RESPONSE SUCCESFULLY IDENTIFIED AS 200 ON CLIENT");
+            //console.log("RESPONSE SUCCESFULLY IDENTIFIED AS 200 ON CLIENT");
             window.location.href = "/flights/" + nextPage;
-            // Assuming the response is not always JSON
-            // return response.text(); // or response.blob(), response.arrayBuffer() depending on the expected response type
         } else {
-            console.log("ERROR BRANCH INITIATED ON CLIENT SIDE");
+            //console.log("ERROR BRANCH INITIATED ON CLIENT SIDE");
             throw new Error(response.statusText);
         }
-    // })
-    // .then(data => {
-    //     // Handle different response types here
-    //     console.log(data); // Log the raw response
     }).catch(error => {
         console.error('Error:', error);
     });

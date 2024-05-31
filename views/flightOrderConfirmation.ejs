@@ -26,20 +26,24 @@
                 <thead>
                     <tr>
                         <th>Item</th>
-                        <th></th>
+                        <th>Travellers</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <tr>
-                        <td>
-                            <%= hotel.name %>
-                        </td>
-                        <td>
-                        </td>
-                        <td>$<%= hotel.price * amountOfDays %>
-                        </td>
+                        <td>Departing Flight #: <%= departingFlight.number %></td>
+                        <td><%= departingFlight.travellers %></td>
+                        <td>$<%= departingFlight.price * departingFlight.travellers %></td>
                     </tr>
+                    <% if(returningFlight && returningFlight.number){ %>
+                    <tr>
+                        <td>Returning Flight #: <%= returningFlight.number %></td>
+                        <td><%= returningFlight.travellers %></td>
+                        <td>$<%= returningFlight.price * returningFlight.travellers %></td>
+                    </tr>
+                    <% } %>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -61,9 +65,8 @@
 
     document.addEventListener('DOMContentLoaded', function () {
 
-
+            // This function generates a random six digit number for a order number
             function generateOrderNumber() {
-                // This function generates a random six digit number for a order number
                 let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
                 document.getElementById('orderNumber').textContent = orderNumber;
             }
@@ -75,6 +78,7 @@
                 let year = date.getFullYear();
                 return month + '/' + day + '/' + year;
             }
+
             // Runs the generateOrderNumber function
             generateOrderNumber();
             var currentDate = new Date();
@@ -89,6 +93,6 @@
                 totalAmount += parseFloat(item.textContent.replace('$', ''));
             });
             document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
-        });
+    });
 </script>
 <%- include('templates/footer') %>

@@ -68,66 +68,138 @@ Mars: "Embark on an epic journey to Mars, where red deserts and towering mountai
 
 Hotels: 
 
-Crater Cove Hotel
-Crater Cove is heeps of fun for the whole family!! Check out the new Crater Splash Water Park. There's great new slides and tons of water to splash in!!!
-Rating: 9.6
-Price: $5009
-Region: Moon
-
 Lunar Oasis Resort
-Nestled in a tranquil lunar valley, Lunar Oasis Resort offers luxurious accommodations with panoramic views of the Earth. Guests can enjoy an array of activities including moonwalking, stargazing from the observatory, and relaxing in the resort's zero-gravity spa.
 Rating: 8.9
 Price: $2003
 Region: Moon
-
+Available from: Wed Jun 19 2024 to Wed Oct 30 2024
+Highlights: Tranquil lunar valley, panoramic views of Earth, moonwalking, stargazing, zero-gravity spa
 
 Selene's Sanctuary
-Selene's Sanctuary is an exclusive resort located on the moon's serene far side, away from Earth’s light pollution. The resort features eco-friendly domes with private lunar gardens, fine dining experiences with a celestial twist, and guided tours of nearby craters and lava tubes.
 Rating: 9.1
 Price: $6012
 Region: Moon
+Available from: Wed Jun 05 2024 to Tue Oct 29 2024
+Highlights: Moon's far side, eco-friendly domes, private lunar gardens, fine dining, guided crater tours
 
 Moonlight Bay Retreat
-Overlooking the breathtaking Sea of Tranquility, Moonlight Bay Retreat offers a blend of adventure and relaxation. Guests can explore ancient lunar ruins, indulge in gourmet meals under the stars, and unwind in the resort's state-of-the-art lunar hot springs.
 Rating: 7.2
 Price: $1406
 Region: Moon
+Available from: Sat Jun 01 2024 to Fri Nov 29 2024
+Highlights: Sea of Tranquility, adventure and relaxation, ancient lunar ruins, gourmet meals, lunar hot springs
 
 Astral Heights Resort
-Astral Heights Resort, situated on one of the moon's highest peaks, offers a unique experience above the lunar surface. Guests can enjoy sky-high dining, helicopter tours of the lunar surface, and nightly entertainment under the brilliant stars, all while savoring the resort’s upscale amenities.
 Rating: 8.1
 Price: $1698
 Region: Moon
+Available from: Thu Jun 06 2024 to Sun Oct 13 2024
+Highlights: High lunar peaks, sky-high dining, helicopter tours, nightly entertainment
+
+Crater Cove Hotel
+Rating: 9.6
+Price: $5009
+Region: Moon
+Available from: Wed May 29 2024 to Sun Oct 06 2024
+Highlights: Family-friendly, Crater Splash Water Park, new slides, water activities
+
+Lunar Crater Lodge
+Rating: 9
+Price: $1566
+Region: Moon
+Available from: Sat Jun 29 2024 to Sat Oct 12 2024
+Highlights: Near lunar crater, stunning lunar landscape views, modern architecture, spa, guided tours
+
+Cavern View Hotel
+Rating: 9
+Price: $2003
+Region: Moon
+Available from: Sun Jun 16 2024 to Fri Nov 22 2024
+Highlights: Built within lunar cavern, natural rock formations, lush indoor gardens, transparent viewing domes
+
+Eclipse Haven
+Rating: 9
+Price: $3312
+Region: Moon
+Available from: Tue Jun 04 2024 to Wed Nov 13 2024
+Highlights: Edge of lunar maria, sleek design, panoramic views of lunar eclipses, cutting-edge spa
+
+Lunar Harmony Resort
+Rating: 9
+Price: $2516
+Region: Moon
+Available from: Tue Jun 18 2024 to Fri Nov 22 2024
+Highlights: Tranquil highlands, contemporary design, wellness center, guided tours
+
+Galactic Gateway Hotel
+Rating: 9
+Price: $2516
+Region: Moon
+Available from: Sat Jun 01 2024 to Wed Oct 09 2024
+Highlights: Near lunar north pole, futuristic design, luxury spa, guided tours
+
+Starlight Summit
+Rating: 9
+Price: $2516
+Region: Moon
+Available from: Sun Jun 09 2024 to Sun Jun 16 2024
+Highlights: High plateau, stunning lunar and Earth views, wellness center, guided tours
 
 Olympus Mons Spa & Resort
-The resort with the best view of the greatest mountain in the solar system! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. !!!!! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. It's a Valentine's day date she'll never forget
 Rating: 7.9
 Price: $2306
 Region: Mars
+Available from: Sat Jun 01 2024 to Wed Oct 30 2024
+Highlights: Best view of Olympus Mons, cosmic solarium for romantic evenings
 
 Red Planet Retreat
-Located in the Valles Marineris, the largest canyon system in the solar system, Red Planet Retreat offers breathtaking views and unparalleled adventures. Guests can explore the Martian landscape, enjoy guided tours of ancient river valleys, and relax in luxurious domes with transparent ceilings for stargazing. The resort features a Martian spa, complete with regolith-based treatments, and gourmet dining with fresh produce grown in on-site greenhouses.!!!!! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. It's a Valentine's day date she'll never forget
 Rating: 6.3
 Price: $1246
 Region: Mars
+Available from: Tue Jun 04 2024 to Fri Oct 18 2024
+Highlights: Valles Marineris location, Martian spa, guided tours of river valleys, transparent domes for stargazing
 
 Crimson Sands Resort
-Nestled within the Martian dunes, Crimson Sands Resort offers a unique desert oasis experience. The resort's design incorporates natural materials to blend with the reddish landscape, featuring open-air lounges, infinity pools, and private bungalows. Activities include sandboarding on the dunes, rover excursions to nearby geological sites, and evening gatherings around a communal fire pit under the stars. The resort emphasizes relaxation and adventure in a stunning, otherworldly setting.!!!!! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. It's a Valentine's day date she'll never forget
 Rating: 8.5
 Price: $2236
 Region: Mars
+Available from: Sat Jun 01 2024 to Tue Oct 29 2024
+Highlights: Martian dunes setting, sandboarding, rover excursions, communal fire pit
 
 Elysium Fields
-Situated in the Elysium Planitia, a broad plain with a rich geological history, Elysium Fields offers a serene and educational experience. Guests can explore ancient lava flows and impact craters, participate in scientific workshops, and enjoy the resort's botanical gardens, which showcase a variety of Martian-adapted plants. The resort features luxurious accommodations with Earth-like amenities, fine dining, and an observatory for nightly stargazing sessions.!!!!! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. It's a Valentine's day date she'll never forget
 Rating: 9.4
 Price: $2560
 Region: Mars
+Available from: Wed Jun 05 2024 to Sun Nov 10 2024
+Highlights: Elysium Planitia location, scientific workshops, botanical gardens, observatory for stargazing
 
 Marineris Vista Resort
-Located on the edge of the Valles Marineris, Marineris Vista Resort provides stunning views of the vast canyon system. The resort boasts state-of-the-art facilities, including a fitness center, spa, and multiple dining options with panoramic windows overlooking the Martian landscape. Guests can take guided tours of the canyon, participate in rock climbing activities, and relax in comfortable, modern suites designed for optimal comfort and safety.!!!!! Check out the new cosmic solarium where you can look up into the stars and enjoy a beautiful romantic evening with the love of your life. It's a Valentine's day date she'll never forget
 Rating: 8.7
 Price: $2416
 Region: Mars
+Available from: Wed Jun 05 2024 to Tue Oct 29 2024
+Highlights: Edge of Valles Marineris, fitness center, spa, panoramic dining, rock climbing activities
+
+Red Dune Retreat
+Rating: 8.5
+Price: $987
+Region: Mars
+Available from: Mon Jun 03 2024 to Thu Oct 10 2024
+Highlights: Martian desert, transparent domes, luxury spa, guided desert tours
+
+Elysium Escape
+Rating: 8.5
+Price: $1255
+Region: Mars
+Available from: Sat Jun 15 2024 to Sun Oct 20 2024
+Highlights: Elysium Planitia, wellness center, gourmet dining, guided tours
+
+Martian Mirage
+Rating: 7.5
+Price: $2306
+Region: Mars
+Available from: Mon Jul 01 2024 to Sat Jul 13 2024
+Highlights: Valles Marineris, transparent domes, spa, fitness center, gourmet dining
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,8 +224,7 @@ Round Trip
 One Way
 Sub-Orbital
 Travellers: Input number between 1 and 10. Use increment/decrement buttons for adjustment.
-Locations: Choose from predefined options or type in a custom location.
-Predefined options: Moon, Mars.
+Locations: Moon, Mars, Beijing, Houston, Paris, Vancouver.
 Dates: Select appropriate departure and return dates using the date picker.
 
 
@@ -274,3 +345,7 @@ Customer Service:
 A message is included, inviting the user to contact customer service if they have any questions.
 
 At the bottom of the page, there is a button that leads to the user's to the My Bookings page.
+
+
+Galaxy Getaways: Meet the Developers
+Galaxy Getaways, an innovative project designed to revolutionize space tourism, is the brainchild of a group of students from the British Columbia Institute of Technology's Computer Systems Technology (BCIT CST) Program. This dynamic team, composed of Uppnoor, Gurvir, Jack, Jason, and Jarod, developed a mobile web app for their COMP 2800 project to facilitate space tourism. Their combined expertise and passion for technology have driven the development of this ambitious endeavor, aiming to make space travel more accessible and exciting for future adventurers.

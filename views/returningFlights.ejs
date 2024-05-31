@@ -3,45 +3,111 @@
 
     <div>
         <h2 class="text-center">Returning Flights:</h2>
-        <!-- <div class="container">
-            <p>Flight Type: <%= flightType%>
-            </p>
-            <p>Travellers: <%= travellers%>
-            </p>
-            <p>From Input: <%= fromInput%>
-            </p>
-            <p>To Input: <%= toInput%>
-            </p>
-            <p>Depart Date: <%= departDate%>
-            </p>
-            <p>Return Date: <%= returnDate%>
-            </p>
-        </div> -->
     </div>
 
-    <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
+    <!-- Collapsing card layout code adapted from the following plus expanded by myself and ChatGPT 3.5
+    Source: https://disjfa.github.io/bootstrap-tricks/card-collapse-tricks/
+    Source: https://getbootstrap.com/docs/5.1/components/collapse/
+    Source: https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object
+    Source: ChatGPT 3.5 -->
     <div class="container">
-        <div class="row justify-content-center ">
-            <% returnFlights.forEach(function(flight, index) {%>
-                <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="sendSelected('returning', '<%= flight.flightNumber%>')" style="cursor: pointer;" id="<%= index%>">
-                        <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+        <% if (validReturnFlights.length == 0){%>
+            <h2 class="text-center m-3">No Flights Found</h2>
+        <% }%>
+        <% for(let i=0; i < validReturnFlights.length; i++){%>
+            <div class="card mt-3">
+                <h5 class="card-header d-flex justify-content-between align-items-center ps-1 pointer"
+                    onclick="headerClicked(event, '<%=JSON.stringify(validReturnFlights[i])%>')">
+                    <div class="d-flex align-items-center pe-2 ps-2">
+                        <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                            <img src="/images/<%= validReturnFlights[i].provider%>.png"
+                                alt="<%= validReturnFlights[i].provider%>"
+                                style="max-height: 100%; max-width: 100%;">
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
+                    </div>
+                    <div class="d-flex flex-column card-content pe-3">
+                        <div class="d-flex">
+                            <p class="card-text bold noWrap">
+                                <%= validReturnFlights[i].number %>
                             </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                        </div>
+                        <div class="d-flex">
+                            <p class="card-text noWrap">From: <%= validReturnFlights[i].departing %>
                             </p>
-                            <p class="card-text">Price: $<%= flight.price %>
+                        </div>
+                        <div class="d-flex">
+                            <p class="card-text noWrap">To: <%= validReturnFlights[i].arriving %>
                             </p>
                         </div>
                     </div>
+                    <div class="d-flex flex-column card-content pe-3 flex-fill">
+                        <div class="d-flex">
+                            <p class="card-text bold noWrap">$<%= validReturnFlights[i].price * travellers%>
+                            </p>
+                        </div>
+                        <div class="d-flex">
+                            <p class="card-text noWrap">Depart: <%=
+                                    validReturnFlights[i].departureDate.toISOString().split('T')[0]; %>
+                            </p>
+                        </div>
+                        <div class="d-flex">
+                            <p class="card-text noWrap">Arrive: <%=
+                                    validReturnFlights[i].arrivalDate.toISOString().split('T')[0]; %>
+                            </p>
+                        </div>
+                    </div>
+                    <a class="collapsed d-block" data-bs-toggle="collapse" href="#collapse-collapsed-<%=i%>"
+                        aria-expanded="false" aria-controls="collapse-collapsed-<%=i%>" id="heading-collapsed-<%=i%>">
+                        <i class="fas fa-chevron-down fa-lg" style="color: #062c43"></i>
+                    </a>
+                </h5>
+                <div id="collapse-collapsed-<%=i%>" class="collapse" aria-labelledby="heading-collapsed-<%=i%>">
+                    <div class="d-flex justify-content-between align-items-center pe-3">
+                        <div class="d-flex flex-column card-content p-2">
+                            <div class="d-flex m-1">
+                                <p class="card-text">Flight Type: <%= validReturnFlights[i].type %>
+                                </p>
+                            </div>
+                            <div class="d-flex m-1">
+                                <p class="card-text">Provider: <%= validReturnFlights[i].provider %>
+                                </p>
+                            </div>
+                            <div class="d-flex m-1">
+                                <p class="card-text">Model: <%= validReturnFlights[i].model %>
+                                </p>
+                            </div>
+                            <div class="d-flex m-1">
+                                <p class="card-text">Emissions: <%= validReturnFlights[i].emissions %>t CO2e
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column card-content p-2 align-self-start flex-fill">
+                            <div class="d-flex m-1">
+                                <p class="card-text">Departure Time: <%= validReturnFlights[i].departureTime %>
+                                </p>
+                            </div>
+                            <div class="d-flex m-1">
+                                <p class="card-text">Arrival Time: <%= validReturnFlights[i].arrivalTime %>
+                                </p>
+                            </div>
+                            <div class="d-flex m-1">
+                                <p class="card-text">Travellers: <%= travellers %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <% }); %>
-        </div>
+            </div>
+            <% }; %>
     </div>
+
+    <script>
+        function headerClicked(event, flightObject) {
+            //Checks that header but not chevron icon is clicked to proceed
+            if (!event.target.classList.contains('fa-chevron-down')) {
+                sendSelected('returning', flightObject);
+            }
+        }
+    </script>
 
     <%- include('templates/footer'); %>

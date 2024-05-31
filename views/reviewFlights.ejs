@@ -6,76 +6,197 @@
     </div>
     <div>
         <br>
-        <h4>Departing Flight:</h4>
+        <h2 class="text-center">Departing Flights:</h2>
     </div>
 
-    <!-- https://stackoverflow.com/questions/49141874/bootstrap-4-card-panel-with-image-left-of-header-and-title -->
+    <!-- Collapsing card layout code adapted from the following plus expanded by myself and ChatGPT 3.5
+    Source: https://disjfa.github.io/bootstrap-tricks/card-collapse-tricks/
+    Source: https://getbootstrap.com/docs/5.1/components/collapse/
+    Source: https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object
+    Source: ChatGPT 3.5 -->
     <div class="container">
-        <div class="row justify-content-center ">
-            <% departingFlights.forEach(function(flight, index) {%>
-                <% if(flight.flightNumber == departingFlight){%>
-                <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
-                        <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+        <div class="card mt-3">
+            <h5 class="card-header d-flex justify-content-between align-items-center ps-1">
+                <div class="d-flex align-items-center pe-2 ps-2">
+                    <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                        <img src="/images/<%= departingFlight.provider%>.png"
+                            alt="<%= departingFlight.provider%>"
+                            style="max-height: 100%; max-width: 100%;">
+                    </div>
+                </div>
+                <div class="d-flex flex-column card-content pe-3">
+                    <div class="d-flex">
+                        <p class="card-text bold noWrap">
+                            <%= departingFlight.number %>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">From: <%= departingFlight.departing %>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">To: <%= departingFlight.arriving %>
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex flex-column card-content pe-3 flex-fill">
+                    <div class="d-flex">
+                        <p class="card-text bold noWrap">$<%= departingFlight.price * travellers%>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">Depart: <%=new Date(departingFlight.departureDate).toISOString().split('T')[0];%>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">Arrive: <%=new Date(departingFlight.arrivalDate).toISOString().split('T')[0];%>
+                        </p>
+                    </div>
+                </div>
+                <a class="d-block" data-bs-toggle="collapse" href="#collapse-collapsed-1"
+                    aria-expanded="true" aria-controls="collapse-collapsed-1" id="heading-collapsed-1">
+                    <i class="fas fa-chevron-down fa-lg" style="color: #062c43"></i>
+                </a>
+            </h5>
+            <div id="collapse-collapsed-1" class="collapse show" aria-labelledby="heading-collapsed-1">
+                <div class="d-flex justify-content-between align-items-center pe-3">
+                    <div class="d-flex flex-column card-content p-2">
+                        <div class="d-flex m-1">
+                            <p class="card-text">Flight Type: <%= departingFlight.type %>
+                            </p>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Provider: <%= departingFlight.provider %>
                             </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Model: <%= departingFlight.model %>
                             </p>
-                            <p class="card-text">Price: $<%= flight.price %>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Emissions: <%= departingFlight.emissions %>t CO2e
                             </p>
-                            <% totalPrice += flight.price;%>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column card-content p-2 align-self-start flex-fill">
+                        <div class="d-flex m-1">
+                            <p class="card-text">Departure Time: <%= departingFlight.departureTime %>
+                            </p>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Arrival Time: <%= departingFlight.arrivalTime %>
+                            </p>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Travellers: <%= travellers %>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <% }%>
-                <% }); %>
+            </div>
         </div>
     </div>
+    <% totalPrice += departingFlight.price * travellers;%>
 
-    <div>
-        <br>
-        <h4>Returning Flight:</h4>
-    </div>
+    <% if(returningFlight){ %>
+        <div>
+            <br>
+            <h2 class="text-center">Returning Flights:</h2>
+        </div>
 
     <div class="container">
-        <div class="row justify-content-center ">
-            <% returnFlights.forEach(function(flight, index) {%>
-                <% if(flight.flightNumber == returningFlight){%>
-                <div class="container">
-                    <div class="card flex-row flex-wrap d-flex" onclick="send()" style="cursor: pointer;">
-                        <div class="d-flex align-items-center justify-content-center ps-3">
-                            <img src="/<%= flight.imageURL%>" class="image-fluid" alt="">
+        <div class="card mt-3">
+            <h5 class="card-header d-flex justify-content-between align-items-center ps-1">
+                <div class="d-flex align-items-center pe-2 ps-2">
+                    <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                        <img src="/images/<%= returningFlight.provider%>.png"
+                            alt="<%= returningFlight.provider%>"
+                            style="max-height: 100%; max-width: 100%;">
+                    </div>
+                </div>
+                <div class="d-flex flex-column card-content pe-3">
+                    <div class="d-flex">
+                        <p class="card-text bold noWrap">
+                            <%= returningFlight.number %>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">From: <%= returningFlight.departing %>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">To: <%= returningFlight.arriving %>
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex flex-column card-content pe-3 flex-fill">
+                    <div class="d-flex">
+                        <p class="card-text bold noWrap">$<%= returningFlight.price * travellers%>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">Depart: <%=new Date(returningFlight.departureDate).toISOString().split('T')[0];%>
+                        </p>
+                    </div>
+                    <div class="d-flex">
+                        <p class="card-text noWrap">Arrive: <%=new Date(returningFlight.arrivalDate).toISOString().split('T')[0];%>
+                        </p>
+                    </div>
+                </div>
+                <a class="d-block" data-bs-toggle="collapse" href="#collapse-collapsed-2"
+                    aria-expanded="true" aria-controls="collapse-collapsed-2" id="heading-collapsed-2">
+                    <i class="fas fa-chevron-down fa-lg" style="color: #062c43"></i>
+                </a>
+            </h5>
+            <div id="collapse-collapsed-2" class="collapse show" aria-labelledby="heading-collapsed-2">
+                <div class="d-flex justify-content-between align-items-center pe-3">
+                    <div class="d-flex flex-column card-content p-2">
+                        <div class="d-flex m-1">
+                            <p class="card-text">Flight Type: <%= returningFlight.type %>
+                            </p>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Flight #: <%= flight.flightNumber %>
-                            </h5>
-                            <p class="card-text">Destination: <%= flight.destination %>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Provider: <%= returningFlight.provider %>
                             </p>
-                            <p class="card-text">Departure Time: <%= flight.departureTime %>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Model: <%= returningFlight.model %>
                             </p>
-                            <p class="card-text">Price: $<%= flight.price %>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Emissions: <%= returningFlight.emissions %>t CO2e
                             </p>
-                            <% totalPrice += flight.price;%>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column card-content p-2 align-self-start flex-fill">
+                        <div class="d-flex m-1">
+                            <p class="card-text">Departure Time: <%= returningFlight.departureTime %>
+                            </p>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Arrival Time: <%= returningFlight.arrivalTime %>
+                            </p>
+                        </div>
+                        <div class="d-flex m-1">
+                            <p class="card-text">Travellers: <%= travellers %>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <% }%>
-                <% }); %>
+            </div>
         </div>
     </div>
+    <% totalPrice += returningFlight.price * travellers;%>
+    
+    <% } %>
 
-    <div class="container text-center">
+    <div class="container text-center mb-3">
         <br>
         <br>
         <h2>Total Price: $<%= totalPrice%></h2>
         <br>
         <div class="button-container">
-            <a href="/main" class="btn btn-primary btn-lg" role="button" type="submit">Pay</a>
+            <a href="/flightPayment" class="btn btn-dark btn-lg" role="button" type="submit" style="background-color: #062c43;">Pay</a>
         </div>
     </div>
 
