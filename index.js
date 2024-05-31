@@ -10,12 +10,14 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const SMTPPool = require('nodemailer/lib/smtp-pool');
 
-//
+// openAi API access
 const { OpenAI } = require('openai');
+
+// OpenAI API Key
 const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
-//
 
 
+// Port for the app.listen
 const port = 8000;
 
 // Import the Hotel model
@@ -54,7 +56,7 @@ function checkHotelData(req, res, next) {
 // MongoDB URI
 const mongoUri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`;
 
-// Connect to MongoDB using Mongoose
+// Connect to MongoDB using Mongoose, This code was adapted from Assignment 1 from COMP 2537
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -64,7 +66,7 @@ mongoose.connect(mongoUri, {
     console.error('Failed to connect to MongoDB', err);
 });
 
-// Creating session collection
+// Creating session collection, This code was adapted from Assignment 1 from COMP 2537
 app.use(session({
     secret: process.env.NODE_SESSION_SECRET, // Secret key
     store: MongoStore.create({
@@ -109,10 +111,22 @@ app.get('/', (req, res) => {
 
 
 // Gurvir's Routes //////////////////
+
+/**
+ * Handler for hotels page that produces form
+ * to gather region and check in and check out
+ * date to query database for hotels
+ */
 app.get('/hotels', sessionValidation, (req, res) => {
     res.render('hotels');
 });
 
+/**
+ * Handles post request from hotels.ejs and 
+ * saves the form selection from the hotels form
+ * into session so it can be used later to query
+ * the database
+ */
 app.post('/search', async (req, res) => {
     const region = req.body.region;
     const checkInDate = req.body.checkIn;
@@ -122,19 +136,15 @@ app.post('/search', async (req, res) => {
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    // await User.findByIdAndUpdate(req.session.userId, {
-    //     $push: {
-    //         searchHistory: {
-    //             region,
-    //             checkInDate: new Date(checkInDate),
-    //             checkOutDate: new Date(checkOutDate)
-    //         }
-    //     }
-    // })
-
     res.redirect('availableHotels');
 });
 
+/**
+ * Handler for the available hotels page that queries
+ * the database to look for available hotels whose 
+ * check in and check out dates fall outside the range
+ * of the user selected date range
+ */
 app.get('/availableHotels', sessionValidation, async (req, res) => {
     const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
 
@@ -147,6 +157,11 @@ app.get('/availableHotels', sessionValidation, async (req, res) => {
     res.render('availableHotels', { hotels });
 });
 
+/**
+ * Handles the post request that creates a hotel ID from the form
+ * submission from the available hotels page and redirects to 
+ * hotel summary page while inserting the hotel id into the url
+ */
 app.post('/hotelSelection', async (req, res) => {
     const hotelID = req.body.hotelId;
     res.redirect(`hotelSummary/${hotelID}`);
@@ -162,10 +177,10 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
 
     const hotel = await Hotel.findById(req.params.id);
 
-    // Get the last 5 reviews
+    // Get the last 5 reviews, Ai generated function to reverse the order of reviews
     const lastFiveReviews = hotel.reviews.slice(-5).map(review => review.details).join("\n\n");
 
-    // Generate the summary using OpenAI API
+    // Generate the summary using OpenAI API, This was partially debugged from stack overflow
     const aiResponse = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -182,6 +197,12 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     res.render('hotelSummary', { hotel, reviews: hotel.reviews, reviewSummary, amountOfDays, formattedCheckInDate, formattedCheckOutDate });
 });
 
+/**
+ * Handler for the post request for the book hotel route that saves the session check
+ * in date and check out date in order to find the number of days for the visit, queries
+ * the database to find the hotel by ID and renders the payment page with the number of days
+ * and hotel details as outlined by the Hotel schema
+ */
 app.post('/bookHotel', sessionValidation, async (req, res) => {
     const checkInDate = new Date(req.session.hotelCheckInDate);
     const checkOutDate = new Date(req.session.hotelCheckOutDate);
@@ -314,6 +335,7 @@ app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
     });
 });
 
+
 // Sign up page route
 app.get('/signup', (req, res) => {
     res.render('signup', { message: null });
@@ -324,6 +346,7 @@ app.get('/signin', (req, res) => {
     res.render('signin', { message: null });
 });
 
+// Main landing page for the users
 app.get('/main', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/signin');
@@ -487,51 +510,64 @@ app.get('/faq', sessionValidation, (req, res) => {
 
 // Flights page route
 app.get('/flights', sessionValidation, (req, res) => {
-    //createFlights();
+    //deletes flight objects from user session to avoid appearing at review on manual redirect
     delete req.session.departingFlight;
     delete req.session.returningFlight;
+
     res.render('flights');
 });
 
-// Departing flights page
+// Departing flights page route
 app.get('/flights/departing', sessionValidation, async (req, res) => {
+    const { travellers, fromInput, toInput, departDate } = req.session;
+
+    //deletes flight objects from user session to avoid appearing at review on manual redirect
     delete req.session.departingFlight;
     delete req.session.returningFlight;
-    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+
+    //creates date objects for the departing date and the day after it
     let departDateDate = new Date(departDate);
-    // console.log(departDateDate);
     let departDateDatePlus = addDays(departDateDate, 1);
-    // console.log(departDateDatePlus);
+
+    //searches database for departing flights matching search parameters
     let validDepartingFlights = await Flight.find({ departureDate: { $lte: departDateDatePlus, $gte: departDateDate }, departing: fromInput, arriving: toInput });
+
     res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
-// Returning flights page
+// Returning flights page route
 app.get('/flights/returning', sessionValidation, async (req, res) => {
-    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    const { flightType, travellers, fromInput, toInput, returnDate } = req.session;
+
     if (flightType == "One Way") {
+        //redirects to review page if a One Way flight is selected as there is return flight
         res.redirect('review');
     } else {
+        //creates date objects for the return date and the day after it
         let returnDateDate = new Date(returnDate);
-        // console.log(departDateDate);
         let returnDateDatePlus = addDays(returnDateDate, 1);
-        // console.log(departDateDatePlus);
+
+        //searches database for returning flights matching search parameters
         let validReturnFlights = await Flight.find({ arrivalDate: { $lte: returnDateDatePlus, $gte: returnDateDate }, departing: toInput, arriving: fromInput });
+
         res.render('returningFlights', { validReturnFlights, travellers });
     }
 });
 
-//https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+// Returns a date object increased by a number of days given another date object.
+// Source: https://stackoverflow.com/questions/563406/how-to-add-days-to-date
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
 
+// Returns a random integer between min and max
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Returns a string representing a random time in 24 hour with 15 minute formatting
 function randomHour() {
     let hours = randomInteger(0, 23);
     let minutes = randomInteger(0, 3) * 15;
@@ -541,14 +577,15 @@ function randomHour() {
     return time;
 }
 
+// Populates the database with flights
 async function createFlights() {
     let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
     let locationCodes = ["BEJ", "HOU", "PAR", "VAN", "LUN", "MRS"];
-    let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
+    let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"];
     let providers = ["NASA", "Blue Origin", "SpaceX", "Virgin Galactic"];
     let modelsBodyToBody = [["Curiosity 4", "Gemini XVI", "Pioneer 16"], ["Shepherd 3", "Blue 7", "Goddard"], ["Dragon 5", "Falcon 12", "Starship 2"], ["VSS Imagine", "VSS Enterprise", "VSS Voyager"]];
     let modelsSubOrbital = [["Space Shuttle 3", "Endeavour 2", "CST-250"], ["Starliner", "Turquoise 7", "Daintree 3"], ["Owl 2", "Komodo", "Scout 2"], ["VSS-S-1", "VSS-S-2", "VSS-B-1"]];
-    let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let flightArray = [];
 
     let tempInteger;
@@ -569,18 +606,21 @@ async function createFlights() {
 
     let tempFlight;
 
+    // Loops over all from locations, to location, months, and days, generating one to five flights per condition.
     for (let from = 0; from < locations.length; from++) {
         for (let to = 0; to < locations.length; to++) {
             for (let month = 0; month < daysInEachMonth.length; month++) {
                 for (let day = 1; day <= daysInEachMonth[month]; day++) {
                     for (let y = 0; y < randomInteger(1, 4); y++) {
                         if (true) {
+                            // Create unique flight code from the locations codes
                             tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
                             tempNumberCode++;
-
+ 
                             tempDeparting = locations[from];
                             tempArriving = locations[to];
 
+                            // Sets a scale to use for emissions and price given distance between bodies
                             if (locationBody[from] == locationBody[to]) {
                                 tempScale = 1;
                             } else if (locationBody[from] == "Mars" || locationBody[to] == "Mars") {
@@ -593,6 +633,7 @@ async function createFlights() {
 
                             tempDepartureTime = randomHour();
 
+                            // Sets an arrival date based on departing date, distance between bodies
                             if (tempScale == 1) {
                                 tempArrivalDate = addDays(tempDepartureDate, 1);
                             } else if (tempScale == 10) {
@@ -607,6 +648,7 @@ async function createFlights() {
 
                             tempProvider = providers[tempInteger];
 
+                            // Sets flight type and model type based on distance between bodies
                             if (locationBody[from] == locationBody[to]) {
                                 tempType = "Sub-Orbital";
                                 tempModel = modelsSubOrbital[tempInteger][randomInteger(0, 2)];
@@ -618,6 +660,7 @@ async function createFlights() {
                             tempEmissions = randomInteger(5, 10) * tempScale;
                             tempPrice = randomInteger(750, 1900) * tempScale;
 
+                            // Creates object to represent generated flight
                             tempFlight = {
                                 number: tempNumber,
                                 departing: tempDeparting,
@@ -633,16 +676,19 @@ async function createFlights() {
                                 price: tempPrice
                             }
 
+                            // Push generated flight object to array
                             flightArray.push(tempFlight);
                         }
                     }
                 }
             }
+            // Reset number code on 'from' and 'to' combination change
             tempNumberCode = 0;
             console.log("Completed " + locations[from] + " to " + locations[to]);
         }
     }
 
+    // Send array of generated flight objects to database
     await Flight.create(flightArray);
 }
 
@@ -656,9 +702,12 @@ app.get('/flights/review', sessionValidation, async (req, res) => {
     }
 });
 
+// Stores selected flight in session data
 app.post('/flights/clicked', (req, res) => {
     let type = req.body.type;
     let flight = req.body.flight;
+
+    // Stores flight object in session data based on flight type
     if (type == "departing") {
         req.session.departingFlight = flight;
         res.sendStatus(200);
@@ -670,15 +719,17 @@ app.post('/flights/clicked', (req, res) => {
     }
 });
 
-// Search flights (temporary format to display post is functioning)
+// Stores flight inputs in session data
 app.post('/flights/search', (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
+
     req.session.flightType = flightType;
     req.session.travellers = travellers;
     req.session.fromInput = fromInput;
     req.session.toInput = toInput;
     req.session.departDate = departDate;
     req.session.returnDate = returnDate;
+    
     res.redirect('departing');
 });
 
@@ -692,10 +743,12 @@ app.get('/flightPayment', sessionValidation, (req, res) => {
     res.render('flightPayment', { departingFlight, returningFlight, travellers });
 })
 
+// Route to render contact page
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
 });
 
+//Route to render inquiry page
 app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
@@ -803,6 +856,7 @@ app.get("/account", sessionValidation, (req, res) => {
     });
 });
 
+// Route to update the user;s information
 app.post('/update-profile', async (req, res) => {
     const { name, email } = req.body;
 
@@ -896,18 +950,6 @@ app.post('/submit-review', async (req, res) => {
 app.get('/terms-and-conditions', (req, res) => {
     res.render('terms-and-conditions');
 });
-
-// For deleteing account 
-/**
-app.post('/delete-account', async (req, res) => {
-
-    const user = await User.findById(req.session.userId);
-
-    await user.deleteOne();
-
-    res.redirect('/');
-});  */
-
 
 // 404 page for any routes that are not defined
 // make sure this is the last route before app.listen
