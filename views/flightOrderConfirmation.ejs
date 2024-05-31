@@ -65,11 +65,13 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         
-
+            // This function generates a random six digit number for a order number
             function generateOrderNumber() {
                 let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
                 document.getElementById('orderNumber').textContent = orderNumber;
             }
+            // This function was genereated with the help of chatGPT 3.5
+            // Source: ChatGPT 3.5
             function formatDate(date) {
                 let day = String(date.getDate()).padStart(2, '0');
                 let month = String(date.getMonth() + 1).padStart(2, '0');
@@ -77,6 +79,7 @@
                 return month + '/' + day + '/' + year;
             }
             
+            // Runs the generateOrderNumber function
             generateOrderNumber();
             var currentDate = new Date();
             var formattedDate = formatDate(currentDate);

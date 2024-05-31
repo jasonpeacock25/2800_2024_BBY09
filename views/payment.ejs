@@ -12,7 +12,7 @@
           <div>
             <h6 class="my-0">Hotel</h6>
             <small class="text-body-secondary">
-              <!-- Check to see if a hotel is booked -->
+              <!-- Check to see if a hotel is booked, if there is execute this code block -->
               <% if (hotel) { %>
                 <div>Name: <%= hotel.name %>
                 </div>
@@ -100,7 +100,8 @@
             </div>
           </div>
 
-          <!-- Canadian ZIP Code Pattern -->
+          <!-- Canadian ZIP Code Pattern regex pattern from chatGPT 3.5
+          Source: chatGPT 3.5-->
           <div class="col-md-3">
             <label for="zip" class="form-label">Zip</label>
             <input type="text" class="form-control" id="zip" name="zip" pattern="[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d" required>
@@ -124,7 +125,8 @@
         </div>
 
         <div class="row gy-3">
-          <!-- Credit card name input -->
+          <!-- Credit card name input with regex pattern from chatGPT 3.5
+          Source: chatGPT 3.5 -->
           <div class="col-md-6">
             <label for="cc-name" class="form-label">Name on card</label>
             <input type="text" class="form-control" id="cc-name" name="cc-name" pattern="[A-Za-z]+" required>
@@ -134,7 +136,8 @@
             </div>
           </div>
 
-          <!-- Credit card number input with pattern from open AI for visa, mastercard, american express and discover card -->
+          <!-- Credit card number input with regex pattern from chatGPT 3.5 for visa, mastercard, american express and discover card 
+          Source: chatGPT 3.5-->
           <div class="col-md-6">
             <label for="cc-number" class="form-label">Credit card number</label>
             <input type="text" class="form-control" id="cc-number"
@@ -145,7 +148,8 @@
             </div>
           </div>
           
-          <!-- Expiry input -->
+          <!-- Expiry input, regex pattern from chatGPT 3.5
+          Source: chatGPT 3.5 -->
           <div class="col-md-3">
             <label for="cc-expiration" class="form-label">Expiration</label>
             <input type="text" class="form-control" id="cc-expiration" pattern="^(0[1-9]|1[0-2])\/?([0-9]{2})$" placeholder="MM/YY" required>
@@ -154,7 +158,8 @@
             </div>
           </div>
 
-          <!-- CVV input -->
+          <!-- CVV input, regex pattern from chatGPT 3.5
+          Source: chatGPT 3.5-->
           <div class="col-md-3">
             <label for="cc-cvv" class="form-label">CVV</label>
             <input type="password" class="form-control" id="cc-cvv" name="cc-cvv" pattern="^[0-9]{3,4}$" required>
@@ -189,7 +194,7 @@
         return parseFloat(amount.replace('$', '').replace(',', ''));
       }
 
-      // formats number as a currency
+      // formats number as a currency with 2 decimal places
       function formatAmount(amount) {
         return '$' + amount.toFixed(2).toLocaleString();
       }
@@ -205,7 +210,8 @@
       // Updates total amount
       totalAmountElement.textContent = formatAmount(totalAmount);
 
-      // Form validation
+      // Form validation with the help of chatGPT 3.5
+      // Source: chatGPT 3.5
       const form = document.getElementById('paymentForm');
       form.addEventListener('submit', function (event) {
         if (!form.checkValidity()) {
