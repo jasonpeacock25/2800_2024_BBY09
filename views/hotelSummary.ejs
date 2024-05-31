@@ -2,132 +2,139 @@
 
     <link rel="stylesheet" href="/css/hotelSummary.css">
 
-<%
-const totalPrice = amountOfDays * hotel.price;
-%>
+    <% const totalPrice=amountOfDays * hotel.price; %>
 
-    <!-- Inside hotelSummary.ejs -->
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1 class="my-4">
-                    <%= hotel.name %>
-                </h1>
-                <img src="/<%= hotel.imageURL %>" class="img-fluid mb-4" alt="<%= hotel.name %>">
-                <p><strong>Hotel details:</strong>
-                    <%= hotel.details %>
-                </p>
-                <p><strong>Rating:</strong>
-                    <%= hotel.rating %>
-                </p>
-                <p><strong>Your dates:</strong>
-                    <%= formattedCheckInDate %> to <%= formattedCheckOutDate %>
-                </p>
-                <p><strong>Total price: $</strong>
-                    <%= totalPrice %>
-                </p>
-                <p><strong>Available from:</strong>
-                    <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
-                </p>
-                <form action="/bookHotel" method="POST">
-                    <input type="hidden" name="hotelId" value="<%= hotel._id %>">
-                    <button type="submit" class="btn btn-primary">Book</button>
-                </form>
-                <br><br>
 
-                <!-- AI-Generated Review Summary -->
-                <div class="review-summary">
-                    <h3>AI Review Summary</h3>
-                    <p>
-                        <%= reviewSummary %>
+        <!-- Page that displays summary of hotel chosen
+             from the available hotels page
+             Note* Structure generated using ChatGPT40 with
+             modification @author https://chat.openai.com/-->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="my-4">
+                        <%= hotel.name %>
+                    </h1>
+                    <img src="/<%= hotel.imageURL %>" class="img-fluid mb-4" alt="<%= hotel.name %>">
+                    <p><strong>Hotel details:</strong>
+                        <%= hotel.details %>
                     </p>
-                    <hr>
-                </div><br>
-
-                <!-- Reviews Section -->
-                <div class="reviews">
-                    <h3>Previous Reviews</h3>
-                    <hr>
-                    <div class="review-scroll-box">
-                        <% if (reviews && reviews.length> 0) { %>
-                            <% reviews.slice().reverse().forEach(function(review) { %>
-                                <div class="review">
-                                    <h4>
-                                        <%= review.title %>
-                                    </h4>
-                                    <p>
-                                        <%= review.details %>
-                                    </p>
-                                    <p><strong>Rating:</strong>
-                                        <%= review.rating %>
-                                    </p>
-                                    <p><em>Reviewed on <%= review.date.toDateString() %></em></p>
-                                </div>
-                                <hr>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p>No reviews yet. Be the first to leave a review!</p>
-                                        <% } %>
-                    </div>
+                    <p><strong>Rating:</strong>
+                        <%= hotel.rating %>
+                    </p>
+                    <p><strong>Your dates:</strong>
+                        <%= formattedCheckInDate %> to <%= formattedCheckOutDate %>
+                    </p>
+                    <p><strong>Total price: $</strong>
+                        <%= totalPrice %>
+                    </p>
+                    <p><strong>Available from:</strong>
+                        <%= hotel.startDate.toDateString() %> to <%= hotel.endDate.toDateString() %>
+                    </p>
+                    <form action="/bookHotel" method="POST">
+                        <input type="hidden" name="hotelId" value="<%= hotel._id %>">
+                        <button type="submit" class="btn btn-primary">Book</button>
+                    </form>
                     <br><br>
-                </div>
 
-                <!-- Submit review form -->
-                <form method="post" action="/submit-review">
-                    <input type="hidden" name="hotelId" value="<%= hotel._id %>">
-                    <div class="form-group">
-                        <label for="review"><b>Leave a Review</b></label>
-                        <input class="form-control" id="title" name="title" type="text" required
-                            placeholder="Title"><br>
-                        <textarea class="form-control" id="details" name="details" rows="3" placeholder="Details"
-                            required></textarea><br>
-                        <input class="form-control" id="rating" name="rating" type="number" min="1" max="10" required
-                            placeholder="Rating">
+                    <!-- AI-Generated Review Summary -->
+                    <div class="review-summary">
+                        <h3>AI Review Summary</h3>
+                        <p>
+                            <%= reviewSummary %>
+                        </p>
+                        <hr>
+                    </div><br>
+
+                    <!-- Reviews Section -->
+                    <div class="reviews">
+                        <h3>Previous Reviews</h3>
+                        <hr>
+                        <div class="review-scroll-box">
+                            <% if (reviews && reviews.length> 0) { %>
+                                <% reviews.slice().reverse().forEach(function(review) { %>
+                                    <div class="review">
+                                        <h4>
+                                            <%= review.title %>
+                                        </h4>
+                                        <p>
+                                            <%= review.details %>
+                                        </p>
+                                        <p><strong>Rating:</strong>
+                                            <%= review.rating %>
+                                        </p>
+                                        <p><em>Reviewed on <%= review.date.toDateString() %></em></p>
+                                    </div>
+                                    <hr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <p>No reviews yet. Be the first to leave a review!</p>
+                                            <% } %>
+                        </div>
+                        <br><br>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3">Submit</button><br><br>
-                </form>
+
+                    <!-- Submit review form -->
+                    <form method="post" action="/submit-review">
+                        <input type="hidden" name="hotelId" value="<%= hotel._id %>">
+                        <div class="form-group">
+                            <label for="review"><b>Leave a Review</b></label>
+                            <input class="form-control" id="title" name="title" type="text" required
+                                placeholder="Title"><br>
+                            <textarea class="form-control" id="details" name="details" rows="3" placeholder="Details"
+                                required></textarea><br>
+                            <input class="form-control" id="rating" name="rating" type="number" min="1" max="10"
+                                required placeholder="Rating">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Submit</button><br><br>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <br><br>
+        <br><br>
 
-<%- include('templates/footer') %>
+        <%- include('templates/footer') %>
 
- <!-- CSS -->
- <style>
-    .review-scroll-box {
-        max-height: 400px;
-        overflow-y: scroll;
-        border: 1px solid #ccc;
-        padding: 10px;
-    }
+            <!-- CSS -->
+            <style>
+                .review-scroll-box {
+                    max-height: 400px;
+                    overflow-y: scroll;
+                    border: 1px solid #ccc;
+                    padding: 10px;
+                }
 
-    .review-scroll-box .review {
-        margin-bottom: 20px;
-    }
+                .review-scroll-box .review {
+                    margin-bottom: 20px;
+                }
 
-    .review-summary {
-    background-color: #003366; /* Darker blue color */
-    color: white; /* White text for contrast */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+                .review-summary {
+                    background-color: #003366;
+                    /* Darker blue color */
+                    color: white;
+                    /* White text for contrast */
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
 
-.review-summary h3 {
-    color: #ffffff; /* White color for the heading */
-    border-bottom: 2px solid #0055aa; /* Lighter blue for a subtle underline effect */
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
+                .review-summary h3 {
+                    color: #ffffff;
+                    /* White color for the heading */
+                    border-bottom: 2px solid #0055aa;
+                    /* Lighter blue for a subtle underline effect */
+                    padding-bottom: 10px;
+                    margin-bottom: 15px;
+                }
 
-.review-summary p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
+                .review-summary p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin-bottom: 20px;
+                }
 
-.review-summary hr {
-    border: 1px solid #0055aa; /* Lighter blue for the horizontal line */
-}
-</style>
+                .review-summary hr {
+                    border: 1px solid #0055aa;
+                    /* Lighter blue for the horizontal line */
+                }
+            </style>
