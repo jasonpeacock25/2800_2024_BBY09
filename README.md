@@ -191,5 +191,5 @@ User login
 ------------------------------------------------------------------------------------------------------------------------------------------------
 8. Contact Information
 Gurvir Dhami        ||      Jason Peacock       ||      Jarod Foster        ||      Uppnoor Panesar     ||      Jack Le
-gdhami21@my.bcit.ca         email@my.bcit.ca            email@my.bcit.ca            email@my.bcit.ca            email@my.bcit.ca
+gdhami21@my.bcit.ca         jpeacock8@my.bcit.ca            jfoster67@my.bcit.ca            upanesar@my.bcit.ca            jle61@my.bcit.ca
 
