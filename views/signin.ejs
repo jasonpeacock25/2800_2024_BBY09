@@ -1,6 +1,7 @@
 <%- include('templates/header-basic') %>
     <h1 class="display-6 text-center">Sign In Here</h1><br>
     <div class="container text-center">
+        <!-- This route handles the signin route that handles the request to check for user and then create a cookie session for the user -->
         <form action="/loggingin" method="post">
             <input class="form-control" type="email" name="email" required="true" placeholder="email">
             <br><br>
