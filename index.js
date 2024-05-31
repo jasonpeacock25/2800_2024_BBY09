@@ -111,10 +111,22 @@ app.get('/', (req, res) => {
 
 
 // Gurvir's Routes //////////////////
+
+/**
+ * Handler for hotels page that produces form
+ * to gather region and check in and check out
+ * date to query database for hotels
+ */
 app.get('/hotels', sessionValidation, (req, res) => {
     res.render('hotels');
 });
 
+/**
+ * Handles post request from hotels.ejs and 
+ * saves the form selection from the hotels form
+ * into session so it can be used later to query
+ * the database
+ */
 app.post('/search', async (req, res) => {
     const region = req.body.region;
     const checkInDate = req.body.checkIn;
@@ -124,19 +136,15 @@ app.post('/search', async (req, res) => {
     req.session.hotelCheckInDate = checkInDate;
     req.session.hotelCheckOutDate = checkOutDate;
 
-    // await User.findByIdAndUpdate(req.session.userId, {
-    //     $push: {
-    //         searchHistory: {
-    //             region,
-    //             checkInDate: new Date(checkInDate),
-    //             checkOutDate: new Date(checkOutDate)
-    //         }
-    //     }
-    // })
-
     res.redirect('availableHotels');
 });
 
+/**
+ * Handler for the available hotels page that queries
+ * the database to look for available hotels whose 
+ * check in and check out dates fall outside the range
+ * of the user selected date range
+ */
 app.get('/availableHotels', sessionValidation, async (req, res) => {
     const { region, hotelCheckInDate, hotelCheckOutDate } = req.session;
 
@@ -149,6 +157,11 @@ app.get('/availableHotels', sessionValidation, async (req, res) => {
     res.render('availableHotels', { hotels });
 });
 
+/**
+ * Handles the post request that creates a hotel ID from the form
+ * submission from the available hotels page and redirects to 
+ * hotel summary page while inserting the hotel id into the url
+ */
 app.post('/hotelSelection', async (req, res) => {
     const hotelID = req.body.hotelId;
     res.redirect(`hotelSummary/${hotelID}`);
@@ -184,6 +197,12 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
     res.render('hotelSummary', { hotel, reviews: hotel.reviews, reviewSummary, amountOfDays, formattedCheckInDate, formattedCheckOutDate });
 });
 
+/**
+ * Handler for the post request for the book hotel route that saves the session check
+ * in date and check out date in order to find the number of days for the visit, queries
+ * the database to find the hotel by ID and renders the payment page with the number of days
+ * and hotel details as outlined by the Hotel schema
+ */
 app.post('/bookHotel', sessionValidation, async (req, res) => {
     const checkInDate = new Date(req.session.hotelCheckInDate);
     const checkOutDate = new Date(req.session.hotelCheckOutDate);
