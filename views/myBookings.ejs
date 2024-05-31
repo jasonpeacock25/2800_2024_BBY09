@@ -185,24 +185,40 @@
 
     <h2 class="text-center">Hotels</h2>
     <div class="container">
-        <div class="row justify-content-center ">
-            <% hotels.forEach(function(hotel, index) {%>
-                <div class="col-md-4 mb-4" id="hotels-<%= index %>">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Hotel name: <%= hotel.hotelName %>
-                            </h5>
-                            <p class="card-text">Rating: <%= hotel.hotelRating %>
-                            </p>
-                            <p class="card-text">Price: $<%= hotel.hotelPrice %>
-                            </p>
-                            <p class="card-text">Location: <%= hotel.hotelRegion %>
-                            </p>
-
-                        </div>
+                <% for(let i=0; i < hotels.length; i++){%>
+                    <div class="card mt-3">
+                        <h5 class="card-header d-flex justify-content-between align-items-center ps-1">
+                            <div class="d-flex align-items-center pe-2 ps-2">
+                                <div id="imageDiv" style="max-height: 70x; max-width: 70px;">
+                                    <img src="/images/hotel.png"
+                                        alt="Hotel icon"
+                                        style="max-height: 100%; max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">
+                                        <%= hotels[i].hotelName %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Rating: <%= hotels[i].hotelRating %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column card-content pe-3 flex-fill">
+                                <div class="d-flex">
+                                    <p class="card-text bold noWrap">Price: $<%= hotels[i].hotelPrice %>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text noWrap">Region: <%= hotels[i].hotelRegion %>
+                                    </p>
+                                </div>
+                            </div>
+                        </h5>
                     </div>
-                </div>
-                <% }); %>
-        </div>
+                    <% }; %>
     </div>
+    
     <%- include('templates/footer') %>
