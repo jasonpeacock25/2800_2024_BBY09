@@ -1,15 +1,13 @@
 <%- include('templates/header-hamburger') %>
 
     <div class="text-center">
-        <h1>Admin ONLY PAGE</h1>
-
         <div id="inquiriesContainer">
             <% if (inquiries && inquiries.length> 0) { %>
-                <h2>Inquiries:</h2>
+                <h1>Inquiries:</h1>
                 <ul style=" list-style-type: none;">
                     <% inquiries.forEach((inquiry)=> { %>
-                        <li>Name: <%= inquiry.name %>, Email: <%= inquiry.email %>, Subject: <%= inquiry.subject %>,
-                                        Description: <%= inquiry.description %>
+                        <li><span id="title">Name:</span> <%= inquiry.name %>, <span id="title">Email:</span> <%= inquiry.email %>, <span id="title">Subject:</span> <%= inquiry.subject %>,
+                                        <span id="title">Description:</span> <%= inquiry.description %>
                         </li>
                         <% }); %>
                 </ul>
@@ -20,3 +18,20 @@
     </div>
 
     <%- include('templates/footer') %>
+    
+    <style>
+        li {
+            margin-top:1.5%;
+            font-size: 20px;
+            text-align: start;
+        }
+
+        h1 {
+            margin-top:2%;
+            margin-bottom:3%;
+        }
+
+        #title {
+            font-weight: bold;
+        }
+    </style>

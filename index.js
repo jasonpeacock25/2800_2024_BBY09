@@ -10,12 +10,14 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const SMTPPool = require('nodemailer/lib/smtp-pool');
 
-//
+// openAi API access
 const { OpenAI } = require('openai');
+
+// OpenAI API Key
 const openai = new OpenAI({ key: process.env.OPENAI_API_KEY });
-//
 
 
+// Port for the app.listen
 const port = 8000;
 
 // Import the Hotel model
@@ -54,7 +56,7 @@ function checkHotelData(req, res, next) {
 // MongoDB URI
 const mongoUri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`;
 
-// Connect to MongoDB using Mongoose
+// Connect to MongoDB using Mongoose, This code was adapted from Assignment 1 from COMP 2537
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -64,7 +66,7 @@ mongoose.connect(mongoUri, {
     console.error('Failed to connect to MongoDB', err);
 });
 
-// Creating session collection
+// Creating session collection, This code was adapted from Assignment 1 from COMP 2537
 app.use(session({
     secret: process.env.NODE_SESSION_SECRET, // Secret key
     store: MongoStore.create({
@@ -162,10 +164,10 @@ app.get('/hotelSummary/:id', sessionValidation, async (req, res) => {
 
     const hotel = await Hotel.findById(req.params.id);
 
-    // Get the last 5 reviews
+    // Get the last 5 reviews, Ai generated function to reverse the order of reviews
     const lastFiveReviews = hotel.reviews.slice(-5).map(review => review.details).join("\n\n");
 
-    // Generate the summary using OpenAI API
+    // Generate the summary using OpenAI API, This was partially debugged from stack overflow
     const aiResponse = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -311,6 +313,7 @@ app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
     });
 });
 
+
 // Sign up page route
 app.get('/signup', (req, res) => {
     res.render('signup', { message: null });
@@ -321,6 +324,7 @@ app.get('/signin', (req, res) => {
     res.render('signin', { message: null });
 });
 
+// Main landing page for the users
 app.get('/main', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/signin');
@@ -715,10 +719,12 @@ app.get('/flightPayment', sessionValidation, (req, res) => {
     res.render('flightPayment', { departingFlight, returningFlight, travellers });
 })
 
+// Route to render contact page
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
 });
 
+//Route to render inquiry page
 app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });
@@ -826,6 +832,7 @@ app.get("/account", sessionValidation, (req, res) => {
     });
 });
 
+// Route to update the user;s information
 app.post('/update-profile', async (req, res) => {
     const { name, email } = req.body;
 
@@ -919,18 +926,6 @@ app.post('/submit-review', async (req, res) => {
 app.get('/terms-and-conditions', (req, res) => {
     res.render('terms-and-conditions');
 });
-
-// For deleteing account 
-/**
-app.post('/delete-account', async (req, res) => {
-
-    const user = await User.findById(req.session.userId);
-
-    await user.deleteOne();
-
-    res.redirect('/');
-});  */
-
 
 // 404 page for any routes that are not defined
 // make sure this is the last route before app.listen
