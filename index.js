@@ -687,10 +687,12 @@ app.get('/flightPayment', sessionValidation, (req, res) => {
     res.render('flightPayment', { departingFlight, returningFlight, travellers });
 })
 
+// Route to render contact page
 app.get('/contact', sessionValidation, (req, res) => {
     res.render('contact');
 });
 
+//Route to render inquiry page
 app.get('/contact/inquiry', sessionValidation, (req, res) => {
     res.render('inquiry');
 });

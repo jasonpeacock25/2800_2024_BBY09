@@ -1,6 +1,10 @@
 <%- include('templates/header-back-arrow') %>
 <div class="container">
     <video autoplay muted loop id="background-video">
+        <!-- Video found from Wallpaper Engine and sourced from Youtube
+            Source: https://steamcommunity.com/sharedfiles/filedetails/?id=2233683417
+            Source: https://www.youtube.com/watch?v=hJodIHbP5NE&t=23s
+        -->
         <source src="/public/video/lost.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -35,13 +39,13 @@ html, body {
 }
 
 #background-video {
-    position: fixed; /* Fixed position to cover the entire viewport */
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensure the video covers the entire area */
-    z-index: -1; /* Place the video behind other content */
+    object-fit: cover; 
+    z-index: -1; 
 }
 
 .message {
