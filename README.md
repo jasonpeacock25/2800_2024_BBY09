@@ -24,10 +24,10 @@ Back end: 			    Node.js | Mongodb
 
 
 3. Files
-├── chatbot												#
+├── chatbot												#Contains the databank for the chatbot
 	├── chatbot.json
 	└── chatbot.txt
-├── favicon_io											#
+├── favicon_io											#Contains favicon images
 	├── android-chrome-192x192.png
 	├── android-chrome-512x512.png
 	├── apple-touch-icon.png
@@ -117,8 +117,8 @@ Back end: 			    Node.js | Mongodb
 ├── .gitignore               							# Git ignore file
 ├── databaseConnection.js								# Creates and exports object to allow for connection to Mongodb database
 ├── index.js               								# Client side js page that initializes node
-├── package-lock.json									# 
-├── package.json										#
+├── package-lock.json									# Automatically generated file that records the exact versions of dependencies installed in your project
+├── package.json										# Contains metadata about the project, including name, version, dependencies, scripts, and other configurations.
 └── README.md
 
 4. How to install this project:
@@ -164,19 +164,53 @@ Hotels booking
     6. Proceed to payments (see Payment processing).
 
 Reviews
+	1. When viewing a hotel's description scroll down
+	2. There will be the AI review section first and then a section where users have written their own reviews.
+	3. You can Write a review by first writing a title and then description then finally giving a numeric rating and then pressing submit.
+	4. The AI review section will update automatically
 
 Flights booking
+	1. From the main page select 'Explore Flights', or select 'Flights' from the hamburger menu.
+	2. Fill in the form to match your desired search properties and select 'Search'.
+	3. Browse the departing flights that match your inputs (selecting the chevron icon to expand and collapse) and select the header of a flight to proceed.
+	4. Browse the returning flights that match your inputs if applicable and select the header of a flight to proceed.
+	5. Review your selected flights in the review page. You can go back and change inputs or selected flights with the back arrow if necessary.
+	6. Proceed to payment by selecting the pay (see Payment processing).
+
 
 Payments processing
+	1. At the payment page, review items for purchase.
+	2. Enter in payment information in the payment form
+	3. Click confirm payment
 
-User signup
+Order Confirmation
+	1. At the order confirmation page you can review your order.
+	2. Click my bookings button to view purchased items.
 
-User login
+My bookings
+	1. At the my bookings page you can review all purchased items.
+	2. You can click on Galaxy Getaways to return to the main page.
+
+Chatbot
+	1. Click on the icon in the bottom right corner.
+	2. Chatbot menu will pop up.
+	3. You can ask it any questions regarding the web app and it will give a response.
+
+FAQ
+	1. Click on the hamburger menu on the topleft
+	2. Click on FAQ
+	3. Here you can see a list of frequently asked questions
+
 	
-
 6. Credits, References, Licenses 
 <-- Credits -->
+Used chatGPT for debugging our code and creation of small functions. Used Open AI for our AI review section, used send bird for our chat bot.
 <-- References -->
+Stackoverflow, chatGPT, Sendbird, Open AI
+https://stackoverflow.com/questions/2638292/after-travelling-back-in-firefox-history-javascript-wont-run
+https://disjfa.github.io/bootstrap-tricks/card-collapse-tricks/
+https://getbootstrap.com/docs/5.1/components/collapse/
+https://stackoverflow.com/questions/2013255/how-to-get-year-month-day-from-a-date-object
 <-- Licenses -->
 
 7. AI Acknowledgment
@@ -186,7 +220,9 @@ User login
     b. AI was used to help create the hotels that populate the database including their
         names, descriptions, and images.
     c. Our app does use AI directly as well... <-- Reviews and chatbot -->
+		Chatbot: Our app uses AI for our Chatbot. The chatbot can generate responses and answers questions you may have about the app.
     d. The limitations we encountered with AI include... <-- Reviews and chatbot -->
+		Chatbot: The limitations we encouneterd with the Chatbot is that it can only generate responses based on the databank that we provide.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 8. Contact Information
