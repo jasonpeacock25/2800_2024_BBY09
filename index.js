@@ -481,51 +481,64 @@ app.get('/faq', sessionValidation, (req, res) => {
 
 // Flights page route
 app.get('/flights', sessionValidation, (req, res) => {
-    //createFlights();
+    //deletes flight objects from user session to avoid appearing at review on manual redirect
     delete req.session.departingFlight;
     delete req.session.returningFlight;
+
     res.render('flights');
 });
 
-// Departing flights page
+// Departing flights page route
 app.get('/flights/departing', sessionValidation, async (req, res) => {
+    const { travellers, fromInput, toInput, departDate } = req.session;
+
+    //deletes flight objects from user session to avoid appearing at review on manual redirect
     delete req.session.departingFlight;
     delete req.session.returningFlight;
-    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+
+    //creates date objects for the departing date and the day after it
     let departDateDate = new Date(departDate);
-    // console.log(departDateDate);
     let departDateDatePlus = addDays(departDateDate, 1);
-    // console.log(departDateDatePlus);
+
+    //searches database for departing flights matching search parameters
     let validDepartingFlights = await Flight.find({ departureDate: { $lte: departDateDatePlus, $gte: departDateDate }, departing: fromInput, arriving: toInput });
+
     res.render('departingFlights', { validDepartingFlights, travellers });
 });
 
-// Returning flights page
+// Returning flights page route
 app.get('/flights/returning', sessionValidation, async (req, res) => {
-    const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.session;
+    const { flightType, travellers, fromInput, toInput, returnDate } = req.session;
+
     if (flightType == "One Way") {
+        //redirects to review page if a One Way flight is selected as there is return flight
         res.redirect('review');
     } else {
+        //creates date objects for the return date and the day after it
         let returnDateDate = new Date(returnDate);
-        // console.log(departDateDate);
         let returnDateDatePlus = addDays(returnDateDate, 1);
-        // console.log(departDateDatePlus);
+
+        //searches database for returning flights matching search parameters
         let validReturnFlights = await Flight.find({ arrivalDate: { $lte: returnDateDatePlus, $gte: returnDateDate }, departing: toInput, arriving: fromInput });
+
         res.render('returningFlights', { validReturnFlights, travellers });
     }
 });
 
-//https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+// Returns a date object increased by a number of days given another date object.
+// Source: https://stackoverflow.com/questions/563406/how-to-add-days-to-date
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
 
+// Returns a random integer between min and max
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Returns a string representing a random time in 24 hour with 15 minute formatting
 function randomHour() {
     let hours = randomInteger(0, 23);
     let minutes = randomInteger(0, 3) * 15;
@@ -535,14 +548,15 @@ function randomHour() {
     return time;
 }
 
+// Populates the database with flights
 async function createFlights() {
     let locations = ["Beijing", "Houston", "Paris", "Vancouver", "Moon", "Mars"];
     let locationCodes = ["BEJ", "HOU", "PAR", "VAN", "LUN", "MRS"];
-    let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"]
+    let locationBody = ["Earth", "Earth", "Earth", "Earth", "Moon", "Mars"];
     let providers = ["NASA", "Blue Origin", "SpaceX", "Virgin Galactic"];
     let modelsBodyToBody = [["Curiosity 4", "Gemini XVI", "Pioneer 16"], ["Shepherd 3", "Blue 7", "Goddard"], ["Dragon 5", "Falcon 12", "Starship 2"], ["VSS Imagine", "VSS Enterprise", "VSS Voyager"]];
     let modelsSubOrbital = [["Space Shuttle 3", "Endeavour 2", "CST-250"], ["Starliner", "Turquoise 7", "Daintree 3"], ["Owl 2", "Komodo", "Scout 2"], ["VSS-S-1", "VSS-S-2", "VSS-B-1"]];
-    let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let daysInEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let flightArray = [];
 
     let tempInteger;
@@ -563,18 +577,21 @@ async function createFlights() {
 
     let tempFlight;
 
+    // Loops over all from locations, to location, months, and days, generating one to five flights per condition.
     for (let from = 0; from < locations.length; from++) {
         for (let to = 0; to < locations.length; to++) {
             for (let month = 0; month < daysInEachMonth.length; month++) {
                 for (let day = 1; day <= daysInEachMonth[month]; day++) {
                     for (let y = 0; y < randomInteger(1, 4); y++) {
                         if (true) {
+                            // Create unique flight code from the locations codes
                             tempNumber = locationCodes[from] + "-" + locationCodes[to] + "-" + tempNumberCode;
                             tempNumberCode++;
-
+ 
                             tempDeparting = locations[from];
                             tempArriving = locations[to];
 
+                            // Sets a scale to use for emissions and price given distance between bodies
                             if (locationBody[from] == locationBody[to]) {
                                 tempScale = 1;
                             } else if (locationBody[from] == "Mars" || locationBody[to] == "Mars") {
@@ -587,6 +604,7 @@ async function createFlights() {
 
                             tempDepartureTime = randomHour();
 
+                            // Sets an arrival date based on departing date, distance between bodies
                             if (tempScale == 1) {
                                 tempArrivalDate = addDays(tempDepartureDate, 1);
                             } else if (tempScale == 10) {
@@ -601,6 +619,7 @@ async function createFlights() {
 
                             tempProvider = providers[tempInteger];
 
+                            // Sets flight type and model type based on distance between bodies
                             if (locationBody[from] == locationBody[to]) {
                                 tempType = "Sub-Orbital";
                                 tempModel = modelsSubOrbital[tempInteger][randomInteger(0, 2)];
@@ -612,6 +631,7 @@ async function createFlights() {
                             tempEmissions = randomInteger(5, 10) * tempScale;
                             tempPrice = randomInteger(750, 1900) * tempScale;
 
+                            // Creates object to represent generated flight
                             tempFlight = {
                                 number: tempNumber,
                                 departing: tempDeparting,
@@ -627,16 +647,19 @@ async function createFlights() {
                                 price: tempPrice
                             }
 
+                            // Push generated flight object to array
                             flightArray.push(tempFlight);
                         }
                     }
                 }
             }
+            // Reset number code on 'from' and 'to' combination change
             tempNumberCode = 0;
             console.log("Completed " + locations[from] + " to " + locations[to]);
         }
     }
 
+    // Send array of generated flight objects to database
     await Flight.create(flightArray);
 }
 
@@ -650,9 +673,12 @@ app.get('/flights/review', sessionValidation, async (req, res) => {
     }
 });
 
+// Stores selected flight in session data
 app.post('/flights/clicked', (req, res) => {
     let type = req.body.type;
     let flight = req.body.flight;
+
+    // Stores flight object in session data based on flight type
     if (type == "departing") {
         req.session.departingFlight = flight;
         res.sendStatus(200);
@@ -664,15 +690,17 @@ app.post('/flights/clicked', (req, res) => {
     }
 });
 
-// Search flights (temporary format to display post is functioning)
+// Stores flight inputs in session data
 app.post('/flights/search', (req, res) => {
     const { flightType, travellers, fromInput, toInput, departDate, returnDate } = req.body;
+
     req.session.flightType = flightType;
     req.session.travellers = travellers;
     req.session.fromInput = fromInput;
     req.session.toInput = toInput;
     req.session.departDate = departDate;
     req.session.returnDate = returnDate;
+    
     res.redirect('departing');
 });
 
