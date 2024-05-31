@@ -196,6 +196,7 @@ app.post('/bookHotel', sessionValidation, async (req, res) => {
 });
 // End of Gurvir's Routes //////////////////////////////
 
+// post route to save hotel information in mongodb
 app.post('/confirmPayment', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     const { hotelId, hotelName, hotelRegion, hotelPrice, hotelRating } = req.body;
@@ -218,6 +219,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
             hotelRating
         });
 
+        // Save data in mongodb
         await bookingInfo.save();
 
         // Fetch all booking information for the user
@@ -230,6 +232,7 @@ app.post('/confirmPayment', sessionValidation, async (req, res) => {
     }
 });
 
+// post route to save departing and returning flight separately 
 app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     let tempDepartingFlightNumber;
@@ -238,6 +241,7 @@ app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
     let tempReturningFlightPrice;
     const { departingFlight, returningFlight, travellers } = req.session;
 
+    // If there is a departing flight available then save the data to mongodb
     try {
         if (departingFlight) {
             const bookingInfo = new BookingInfo({
@@ -266,6 +270,7 @@ app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 
+    // If there is a returning flight available then save the data to mongodb
     try {
         if (returningFlight) {
             const bookingInfo = new BookingInfo({
@@ -293,8 +298,6 @@ app.post('/confirmFlightPayment', sessionValidation, async (req, res) => {
         console.error('Error saving booking information', error);
         res.status(500).send('Internal Server Error');
     }
-
-    let returnNum
 
     res.render('flightOrderConfirmation', {
         username: req.session.username,
@@ -413,13 +416,14 @@ app.get('/about', sessionValidation, (req, res) => {
 app.get('/myBookings', sessionValidation, async (req, res) => {
     const userId = req.session.userId;
     try {
-        // Fetch bookings for the user
+        // Fetch bookings by userID
         const bookings = await BookingInfo.find({ userId });
 
         const departingFlights = [];
         const returningFlights = [];
         const hotels = [];
 
+        // If there is a departing flight available in mongodb that matches userID then push data into departing flights array
         bookings.forEach(booking => {
             if (booking.departingOrReturning === "departing") {
                 departingFlights.push({
@@ -439,6 +443,7 @@ app.get('/myBookings', sessionValidation, async (req, res) => {
                     travellers: booking.travellers
                 });
             }
+            // If there is a returning flight available in mongodb that matches userID then push data into returning flights array
             if (booking.departingOrReturning === "returning") {
                 returningFlights.push({
                     userId: userId,
@@ -457,6 +462,7 @@ app.get('/myBookings', sessionValidation, async (req, res) => {
                     travellers: booking.travellers
                 });
             }
+            // If there is a hotel available in mongodb that matches userID then push data into hotels array
             if (booking.hotelName) {
                 hotels.push({
                     hotelName: booking.hotelName,
@@ -677,7 +683,6 @@ app.post('/flights/search', (req, res) => {
 });
 
 app.get('/payment', sessionValidation, async (req, res) => {
-    // const hotel = await Hotel.find();
     const hotel = await Hotel.findById(req.body.hotelId);
     res.render('payment', { hotel });
 })

@@ -64,7 +64,7 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        
+
             // This function generates a random six digit number for a order number
             function generateOrderNumber() {
                 let orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
@@ -78,19 +78,21 @@
                 let year = date.getFullYear();
                 return month + '/' + day + '/' + year;
             }
-            
+
             // Runs the generateOrderNumber function
             generateOrderNumber();
             var currentDate = new Date();
             var formattedDate = formatDate(currentDate);
             document.getElementById('orderDate').textContent = formattedDate;
-            
+
             var totalAmount = 0;
-                var items = document.querySelectorAll('tbody tr td:nth-child(3)');
-                items.forEach(function(item) {
-                    totalAmount += parseFloat(item.textContent.replace('$', ''));
-                });
-                document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
-        });
+            // selects all td elements that are third child of tr in tbody
+            var items = document.querySelectorAll('tbody tr td:nth-child(3)');
+            items.forEach(function (item) {
+                // takes the td element, replaces $ to a string, parses the string to a number and adds to the total amount
+                totalAmount += parseFloat(item.textContent.replace('$', ''));
+            });
+            document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+    });
 </script>
 <%- include('templates/footer') %>
